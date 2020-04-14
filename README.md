@@ -1,16 +1,16 @@
-# musify
+# Musify
+Una aplicación de música por streaming.
 
-A new Flutter project.
+### Contribuidores
+- Cruz Portilla Mauricio
+- Romero Peña Arturo Iván
 
-## Getting Started
+## Acerca del proyecto
+Creado con el Framework <a href="https://flutter.dev/">Flutter</a> para un proyecto de Android en Kotlin y de iOS en Swift.
 
-This project is a starting point for a Flutter application.
+### Dependencias
+- Flutter v1.12.13+hotfix.9 o superior
+- Android SDK v29.0.2 o superior
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+### Editor de código recomendado
+- Visual Studio Code v1.44.0 o superior
