@@ -41,6 +41,18 @@ class _HomePageState extends State<HomeScreen> {
     }
 
     List<Widget> _rows() {
+        List<String> songs = [
+            "Sirens of the Sea",
+            "Umbrella",
+            "Demons",
+            "Daphnes",
+            "Hope is a dangerous thing...",
+            "Moth",
+            "#1 Zero",
+            "Like a Stone",
+            "Careless Whisper",
+            "Karma"
+        ];
         List<Widget> rows = <Widget>[];
         for (var i = 0; i < 10; i++) {
             rows.add(
@@ -50,10 +62,13 @@ class _HomePageState extends State<HomeScreen> {
                         onTap: () { },
                         child: Container(
                             child: Text(
-                                "Esta es una fila",
+                                songs[i],
                                 textAlign: TextAlign.left,
                             ),
                             padding: EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                                border: Border(bottom: BorderSide(color: Colors.black, width: 0.3))
+                            ),
                         )
                     )
                 )
