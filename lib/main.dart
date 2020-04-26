@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:musify/core/session.dart';
+import 'package:musify/core/ui/player.dart';
+import 'package:musify/main_menu.dart';
+import 'package:musify/screens/search_screen.dart';
 
 void main() => runApp(Musify());
 
@@ -34,46 +38,19 @@ class _HomePageState extends State<HomeScreen> {
             ),
             body: Container(
                 child: Column(
-                    children: _rows(),
+                    children: <Widget>[
+                        FlatButton(
+                            child: Text("Main menu"),
+                            onPressed: () {
+                                Session.player = Player();
+                                Navigator.push(context, MaterialPageRoute(
+                                    builder: (context) => MainMenuScreen()
+                                ));
+                            },
+                        )
+                    ],
                 ),
             )
         );
-    }
-
-    List<Widget> _rows() {
-        List<String> songs = [
-            "Sirens of the Sea",
-            "Umbrella",
-            "Demons",
-            "Daphnes",
-            "Hope is a dangerous thing...",
-            "Moth",
-            "#1 Zero",
-            "Like a Stone",
-            "Careless Whisper",
-            "Karma"
-        ];
-        List<Widget> rows = <Widget>[];
-        for (var i = 0; i < 10; i++) {
-            rows.add(
-                Container(
-                    width: double.infinity,
-                    child: InkWell(
-                        onTap: () { },
-                        child: Container(
-                            child: Text(
-                                songs[i],
-                                textAlign: TextAlign.left,
-                            ),
-                            padding: EdgeInsets.all(10),
-                            decoration: BoxDecoration(
-                                border: Border(bottom: BorderSide(color: Colors.black, width: 0.3))
-                            ),
-                        )
-                    )
-                )
-            );
-        }
-        return rows;
     }
 }
