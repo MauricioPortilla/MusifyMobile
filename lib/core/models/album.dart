@@ -1,4 +1,5 @@
 import 'package:musify/core/models/artist.dart';
+import 'package:musify/core/models/song.dart';
 
 class Album {
     final int albumId;
@@ -8,6 +9,7 @@ class Album {
     final String discography;
     final String imageLocation;
     List<Artist> artists = <Artist>[];
+    List<Song> songs = <Song>[];
 
     Album({
         this.albumId,
@@ -16,7 +18,8 @@ class Album {
         this.launchYear,
         this.discography,
         this.imageLocation,
-        this.artists
+        this.artists,
+        this.songs
     });
 
     String artistsNames() {

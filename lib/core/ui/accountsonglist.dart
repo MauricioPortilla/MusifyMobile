@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:musify/core/models/song.dart';
+import 'package:musify/core/models/accountsong.dart';
 
-class SongList extends StatefulWidget {
-    final List<Song> songs;
+class AccountSongList extends StatefulWidget {
+    final List<AccountSong> accountSongs;
 
-    SongList({@required this.songs});
+    AccountSongList({@required this.accountSongs});
 
     @override
     State<StatefulWidget> createState() {
-        return _SongListState();
+        return _AccountSongListState();
     }
 }
 
-class _SongListState extends State<SongList> {
+class _AccountSongListState extends State<AccountSongList> {
     @override
     Widget build(BuildContext context) {
         return Expanded(
@@ -23,7 +23,7 @@ class _SongListState extends State<SongList> {
     ListView _createListView() {
         return ListView.builder(
             shrinkWrap: true,
-            itemCount: widget.songs.length,
+            itemCount: widget.accountSongs.length,
             itemBuilder: (BuildContext context, int index) {
                 return Container(
                     width: double.infinity,
@@ -34,23 +34,12 @@ class _SongListState extends State<SongList> {
                             child: Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: <Widget>[
-                                    Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: <Widget>[
-                                            Container(
-                                                child: Text(
-                                                    widget.songs[index].title,
-                                                    textAlign: TextAlign.left,
-                                                ),
-                                                margin: EdgeInsets.only(bottom: 3),
-                                            ),
-                                            Row(
-                                                children: <Widget>[
-                                                    Text("Canción - "),
-                                                    Text(widget.songs[index].album.artistsNames())
-                                                ],
-                                            )
-                                        ],
+                                    Container(
+                                        child: Text(
+                                            widget.accountSongs[index].title,
+                                            textAlign: TextAlign.left,
+                                        ),
+                                        margin: EdgeInsets.only(bottom: 3),
                                     ),
                                     InkWell(
                                         child: Icon(Icons.more_horiz),

@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:musify/core/models/album.dart';
+import 'package:musify/core/models/artist.dart';
+import 'package:musify/core/models/song.dart';
 import 'package:musify/core/session.dart';
-import 'package:musify/core/ui/player.dart';
+import 'package:musify/screens/add_song_to_playlist.dart';
+import 'package:musify/screens/consult_account_songs.dart';
+import 'package:musify/screens/consult_artist.dart';
+import 'package:musify/screens/consult_playlists.dart';
 import 'package:musify/screens/search_screen.dart';
 import 'package:musify/screens/history_screen.dart';
 
@@ -32,18 +38,60 @@ class _MainMenuPageState extends State<_MainMenuPage> with SingleTickerProviderS
                     controller: _tabController,
                     children: [
                         Container(
-                            child: ListView(
-                                children: <Widget>[
-                                ],
-                            )
+                            child: ConsultPlaylistsScreen()
                         ),
                         Container(
                             child: SearchScreen()
                         ),
                         Container(
                             child: ListView(
-                                
-                            ),
+                                children: <Widget>[
+                                    FlatButton(
+                                        child: Text("Consultar artista"),
+                                        onPressed: () {
+                                            Navigator.push(context, MaterialPageRoute(
+                                                builder: (context) => ConsultArtistScreen(
+                                                    artist: Artist(
+                                                        artisticName: "Above & Beyond",
+                                                        albums: [
+                                                            Album(
+                                                                name: "Acoustic",
+                                                                launchYear: 2020,
+                                                                discography: "Something",
+                                                                songs: [
+                                                                    Song(title: "Sirens of the Sea", album: Album(name: "Acoustic", artists: <Artist>[
+                                                                        Artist(artisticName: "Above & Beyond")
+                                                                    ])),
+                                                                    Song(title: "Sirens of the Sea - Club Mix", album: Album(name: "Acoustic Mix", artists: <Artist>[
+                                                                        Artist(artisticName: "Above & Beyond"),
+                                                                        Artist(artisticName: "Oceanlab")
+                                                                    ])),
+                                                                ]
+                                                            ),
+                                                        ]
+                                                    )
+                                                )
+                                            ));
+                                        },
+                                    ),
+                                    FlatButton(
+                                        child: Text("Consultar biblioteca propia"),
+                                        onPressed: () {
+                                            Navigator.push(context, MaterialPageRoute(
+                                                builder: (context) => ConsultAccountSongsScreen()
+                                            ));
+                                        },
+                                    ),
+                                    FlatButton(
+                                        child: Text("Agregar canción a playlist"),
+                                        onPressed: () {
+                                            Navigator.push(context, MaterialPageRoute(
+                                                builder: (context) => AddSongToPlaylistScreen(songToAdd: Song(songId: 1))
+                                            ));
+                                        },
+                                    ),
+                                ],
+                            )
                         ),
                         Container(
                             child: HistoryScreen()
