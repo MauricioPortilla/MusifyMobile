@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:musify/core/session.dart';
 import 'package:musify/core/ui/player.dart';
 import 'package:musify/screens/search_screen.dart';
+import 'package:musify/screens/history_screen.dart';
 
 class MainMenuScreen extends StatelessWidget {
     @override
@@ -45,11 +46,7 @@ class _MainMenuPageState extends State<_MainMenuPage> with SingleTickerProviderS
                             ),
                         ),
                         Container(
-                            child: ListView(
-                                children: <Widget> [
-                                    
-                                ],
-                            ),
+                            child: HistoryScreen()
                         ),
                     ],
                 ),
