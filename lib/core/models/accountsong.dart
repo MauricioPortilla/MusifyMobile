@@ -14,4 +14,15 @@ class AccountSong {
         this.songLocation,
         this.uploadDate
     });
+
+    factory AccountSong.fromJson(Map<String, dynamic> json) {
+        return AccountSong(
+            accountSongId: json["account_song_id"],
+            accountId: json["account_id"],
+            title: json["title"],
+            duration: json["duration"],
+            songLocation: json["song_location"],
+            uploadDate: DateTime.parse(json["upload_date"])
+        );
+    }
 }

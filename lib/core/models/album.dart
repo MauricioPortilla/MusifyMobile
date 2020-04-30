@@ -22,6 +22,17 @@ class Album {
         this.songs
     });
 
+    factory Album.fromJson(Map<String, dynamic> json) {
+        return Album(
+            albumId: json["album_id"],
+            type: json["type"],
+            name: json["name"],
+            launchYear: json["launch_year"],
+            discography: json["discography"],
+            imageLocation: json["image_location"]
+        );
+    }
+
     String artistsNames() {
         String artistsNames = "";
         for (Artist artist in artists) {

@@ -23,4 +23,16 @@ class Song {
         this.songLocation,
         this.status
     });
+
+    factory Song.fromJson(Map<String, dynamic> json) {
+        return Song(
+            songId: json["song_id"],
+            albumId: json["album_id"],
+            genreId: json["genre_id"],
+            title: json["title"],
+            duration: json["duration"],
+            songLocation: json["song_location"],
+            status: json["status"]
+        );
+    }
 }

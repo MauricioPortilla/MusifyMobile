@@ -12,4 +12,12 @@ class Artist {
         this.artisticName,
         this.albums
     });
+
+    factory Artist.fromJson(Map<String, dynamic> json) {
+        return Artist(
+            artistId: json["artist_id"],
+            accountId: json["account_id"],
+            artisticName: json["artistic_name"]
+        );
+    }
 }

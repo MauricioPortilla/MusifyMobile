@@ -12,4 +12,12 @@ class Playlist {
         this.name,
         this.songs
     });
+
+    factory Playlist.fromJson(Map<String, dynamic> json) {
+        return Playlist(
+            playlistId: json["playlist_id"],
+            accountId: json["account_id"],
+            name: json["name"]
+        );
+    }
 }
