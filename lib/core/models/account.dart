@@ -53,4 +53,22 @@ class Account {
             print("Exception@Account->login() -> $exception");
         }
     }
+
+    static void loginWithGoogle(String accessToken, onSuccess(Account account), onFailure(NetworkResponse errorResponse)) {
+        var data = {
+            "access_token": accessToken
+        };
+        try {
+            Network.post("/auth/login/google", data, (response) {
+                NetworkResponse networkResponse = NetworkResponse.fromJson(response);
+                Session.accessToken = response["access_token"];
+                onSuccess(Account.fromJson(networkResponse.data));
+            }, (errorResponse) {
+                NetworkResponse networkResponse = NetworkResponse.fromJson(errorResponse);
+                onFailure(networkResponse);
+            });
+        } catch (exception) {
+            print("Exception@Account->loginWithGoogle() -> $exception");
+        }
+    }
 }
