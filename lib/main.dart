@@ -16,21 +16,21 @@ class Musify extends StatelessWidget {
             theme: ThemeData(
                 primarySwatch: Colors.blue,
             ),
-            home: HomeScreen(title: 'Musify'),
+            home: MusifyScreen(title: 'Musify'),
         );
     }
 }
 
-class HomeScreen extends StatefulWidget {
-    HomeScreen({Key key, this.title}) : super(key: key);
+class MusifyScreen extends StatefulWidget {
+    MusifyScreen({Key key, this.title}) : super(key: key);
 
     final String title;
 
     @override
-    _HomePageState createState() => _HomePageState();
+    _MusifyState createState() => _MusifyState();
 }
 
-class _HomePageState extends State<HomeScreen> {
+class _MusifyState extends State<MusifyScreen> {
     TextEditingController _emailTextFieldController = TextEditingController();
     TextEditingController _passwordTextFieldController = TextEditingController();
     final GoogleSignIn googleSignIn = GoogleSignIn(
@@ -102,11 +102,7 @@ class _HomePageState extends State<HomeScreen> {
             return;
         }
         Account.login(_emailTextFieldController.text, _passwordTextFieldController.text, (account) {
-            Session.account = account;
-            Session.player = Player();
-            Navigator.push(context, MaterialPageRoute(
-                builder: (context) => MainMenuScreen()
-            ));
+            _onSuccessfulLogin(account);
         }, (errorResponse) {
             UI.createErrorDialog(context, errorResponse.message);
         });
@@ -117,22 +113,27 @@ class _HomePageState extends State<HomeScreen> {
             await googleSignIn.signIn().then((result) {
                 result.authentication.then((googleKey) {
                     Account.loginWithGoogle(googleKey.accessToken, (account) {
-                        Session.account = account;
-                        Session.player = Player();
-                        Navigator.push(context, MaterialPageRoute(
-                            builder: (context) => MainMenuScreen()
-                        ));
+                        _onSuccessfulLogin(account);
                     }, (errorResponse) {
                         UI.createErrorDialog(context, errorResponse.message);
                     });
                 }).catchError((error) {
-                    print("Error on main->_googleLoginButton() -> $error");
+                    print("Error on _HomePageState->_googleLoginButton() -> $error");
                 });
             }).catchError((error) {
-                print("Error on main->_googleLoginButton() -> $error");
+                print("Error on _HomePageState->_googleLoginButton() -> $error");
             });
         } catch (exception) {
             print(exception);
         }
+    }
+
+    void _onSuccessfulLogin(Account account) {
+        Session.account = account;
+        Session.mainMenu = MainMenuScreen();
+        Session.player = Player();
+        Navigator.push(context, MaterialPageRoute(
+            builder: (context) => Session.mainMenu
+        ));
     }
 }

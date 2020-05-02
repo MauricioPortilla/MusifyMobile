@@ -1,5 +1,6 @@
 import 'package:musify/core/models/artist.dart';
 import 'package:musify/core/models/song.dart';
+import 'package:musify/core/network.dart';
 
 class Album {
     final int albumId;
@@ -17,9 +18,7 @@ class Album {
         this.name,
         this.launchYear,
         this.discography,
-        this.imageLocation,
-        this.artists,
-        this.songs
+        this.imageLocation
     });
 
     factory Album.fromJson(Map<String, dynamic> json) {
@@ -31,6 +30,20 @@ class Album {
             discography: json["discography"],
             imageLocation: json["image_location"]
         );
+    }
+
+    Future<List<Artist>> loadArtists() async {
+        var data = {
+            "{albumId}": albumId
+        };
+        Map<String, dynamic> response = await Network.futureGet("/album/{albumId}/artists", data);
+        artists.clear();
+        if (response["status"] == "success") {
+            for (var artistJson in response["data"]) {
+                artists.add(Artist.fromJson(artistJson));
+            }
+        }
+        return artists;
     }
 
     String artistsNames() {

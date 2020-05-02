@@ -1,5 +1,6 @@
 import 'package:musify/core/models/album.dart';
 import 'package:musify/core/models/genre.dart';
+import 'package:musify/core/network.dart';
 
 class Song {
     final int songId;
@@ -34,5 +35,16 @@ class Song {
             songLocation: json["song_location"],
             status: json["status"]
         );
+    }
+
+    Future<Album> loadAlbum() async {
+        var data = {
+            "{albumId}": albumId
+        };
+        Map<String, dynamic> response = await Network.futureGet("/album/{albumId}", data);
+        if (response["status"] == "success") {
+            album = Album.fromJson(response["data"]);
+        }
+        return album;
     }
 }

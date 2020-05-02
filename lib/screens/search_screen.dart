@@ -18,15 +18,15 @@ class _SearchPage extends StatefulWidget {
 class _SearchPageState extends State<_SearchPage> {
     final TextEditingController _searchTextFieldController = new TextEditingController();
 
-    List<Song> songs = <Song>[
-        Song(title: "Sirens of the Sea", album: Album(name: "Acoustic", artists: <Artist>[
-            Artist(artisticName: "Above & Beyond")
-        ])),
-        Song(title: "Sirens of the Sea - Club Mix", album: Album(name: "Acoustic Mix", artists: <Artist>[
-            Artist(artisticName: "Above & Beyond"),
-            Artist(artisticName: "Oceanlab")
-        ])),
-    ];
+    // List<Song> songs = <Song>[
+    //     Song(title: "Sirens of the Sea", album: Album(name: "Acoustic", artists: <Artist>[
+    //         Artist(artisticName: "Above & Beyond")
+    //     ])),
+    //     Song(title: "Sirens of the Sea - Club Mix", album: Album(name: "Acoustic Mix", artists: <Artist>[
+    //         Artist(artisticName: "Above & Beyond"),
+    //         Artist(artisticName: "Oceanlab")
+    //     ])),
+    // ];
     
     @override
     Widget build(BuildContext context) {
@@ -50,9 +50,9 @@ class _SearchPageState extends State<_SearchPage> {
                                 },
                             ),
                         ),
-                        Container(
-                            child: SongList(songs: songs),
-                        ),
+                        // Container(
+                        //     child: SongList(songs: songs),
+                        // ),
                     ],
                 ),
                 padding: EdgeInsets.fromLTRB(15, 5, 15, 15),

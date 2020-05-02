@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:musify/core/models/accountsong.dart';
 import 'package:musify/core/models/playlist.dart';
 import 'package:musify/core/models/song.dart';
-import 'package:musify/core/ui/accountsonglist.dart';
 import 'package:musify/core/ui/playlistlist.dart';
 
 class AddSongToPlaylistScreen extends StatelessWidget {

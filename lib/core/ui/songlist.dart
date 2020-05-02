@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:musify/core/models/song.dart';
+import 'package:musify/core/session.dart';
 
 class SongList extends StatefulWidget {
     final List<Song> songs;
@@ -29,6 +30,7 @@ class _SongListState extends State<SongList> {
                     width: double.infinity,
                     child: InkWell(
                         onTap: () {
+                            Session.player.state.playSong(widget.songs[index]);
                         },
                         child: Container(
                             child: Row(

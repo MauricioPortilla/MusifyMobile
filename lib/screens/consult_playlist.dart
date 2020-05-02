@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:musify/core/models/album.dart';
-import 'package:musify/core/models/artist.dart';
+import 'package:musify/core/futurefactory.dart';
 import 'package:musify/core/models/playlist.dart';
 import 'package:musify/core/models/song.dart';
+import 'package:musify/core/session.dart';
 import 'package:musify/core/ui/songlist.dart';
 
 class ConsultPlaylistScreen extends StatelessWidget {
@@ -34,6 +34,12 @@ class _ConsultPlaylistScreenPageState extends State<_ConsultPlaylistScreenPage> 
                 title: Text("Lista de reproducción"),
                 centerTitle: true,
                 automaticallyImplyLeading: false,
+                leading: IconButton(
+                    icon: Icon(Icons.arrow_back_ios),
+                    onPressed: () {
+                        Session.homePop();
+                    },
+                ),
             ),
             body: Container(
                 margin: EdgeInsets.only(top: 10),
@@ -68,7 +74,7 @@ class _ConsultPlaylistScreenPageState extends State<_ConsultPlaylistScreenPage> 
                             ),
                         ),
                         Container(
-                            child: SongList(songs: widget.playlist.songs),
+                            child: _songList(),
                         ),
                     ],
                 ),
@@ -77,6 +83,9 @@ class _ConsultPlaylistScreenPageState extends State<_ConsultPlaylistScreenPage> 
         );
     }
 
-    void _search(String text) {
+    FutureBuilder<List<Song>> _songList() {
+        return FutureFactory<List<Song>>().networkFuture(widget.playlist.loadSongs(), (data) {
+            return SongList(songs: data);
+        });
     }
 }

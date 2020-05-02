@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:musify/core/models/album.dart';
-import 'package:musify/core/models/artist.dart';
+import 'package:musify/core/futurefactory.dart';
 import 'package:musify/core/models/playlist.dart';
-import 'package:musify/core/models/song.dart';
+import 'package:musify/core/session.dart';
 import 'package:musify/core/ui/playlistlist.dart';
 import 'package:musify/screens/consult_playlist.dart';
 
@@ -18,19 +17,7 @@ class _ConsultPlaylistsPage extends StatefulWidget {
 }
 
 class _ConsultPlaylistsPageState extends State<_ConsultPlaylistsPage> {
-    List<Playlist> playlists = <Playlist>[
-        Playlist(name: "Awesome", songs: <Song>[
-            Song(title: "Sirens of the Sea", album: Album(name: "Acoustic", artists: <Artist>[
-                Artist(artisticName: "Above & Beyond")
-            ])),
-            Song(title: "Sirens of the Sea - Club Mix", album: Album(name: "Acoustic Mix", artists: <Artist>[
-                Artist(artisticName: "Above & Beyond"),
-                Artist(artisticName: "Oceanlab")
-            ])),
-        ]),
-        Playlist(name: "Mis canciones favoritas")
-    ];
-    
+
     @override
     Widget build(BuildContext context) {
         return Scaffold(
@@ -66,7 +53,7 @@ class _ConsultPlaylistsPageState extends State<_ConsultPlaylistsPage> {
                             )
                         ),
                         Container(
-                            child: PlaylistList(playlists: playlists, onTap: _onSelectPlaylist),
+                            child: _playlistListUI(),
                         ),
                     ],
                 ),
@@ -76,6 +63,12 @@ class _ConsultPlaylistsPageState extends State<_ConsultPlaylistsPage> {
     }
 
     void _onSelectPlaylist(Playlist playlist) {
-        Navigator.push(context, MaterialPageRoute(builder: (context) => ConsultPlaylistScreen(playlist: playlist)));
+        Session.homePush(ConsultPlaylistScreen(playlist: playlist));
+    }
+
+    FutureBuilder<List<Playlist>> _playlistListUI() {
+        return FutureFactory<List<Playlist>>().networkFuture(Session.account.loadPlaylists(), (data) {
+            return PlaylistList(playlists: data, onTap: _onSelectPlaylist);
+        });
     }
 }

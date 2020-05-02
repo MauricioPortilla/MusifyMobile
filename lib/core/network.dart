@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:musify/core/core.dart';
 import 'package:musify/core/session.dart';
@@ -22,7 +23,7 @@ class Network {
                 Core.SERVER_URL + query,
                 headers: <String, String> {
                     "Content-Type": "application/json; charset=UTF-8",
-                    "Authorization": Session.accessToken != null ? ("Bearer " + Session.accessToken) : ""
+                    "Authorization": Session.accessToken != null ? Session.accessToken : ""
                 }
             );
             Map<String, dynamic> jsonDecoded = json.decode(response.body);
@@ -52,11 +53,45 @@ class Network {
                 Core.SERVER_URL + query,
                 headers: <String, String> {
                     "Content-Type": "application/json; charset=UTF-8",
-                    "Authorization": Session.accessToken != null ? ("Bearer " + Session.accessToken) : ""
+                    "Authorization": Session.accessToken != null ? Session.accessToken : ""
                 }
             );
             return json.decode(response.body);
         } catch (exception) {
+            throw exception;
+        }
+    }
+
+    static void getStreamBuffer(
+        String resource, 
+        Map<String, dynamic> data, 
+        onSuccess(Uint8List buffer), 
+        onFailure(Map<String, dynamic> data)
+    ) async {
+        try {
+            String query = resource;
+            if (data != null) {
+                data.forEach((key, value) {
+                    query = query.replaceAll(key, value.toString());
+                });
+            }
+            final http.Response response = await http.get(
+                Core.SERVER_URL + query,
+                headers: <String, String> {
+                    "Content-Type": "application/json; charset=UTF-8",
+                    "Authorization": Session.accessToken != null ? Session.accessToken : ""
+                }
+            );
+            if (response.contentLength > 0) {
+                onSuccess(response.bodyBytes);
+                return;
+            }
+            throw Exception();
+        } catch (exception) {
+            onFailure(<String, dynamic> { 
+                "status": "failure", 
+                "message": "No se pudo establecer una conexión con el servidor." 
+            });
             throw exception;
         }
     }
@@ -78,7 +113,7 @@ class Network {
                 Core.SERVER_URL + query,
                 headers: <String, String> {
                     "Content-Type": "application/json; charset=UTF-8",
-                    "Authorization": Session.accessToken != null ? ("Bearer " + Session.accessToken) : ""
+                    "Authorization": Session.accessToken != null ? Session.accessToken : ""
                 },
                 body: jsonEncode(data)
             );

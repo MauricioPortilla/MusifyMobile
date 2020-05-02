@@ -1,3 +1,4 @@
+import 'package:musify/core/models/playlist.dart';
 import 'package:musify/core/network.dart';
 import 'package:musify/core/networkresponse.dart';
 import 'package:musify/core/session.dart';
@@ -9,6 +10,7 @@ class Account {
     final String name;
     final String lastName;
     final DateTime creationDate;
+    List<Playlist> playlists = <Playlist>[];
 
     Account({
         this.accountId,
@@ -70,5 +72,19 @@ class Account {
         } catch (exception) {
             print("Exception@Account->loginWithGoogle() -> $exception");
         }
+    }
+
+    Future<List<Playlist>> loadPlaylists() async {
+        var data = {
+            "{accountId}": accountId    
+        };
+        Map<String, dynamic> response = await Network.futureGet("/account/{accountId}/playlists", data);
+        playlists.clear();
+        if (response["status"] == "success") {
+            for (var playlistJson in response["data"]) {
+                playlists.add(Playlist.fromJson(playlistJson));
+            }
+        }
+        return playlists;
     }
 }
