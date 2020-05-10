@@ -1,6 +1,7 @@
 import 'package:musify/core/models/album.dart';
 import 'package:musify/core/models/song.dart';
 import 'package:musify/core/network.dart';
+import 'package:musify/core/networkresponse.dart';
 
 class Playlist {
     final int playlistId;
@@ -26,10 +27,10 @@ class Playlist {
         var data = {
             "{playlistId}": playlistId
         };
-        Map<String, dynamic> response = await Network.futureGet("/playlist/{playlistId}/songs", data);
+        NetworkResponse response = await Network.futureGet("/playlist/{playlistId}/songs", data);
         songs.clear();
-        if (response["status"] == "success") {
-            for (var songJson in response["data"]) {
+        if (response.status == "success") {
+            for (var songJson in response.data) {
                 var song = Song.fromJson(songJson);
                 Album album = await song.loadAlbum();
                 await album.loadArtists();

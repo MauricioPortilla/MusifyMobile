@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:musify/core/core.dart';
+import 'package:musify/core/networkresponse.dart';
 import 'package:musify/core/session.dart';
 import 'package:http/http.dart' as http;
 
@@ -41,7 +42,7 @@ class Network {
         }
     }
 
-    static Future<Map<String, dynamic>> futureGet(String resource, Map<String, dynamic> data) async {
+    static Future<NetworkResponse> futureGet(String resource, Map<String, dynamic> data) async {
         try {
             String query = resource;
             if (data != null) {
@@ -56,7 +57,8 @@ class Network {
                     "Authorization": Session.accessToken != null ? Session.accessToken : ""
                 }
             );
-            return json.decode(response.body);
+            var jsonResponse = json.decode(response.body);
+            return NetworkResponse(status: jsonResponse["status"], data: jsonResponse["data"], message: jsonResponse["message"] ?? null);
         } catch (exception) {
             throw exception;
         }

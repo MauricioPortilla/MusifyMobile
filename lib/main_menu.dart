@@ -42,7 +42,7 @@ class _MainMenuPageState extends State<_MainMenuPage> with SingleTickerProviderS
                     controller: _tabController,
                     children: [
                         Container(
-                            child: HomeScreen(stream: controller.stream)
+                            child: HomeScreen(stream: controller.stream.asBroadcastStream())
                         ),
                         Container(
                             child: SearchScreen()

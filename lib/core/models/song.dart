@@ -1,6 +1,7 @@
 import 'package:musify/core/models/album.dart';
 import 'package:musify/core/models/genre.dart';
 import 'package:musify/core/network.dart';
+import 'package:musify/core/networkresponse.dart';
 
 class Song {
     final int songId;
@@ -41,10 +42,24 @@ class Song {
         var data = {
             "{albumId}": albumId
         };
-        Map<String, dynamic> response = await Network.futureGet("/album/{albumId}", data);
-        if (response["status"] == "success") {
-            album = Album.fromJson(response["data"]);
+        NetworkResponse response = await Network.futureGet("/album/{albumId}", data);
+        if (response.status == "success") {
+            album = Album.fromJson(response.data);
         }
         return album;
+    }
+
+    static Future<List<Song>> fetchSongByTitleCoincidences(String title) async {
+        var data = {
+            "{title}": title
+        };
+        NetworkResponse response = await Network.futureGet("/song/search/{title}", data);
+        List<Song> songs = <Song>[];
+        if (response.status == "success") {
+            for (var songResponse in response.data) {
+                songs.add(Song.fromJson(songResponse));
+            }
+        }
+        return songs;
     }
 }

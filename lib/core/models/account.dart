@@ -78,10 +78,10 @@ class Account {
         var data = {
             "{accountId}": accountId    
         };
-        Map<String, dynamic> response = await Network.futureGet("/account/{accountId}/playlists", data);
+        NetworkResponse response = await Network.futureGet("/account/{accountId}/playlists", data);
         playlists.clear();
-        if (response["status"] == "success") {
-            for (var playlistJson in response["data"]) {
+        if (response.status == "success") {
+            for (var playlistJson in response.data) {
                 playlists.add(Playlist.fromJson(playlistJson));
             }
         }
