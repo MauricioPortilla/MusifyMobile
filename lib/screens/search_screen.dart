@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:musify/core/futurefactory.dart';
-import 'package:musify/core/models/album.dart';
-import 'package:musify/core/models/artist.dart';
 import 'package:musify/core/models/song.dart';
 import 'package:musify/core/ui/songlist.dart';
 
@@ -18,7 +16,7 @@ class _SearchPage extends StatefulWidget {
 
 class _SearchPageState extends State<_SearchPage> {
     final TextEditingController _searchTextFieldController = new TextEditingController();
-    List<Song> songs = <Song>[];
+    List<Song> _songs = <Song>[];
     
     @override
     Widget build(BuildContext context) {
@@ -38,12 +36,14 @@ class _SearchPageState extends State<_SearchPage> {
                                     labelText: "Buscar",
                                 ),
                                 onChanged: (text) {
-                                    _search(text);
+                                    setState(() {
+                                    });
                                 },
                             ),
                         ),
                         Container(
-                            child: SongList(songs: songs),
+                            // child: SongList(songs: songs),
+                            child: _songList(_searchTextFieldController.text)
                         ),
                     ],
                 ),
@@ -53,15 +53,11 @@ class _SearchPageState extends State<_SearchPage> {
     }
 
     FutureBuilder<List<Song>> _songList(String title) {
-        return FutureFactory<List<Song>>().networkFuture(
-            Song.fetchSongByTitleCoincidences(title), (data) {
-                songs = data;
+        return FutureFactory<List<Song>>().networkFuture(Song.fetchSongByTitleCoincidences(title), (data) {
+                _songs.clear();
+                _songs.addAll(data);
                 return SongList(songs: data);
             }
         );
-    }
-
-    void _search(String text) {
-        _songList(text);
     }
 }

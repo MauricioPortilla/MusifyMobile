@@ -50,14 +50,20 @@ class Song {
     }
 
     static Future<List<Song>> fetchSongByTitleCoincidences(String title) async {
+        List<Song> songs = <Song>[];
+        if (title.isEmpty) {
+            return songs;
+        }
         var data = {
             "{title}": title
         };
         NetworkResponse response = await Network.futureGet("/song/search/{title}", data);
-        List<Song> songs = <Song>[];
         if (response.status == "success") {
             for (var songResponse in response.data) {
-                songs.add(Song.fromJson(songResponse));
+                var song = Song.fromJson(songResponse);
+                Album album = await song.loadAlbum();
+                await album.loadArtists();
+                songs.add(song);
             }
         }
         return songs;
