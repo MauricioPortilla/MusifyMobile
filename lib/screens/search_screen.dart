@@ -14,50 +14,86 @@ class _SearchPage extends StatefulWidget {
     _SearchPageState createState() => _SearchPageState();
 }
 
-class _SearchPageState extends State<_SearchPage> {
+class _SearchPageState extends State<_SearchPage> with SingleTickerProviderStateMixin {
     final TextEditingController _searchTextFieldController = new TextEditingController();
     List<Song> _songs = <Song>[];
+    TabController _tabController;
+
+    @override
+    void initState() {
+        _tabController = TabController(length: 3, vsync: this);
+        super.initState();
+    }
     
     @override
     Widget build(BuildContext context) {
         return Scaffold(
             appBar: AppBar(
-                title: Text("Buscar canción"),
+                title: Container(
+                    padding: EdgeInsets.fromLTRB(12, 0, 12, 0),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(50)),
+                        color: Colors.white
+                    ),
+                    child: TextField(
+                        controller: _searchTextFieldController,
+                        decoration: InputDecoration(
+                            hintText: "Buscar",
+                        ),
+                        onChanged: (text) {
+                            setState(() {
+                            });
+                        },
+                    ),
+                ),
                 centerTitle: true,
                 automaticallyImplyLeading: false,
-            ),
-            body: Container(
-                child: Column(
-                    children: <Widget>[
-                        Container(
-                            child: TextField(
-                                controller: _searchTextFieldController,
-                                decoration: InputDecoration(
-                                    labelText: "Buscar",
-                                ),
-                                onChanged: (text) {
-                                    setState(() {
-                                    });
-                                },
-                            ),
-                        ),
-                        Container(
-                            // child: SongList(songs: songs),
-                            child: _songList(_searchTextFieldController.text)
-                        ),
+                bottom: TabBar(
+                    controller: _tabController,
+                    tabs: <Widget>[
+                        Tab(child: Text("Canción")),
+                        Tab(child: Text("Álbum")),
+                        Tab(child: Text("Artista")),
                     ],
                 ),
-                padding: EdgeInsets.fromLTRB(15, 5, 15, 15),
-            )
+            ),
+            body: TabBarView(
+                controller: _tabController,
+                children: <Widget>[
+                    Container(
+                        padding: EdgeInsets.fromLTRB(15, 5, 15, 15),
+                        child: Column(
+                            children: <Widget>[
+                                _songList(_searchTextFieldController.text)
+                            ]
+                        ),
+                    ),
+                    Container(
+                        padding: EdgeInsets.fromLTRB(15, 5, 15, 15),
+                        child: Column(
+                            children: <Widget>[
+                                // _songList(_searchTextFieldController.text)
+                            ]
+                        ),
+                    ),
+                    Container(
+                        padding: EdgeInsets.fromLTRB(15, 5, 15, 15),
+                        child: Column(
+                            children: <Widget>[
+                                // _songList(_searchTextFieldController.text)
+                            ]
+                        ),
+                    ),
+                ],
+            ),
         );
     }
 
     FutureBuilder<List<Song>> _songList(String title) {
         return FutureFactory<List<Song>>().networkFuture(Song.fetchSongByTitleCoincidences(title), (data) {
-                _songs.clear();
-                _songs.addAll(data);
-                return SongList(songs: data);
-            }
-        );
+            _songs.clear();
+            _songs.addAll(data);
+            return SongList(songs: data);
+        });
     }
 }
