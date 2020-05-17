@@ -47,6 +47,25 @@ class Album {
         return artists;
     }
 
+    static Future<List<Album>> fetchAlbumByNameCoincidences(String name) async {
+        List<Album> albums = <Album>[];
+        if (name.isEmpty) {
+            return albums;
+        }
+        var data = {
+            "{name}": name
+        };
+        NetworkResponse response = await Network.futureGet("/album/search/{name}", data);
+        if (response.status == "success") {
+            for (var albumResponse in response.data) {
+                var album = Album.fromJson(albumResponse);
+                await album.loadArtists();
+                albums.add(album);
+            }
+        }
+        return albums;
+    }
+
     String artistsNames() {
         String artistsNames = "";
         for (Artist artist in artists) {

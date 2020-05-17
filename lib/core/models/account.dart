@@ -44,12 +44,10 @@ class Account {
         };
         try {
             Network.post("/auth/login", data, (response) {
-                NetworkResponse networkResponse = NetworkResponse.fromJson(response);
-                Session.accessToken = response["access_token"];
-                onSuccess(Account.fromJson(networkResponse.data));
+                Session.accessToken = response.json["access_token"];
+                onSuccess(Account.fromJson(response.data));
             }, (errorResponse) {
-                NetworkResponse networkResponse = NetworkResponse.fromJson(errorResponse);
-                onFailure(networkResponse);
+                onFailure(errorResponse);
             });
         } catch (exception) {
             print("Exception@Account->login() -> $exception");
@@ -62,12 +60,10 @@ class Account {
         };
         try {
             Network.post("/auth/login/google", data, (response) {
-                NetworkResponse networkResponse = NetworkResponse.fromJson(response);
-                Session.accessToken = response["access_token"];
-                onSuccess(Account.fromJson(networkResponse.data));
+                Session.accessToken = response.json["access_token"];
+                onSuccess(Account.fromJson(response.data));
             }, (errorResponse) {
-                NetworkResponse networkResponse = NetworkResponse.fromJson(errorResponse);
-                onFailure(networkResponse);
+                onFailure(errorResponse);
             });
         } catch (exception) {
             print("Exception@Account->loginWithGoogle() -> $exception");

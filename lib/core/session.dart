@@ -14,11 +14,11 @@ class Session {
 
     static void homePush(Widget content) {
         homeTabWidgetQueue.addLast(content);
-        mainMenu.page.state.controller.add(homeTabWidgetQueue.last);
+        mainMenu.page.controller.add(homeTabWidgetQueue.last);
     }
 
     static void homePop() {
         homeTabWidgetQueue.removeLast();
-        mainMenu.page.state.controller.add(homeTabWidgetQueue.last);
+        mainMenu.page.controller.add(homeTabWidgetQueue.last);
     }
 }

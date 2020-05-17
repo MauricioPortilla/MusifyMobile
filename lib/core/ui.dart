@@ -40,12 +40,12 @@ class UI {
                     child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: <Widget>[
-                        Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: <Widget>[
-                            CircularProgressIndicator(),
-                            ],
-                        ),
+                            Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: <Widget>[
+                                    CircularProgressIndicator(),
+                                ],
+                            ),
                         ],
                     )
                 )

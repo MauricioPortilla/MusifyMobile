@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:musify/core/core.dart';
 import 'package:musify/core/models/album.dart';
 import 'package:musify/core/ui/songlist.dart';
 

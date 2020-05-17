@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:musify/core/futurefactory.dart';
+import 'package:musify/core/models/album.dart';
+import 'package:musify/core/models/artist.dart';
 import 'package:musify/core/models/song.dart';
+import 'package:musify/core/ui/albumlist.dart';
+import 'package:musify/core/ui/artistlist.dart';
 import 'package:musify/core/ui/songlist.dart';
 
 class SearchScreen extends StatelessWidget {
@@ -16,7 +20,6 @@ class _SearchPage extends StatefulWidget {
 
 class _SearchPageState extends State<_SearchPage> with SingleTickerProviderStateMixin {
     final TextEditingController _searchTextFieldController = new TextEditingController();
-    List<Song> _songs = <Song>[];
     TabController _tabController;
 
     @override
@@ -72,7 +75,7 @@ class _SearchPageState extends State<_SearchPage> with SingleTickerProviderState
                         padding: EdgeInsets.fromLTRB(15, 5, 15, 15),
                         child: Column(
                             children: <Widget>[
-                                // _songList(_searchTextFieldController.text)
+                                _albumList(_searchTextFieldController.text)
                             ]
                         ),
                     ),
@@ -80,7 +83,7 @@ class _SearchPageState extends State<_SearchPage> with SingleTickerProviderState
                         padding: EdgeInsets.fromLTRB(15, 5, 15, 15),
                         child: Column(
                             children: <Widget>[
-                                // _songList(_searchTextFieldController.text)
+                                _artistList(_searchTextFieldController.text)
                             ]
                         ),
                     ),
@@ -91,9 +94,19 @@ class _SearchPageState extends State<_SearchPage> with SingleTickerProviderState
 
     FutureBuilder<List<Song>> _songList(String title) {
         return FutureFactory<List<Song>>().networkFuture(Song.fetchSongByTitleCoincidences(title), (data) {
-            _songs.clear();
-            _songs.addAll(data);
             return SongList(songs: data);
+        });
+    }
+
+    FutureBuilder<List<Album>> _albumList(String name) {
+        return FutureFactory<List<Album>>().networkFuture(Album.fetchAlbumByNameCoincidences(name), (data) {
+            return AlbumList(albums: data);
+        });
+    }
+
+    FutureBuilder<List<Artist>> _artistList(String artisticName) {
+        return FutureFactory<List<Artist>>().networkFuture(Artist.fetchAlbumByArtisticNameCoincidences(artisticName), (data) {
+            return ArtistList(artists: data);
         });
     }
 }

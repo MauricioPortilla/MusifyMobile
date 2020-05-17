@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:musify/core/futurefactory.dart';
 import 'package:musify/core/models/playlist.dart';
 import 'package:musify/core/session.dart';
+import 'package:musify/core/ui.dart';
 import 'package:musify/core/ui/playlistlist.dart';
 import 'package:musify/screens/consult_playlist.dart';
 
@@ -40,7 +41,7 @@ class _ConsultPlaylistsPageState extends State<_ConsultPlaylistsPage> {
                                     ),
                                     RaisedButton(
                                         child: Text("Nueva lista de reproducción"),
-                                        onPressed: () {},
+                                        onPressed: _createNewPlaylistButton,
                                     ),
                                 ],
                             ),
@@ -70,5 +71,51 @@ class _ConsultPlaylistsPageState extends State<_ConsultPlaylistsPage> {
         return FutureFactory<List<Playlist>>().networkFuture(Session.account.loadPlaylists(), (data) {
             return PlaylistList(playlists: data, onTap: _onSelectPlaylist);
         });
+    }
+
+    void _createNewPlaylistButton() {
+        var playlistNameTextFieldController = TextEditingController();
+        UI.createDialog(
+            context, 
+            "Nueva lista de reproducción", 
+            Column(
+                children: <Widget>[
+                    TextField(
+                        controller: playlistNameTextFieldController,
+                        decoration: InputDecoration(
+                            labelText: "Nombre"
+                        ),
+                        maxLength: 20,
+                        maxLengthEnforced: true,
+                    ),
+                ],
+            ), [
+                FlatButton(
+                    child: Text("Crear"),
+                    onPressed: () {
+                        Playlist newPlaylist = Playlist(
+                            accountId: Session.account.accountId, 
+                            name: playlistNameTextFieldController.text
+                        );
+                        try {
+                            newPlaylist.save((playlist) {
+                                setState(() {
+                                });
+                                Navigator.pop(context);
+                            }, (errorResponse) {
+                                UI.createErrorDialog(context, "Ocurrió un error al crear la lista de reproducción.");
+                            });
+                        } catch (exception) {
+                            UI.createErrorDialog(context, "Ocurrió un error al crear la lista de reproducción.");
+                        }
+                    },
+                ),
+                FlatButton(
+                    child: Text("Cancelar"),
+                    onPressed: () {
+                        Navigator.pop(context);
+                    },
+                )
+            ]);
     }
 }

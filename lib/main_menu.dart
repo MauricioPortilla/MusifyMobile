@@ -19,13 +19,18 @@ class MainMenuScreen extends StatelessWidget {
 }
 
 class _MainMenuPage extends StatefulWidget {
-    final state = _MainMenuPageState();
-    _MainMenuPageState createState() => state;
+    final StreamController<Widget> controller = StreamController<Widget>();
+    Stream<Widget> controllerStreamBroadcast;
+    
+    _MainMenuPage() {
+        controllerStreamBroadcast = controller.stream.asBroadcastStream();
+    }
+
+    _MainMenuPageState createState() => _MainMenuPageState();
 }
 
 class _MainMenuPageState extends State<_MainMenuPage> with SingleTickerProviderStateMixin {
     TabController _tabController;
-    final StreamController<Widget> controller = StreamController<Widget>();
 
     @override
     void initState() {
@@ -42,7 +47,7 @@ class _MainMenuPageState extends State<_MainMenuPage> with SingleTickerProviderS
                     controller: _tabController,
                     children: [
                         Container(
-                            child: HomeScreen(stream: controller.stream.asBroadcastStream())
+                            child: HomeScreen(stream: widget.controllerStreamBroadcast)
                         ),
                         Container(
                             child: SearchScreen()

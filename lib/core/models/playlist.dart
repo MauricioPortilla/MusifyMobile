@@ -10,7 +10,7 @@ class Playlist {
     List<Song> songs = <Song>[];
 
     Playlist({
-        this.playlistId,
+        this.playlistId = 0,
         this.accountId,
         this.name
     });
@@ -38,5 +38,30 @@ class Playlist {
             }
         }
         return songs;
+    }
+
+    void save(onSuccess(Playlist playlist), onFailure(NetworkResponse errorResponse)) {
+        try {
+            var data = {
+                "account_id": accountId,
+                "name": name
+            };
+            if (playlistId == 0) {
+                Network.post("/playlist", data, (response) {
+                    onSuccess(Playlist.fromJson(response.data));
+                }, (errorResponse) {
+                    onFailure(errorResponse);
+                });
+            } else {
+                Network.put("/playlist", data, (response) {
+                    onSuccess(Playlist.fromJson(response.data));
+                }, (errorResponse) {
+                    onFailure(errorResponse);
+                });
+            }
+        } catch (exception) {
+            print("Exception@Playlist->save() -> $exception");
+            throw exception;
+        }
     }
 }

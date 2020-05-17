@@ -1,19 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:musify/core/models/song.dart';
-import 'package:musify/core/session.dart';
+import 'package:musify/core/models/album.dart';
 
-class SongList extends StatefulWidget {
-    final List<Song> songs;
+class AlbumList extends StatefulWidget {
+    final List<Album> albums;
 
-    SongList({@required this.songs});
+    AlbumList({@required this.albums});
 
     @override
     State<StatefulWidget> createState() {
-        return _SongListState();
+        return _AlbumListState();
     }
 }
 
-class _SongListState extends State<SongList> {
+class _AlbumListState extends State<AlbumList> {
     @override
     Widget build(BuildContext context) {
         return Expanded(
@@ -24,13 +23,13 @@ class _SongListState extends State<SongList> {
     ListView _createListView() {
         return ListView.builder(
             shrinkWrap: true,
-            itemCount: widget.songs.length,
+            itemCount: widget.albums.length,
             itemBuilder: (BuildContext context, int index) {
                 return Container(
                     width: double.infinity,
                     child: InkWell(
                         onTap: () {
-                            Session.player.state.playSong(widget.songs[index]);
+                            
                         },
                         child: Container(
                             child: Row(
@@ -41,7 +40,7 @@ class _SongListState extends State<SongList> {
                                         children: <Widget>[
                                             Container(
                                                 child: Text(
-                                                    widget.songs[index].title,
+                                                    widget.albums[index].name,
                                                     textAlign: TextAlign.left,
                                                     style: TextStyle(fontWeight: FontWeight.bold)
                                                 ),
@@ -49,8 +48,8 @@ class _SongListState extends State<SongList> {
                                             ),
                                             Row(
                                                 children: <Widget>[
-                                                    Text("Canción - ", style: TextStyle(fontSize: 13)),
-                                                    Text(widget.songs[index].album.artistsNames())
+                                                    Text("Álbum - ", style: TextStyle(fontSize: 13)),
+                                                    Text(widget.albums[index].artistsNames())
                                                 ],
                                             )
                                         ],

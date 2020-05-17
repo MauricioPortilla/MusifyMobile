@@ -101,8 +101,8 @@ class Network {
     static void post(
         String resource, 
         Map<String, dynamic> data, 
-        onSuccess(Map<String, dynamic> response), 
-        onFailure(Map<String, dynamic> errorResponse)
+        onSuccess(NetworkResponse response), 
+        onFailure(NetworkResponse errorResponse)
     ) async {
         try {
             String query = resource;
@@ -121,15 +121,51 @@ class Network {
             );
             Map<String, dynamic> jsonDecoded = json.decode(response.body);
             if (jsonDecoded["status"] == "success") {
-                onSuccess(jsonDecoded);
+                onSuccess(NetworkResponse.fromJson(jsonDecoded));
             } else {
-                onFailure(jsonDecoded);
+                onFailure(NetworkResponse.fromJson(jsonDecoded));
             }
         } catch (exception) {
-            onFailure(<String, dynamic> { 
-                "status": "failure", 
-                "message": "No se pudo establecer una conexión con el servidor." 
-            });
+            onFailure(NetworkResponse(
+                status: "failure", 
+                message: "No se pudo establecer una conexión con el servidor."
+            ));
+            throw exception;
+        }
+    }
+
+    static void put(
+        String resource,
+        Map<String, dynamic> data,
+        onSuccess(NetworkResponse response),
+        onFailure(NetworkResponse errorResponse)
+    ) async {
+        try {
+            String query = resource;
+            if (data != null) {
+                data.forEach((key, value) {
+                    query = query.replaceAll(key, value.toString());
+                });
+            }
+            final http.Response response = await http.put(
+                Core.SERVER_URL + query,
+                headers: <String, String> {
+                    "Content-Type": "application/json; charset=UTF-8",
+                    "Authorization": Session.accessToken != null ? Session.accessToken : ""
+                },
+                body: jsonEncode(data)
+            );
+            Map<String, dynamic> jsonDecoded = json.decode(response.body);
+            if (jsonDecoded["status"] == "success") {
+                onSuccess(NetworkResponse.fromJson(jsonDecoded));
+            } else {
+                onFailure(NetworkResponse.fromJson(jsonDecoded));
+            }
+        } catch (exception) {
+            onFailure(NetworkResponse(
+                status: "failure", 
+                message: "No se pudo establecer una conexión con el servidor."
+            ));
             throw exception;
         }
     }
