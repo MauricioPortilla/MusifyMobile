@@ -23,8 +23,7 @@ class _AlbumPanelState extends State<AlbumPanel> {
                                 width: 100,
                                 height: 100,
                                 margin: EdgeInsets.only(right: 10),
-                                // child: Image.network(Core.SERVER_URL + "/album/" + widget.album.albumId.toString() + "/image"),
-                                color: Colors.black,
+                                child: widget.album.fetchImage(),
                             ),
                             Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,

@@ -57,6 +57,7 @@ class _MusifyState extends State<MusifyScreen> {
                             ),
                             maxLength: 100,
                             maxLengthEnforced: true,
+                            keyboardType: TextInputType.emailAddress,
                         ),
                         TextField(
                             controller: _passwordTextFieldController,

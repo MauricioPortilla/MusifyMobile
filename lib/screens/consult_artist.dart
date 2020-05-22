@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:musify/core/futurefactory.dart';
 import 'package:musify/core/models/album.dart';
 import 'package:musify/core/models/artist.dart';
+import 'package:musify/core/session.dart';
 import 'package:musify/core/ui/album_panel.dart';
 
 class ConsultArtistScreen extends StatelessWidget {
@@ -23,6 +25,7 @@ class _ConsultArtistPage extends StatefulWidget {
 }
 
 class _ConsultArtistPageState extends State<_ConsultArtistPage> {
+    List<Widget> _albumsUI = <Widget>[];
 
     @override
     Widget build(BuildContext context) {
@@ -31,28 +34,36 @@ class _ConsultArtistPageState extends State<_ConsultArtistPage> {
                 title: Text(widget.artist.artisticName),
                 centerTitle: true,
                 automaticallyImplyLeading: false,
+                leading: IconButton(
+                    icon: Icon(Icons.arrow_back_ios),
+                    onPressed: () {
+                        Session.homePop();
+                    },
+                ),
             ),
             body: SingleChildScrollView(
                 child: Container(
-                    child: Column(
-                        children: _loadAlbums()
-                    ),
+                    child: _loadAlbums(),
                     padding: EdgeInsets.fromLTRB(15, 5, 15, 15),
                 )
             )
         );
     }
 
-    List<Widget> _loadAlbums() {
-        List<Widget> albumsUI = <Widget>[];
-        for (Album album in widget.artist.albums) {
-            albumsUI.add(
-                Container(
-                    child: AlbumPanel(album: album),
-                    margin: EdgeInsets.only(bottom: 15)
-                )
+    FutureBuilder<List<Album>> _loadAlbums() {
+        return FutureFactory<List<Album>>().networkFuture(widget.artist.fetchAlbums(), (data) {
+            _albumsUI.clear();
+            for (Album album in data) {
+                _albumsUI.add(
+                    Container(
+                        child: AlbumPanel(album: album),
+                        margin: EdgeInsets.only(bottom: 15)
+                    )
+                );
+            }
+            return Column(
+                children: _albumsUI,
             );
-        }
-        return albumsUI;
+        });
     }
 }

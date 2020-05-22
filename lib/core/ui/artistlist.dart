@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:musify/core/models/artist.dart';
+import 'package:musify/core/session.dart';
+import 'package:musify/screens/consult_artist.dart';
 
 class ArtistList extends StatefulWidget {
     final List<Artist> artists;
@@ -29,7 +31,10 @@ class _ArtistListState extends State<ArtistList> {
                     width: double.infinity,
                     child: InkWell(
                         onTap: () {
-                            
+                            FocusScope.of(context).unfocus();
+                            Session.homePush(ConsultArtistScreen(
+                                artist: widget.artists[index]
+                            ));
                         },
                         child: Container(
                             child: Row(

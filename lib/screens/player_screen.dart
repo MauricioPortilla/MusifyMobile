@@ -58,7 +58,7 @@ class _PlayerPageState extends State<_PlayerPage> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
                         Container(
-                            // child: Image.network("")
+                            child: Session.player.state.latestPlayedSong.album.fetchImage(),
                             width: MediaQuery.of(context).size.width / 1.15,
                             height: MediaQuery.of(context).size.width / 1.15,
                             color: Colors.black,
@@ -89,11 +89,10 @@ class _PlayerPageState extends State<_PlayerPage> {
                                                     )
                                                 ),
                                                 onTap: () {
-                                                    Navigator.push(context, MaterialPageRoute(
-                                                        builder: (context) => ConsultArtistScreen(
-                                                            artist: Session.player.state.latestPlayedSong.album.artists[0]
-                                                        )
+                                                    Session.homePush(ConsultArtistScreen(
+                                                        artist: Session.player.state.latestPlayedSong.album.artists[0]
                                                     ));
+                                                    Navigator.pop(context);
                                                 },
                                             )
                                         ],

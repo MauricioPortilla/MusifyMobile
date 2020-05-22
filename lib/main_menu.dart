@@ -19,6 +19,7 @@ class MainMenuScreen extends StatelessWidget {
 }
 
 class _MainMenuPage extends StatefulWidget {
+    final _MainMenuPageState state = _MainMenuPageState();
     final StreamController<Widget> controller = StreamController<Widget>();
     Stream<Widget> controllerStreamBroadcast;
     
@@ -26,16 +27,22 @@ class _MainMenuPage extends StatefulWidget {
         controllerStreamBroadcast = controller.stream.asBroadcastStream();
     }
 
-    _MainMenuPageState createState() => _MainMenuPageState();
+    _MainMenuPageState createState() => state;
 }
 
 class _MainMenuPageState extends State<_MainMenuPage> with SingleTickerProviderStateMixin {
-    TabController _tabController;
+    TabController tabController;
 
     @override
     void initState() {
         super.initState();
-        _tabController = TabController(length: 4, vsync: this);
+        tabController = TabController(length: 4, vsync: this);
+    }
+
+    @override
+    void dispose() {
+        widget.controller.close();
+        super.dispose();
     }
 
     @override
@@ -44,7 +51,7 @@ class _MainMenuPageState extends State<_MainMenuPage> with SingleTickerProviderS
             onWillPop: () async => false,
             child: Scaffold(
                 body: TabBarView(
-                    controller: _tabController,
+                    controller: tabController,
                     children: [
                         Container(
                             child: HomeScreen(stream: widget.controllerStreamBroadcast)
@@ -55,11 +62,6 @@ class _MainMenuPageState extends State<_MainMenuPage> with SingleTickerProviderS
                         Container(
                             child: ListView(
                                 children: <Widget>[
-                                    FlatButton(
-                                        child: Text("Consultar artista"),
-                                        onPressed: () {
-                                        },
-                                    ),
                                     FlatButton(
                                         child: Text("Consultar biblioteca propia"),
                                         onPressed: () {
@@ -91,7 +93,7 @@ class _MainMenuPageState extends State<_MainMenuPage> with SingleTickerProviderS
                             Container(
                                 color: Color(0xFF3F5AA6),
                                 child: TabBar(
-                                    controller: _tabController,
+                                    controller: tabController,
                                     labelColor: Colors.white,
                                     unselectedLabelColor: Colors.white70,
                                     indicatorSize: TabBarIndicatorSize.tab,

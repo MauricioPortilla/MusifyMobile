@@ -15,6 +15,7 @@ class Session {
     static void homePush(Widget content) {
         homeTabWidgetQueue.addLast(content);
         mainMenu.page.controller.add(homeTabWidgetQueue.last);
+        mainMenu.page.state.tabController.animateTo(0);
     }
 
     static void homePop() {

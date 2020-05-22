@@ -1,7 +1,11 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/material.dart';
+import 'package:musify/core/core.dart';
 import 'package:musify/core/models/artist.dart';
 import 'package:musify/core/models/song.dart';
 import 'package:musify/core/network.dart';
 import 'package:musify/core/networkresponse.dart';
+import 'package:musify/core/session.dart';
 
 class Album {
     final int albumId;
@@ -38,13 +42,28 @@ class Album {
             "{albumId}": albumId
         };
         NetworkResponse response = await Network.futureGet("/album/{albumId}/artists", data);
-        artists.clear();
         if (response.status == "success") {
+            artists.clear();
             for (var artistJson in response.data) {
                 artists.add(Artist.fromJson(artistJson));
             }
         }
         return artists;
+    }
+
+    Future loadSongs() async {
+        var data = {
+            "{albumId}": albumId
+        };
+        NetworkResponse response = await Network.futureGet("/album/{albumId}/songs", data);
+        if (response.status == "success") {
+            songs.clear();
+            for (var songJson in response.data) {
+                var song = Song.fromJson(songJson);
+                song.album = this;
+                songs.add(song);
+            }
+        }
     }
 
     static Future<List<Album>> fetchAlbumByNameCoincidences(String name) async {
@@ -64,6 +83,15 @@ class Album {
             }
         }
         return albums;
+    }
+
+    CachedNetworkImage fetchImage() {
+        return CachedNetworkImage(
+            imageUrl: Core.SERVER_URL + "/album/" + albumId.toString() + "/image",
+            placeholder: (context, url) => CircularProgressIndicator(),
+            errorWidget: (context, url, error) => Icon(Icons.error),
+            httpHeaders: { "Authorization": Session.accessToken },
+        );
     }
 
     String artistsNames() {

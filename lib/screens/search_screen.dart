@@ -18,9 +18,12 @@ class _SearchPage extends StatefulWidget {
     _SearchPageState createState() => _SearchPageState();
 }
 
-class _SearchPageState extends State<_SearchPage> with SingleTickerProviderStateMixin {
+class _SearchPageState extends State<_SearchPage> with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin {
     final TextEditingController _searchTextFieldController = new TextEditingController();
     TabController _tabController;
+
+    @override
+    bool get wantKeepAlive => true;
 
     @override
     void initState() {

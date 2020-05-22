@@ -11,8 +11,7 @@ class Artist {
     Artist({
         this.artistId, 
         this.accountId, 
-        this.artisticName,
-        this.albums
+        this.artisticName
     });
 
     factory Artist.fromJson(Map<String, dynamic> json) {
@@ -39,5 +38,22 @@ class Artist {
             }
         }
         return artists;
+    }
+
+    Future<List<Album>> fetchAlbums() async {
+        var data = {
+            "{artistId}": artistId
+        };
+        NetworkResponse response = await Network.futureGet("/artist/{artistId}/albums", data);
+        if (response.status == "success") {
+            albums.clear();
+            for (var albumResponse in response.data) {
+                var album = Album.fromJson(albumResponse);
+                await album.loadSongs();
+                await album.loadArtists();
+                albums.add(album);
+            }
+        }
+        return albums;
     }
 }

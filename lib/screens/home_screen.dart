@@ -24,8 +24,11 @@ class _HomePage extends StatefulWidget {
     _HomePageState createState() => state;
 }
 
-class _HomePageState extends State<_HomePage> {
+class _HomePageState extends State<_HomePage> with AutomaticKeepAliveClientMixin {
     Widget content = ConsultPlaylistsScreen();
+
+    @override
+    bool get wantKeepAlive => true;
 
     @override
     void initState() {
