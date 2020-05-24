@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_config/flutter_config.dart';
 import 'package:musify/core/models/account.dart';
 import 'package:musify/core/session.dart';
 import 'package:musify/core/ui.dart';
@@ -6,7 +7,11 @@ import 'package:musify/core/ui/player.dart';
 import 'package:musify/main_menu.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
-void main() => runApp(Musify());
+void main() async {
+    WidgetsFlutterBinding.ensureInitialized();
+    await FlutterConfig.loadEnvVariables();
+    runApp(Musify());
+}
 
 class Musify extends StatelessWidget {
     @override
@@ -102,9 +107,12 @@ class _MusifyState extends State<MusifyScreen> {
             UI.createErrorDialog(context, "Faltan campos por completar.");
             return;
         }
+        UI.createLoadingDialog(context);
         Account.login(_emailTextFieldController.text, _passwordTextFieldController.text, (account) {
+            Navigator.pop(context);
             _onSuccessfulLogin(account);
         }, (errorResponse) {
+            Navigator.pop(context);
             UI.createErrorDialog(context, errorResponse.message);
         });
     }
