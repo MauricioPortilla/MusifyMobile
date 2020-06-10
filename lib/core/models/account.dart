@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:musify/core/models/accountsong.dart';
 import 'package:musify/core/models/playlist.dart';
 import 'package:musify/core/network.dart';
 import 'package:musify/core/networkresponse.dart';
@@ -11,6 +14,7 @@ class Account {
     final String lastName;
     final DateTime creationDate;
     List<Playlist> playlists = <Playlist>[];
+    List<AccountSong> accountSongs = <AccountSong>[];
 
     Account({
         this.accountId,
@@ -70,6 +74,58 @@ class Account {
         }
     }
 
+    void register(
+        bool isArtist, 
+        onSuccess(Account account), 
+        onFailure(NetworkResponse errorResponse), 
+        onError(), 
+        { String artisticName = "" }
+    ) {
+        var data = {
+            "email": email,
+            "password": password,
+            "name": name,
+            "last_name": lastName,
+            "is_artist": isArtist,
+            "artistic_name": artisticName == "" ? null : artisticName
+        };
+        try {
+            Network.post("/auth/register", data, (response) {
+                onSuccess(Account.fromJson(response.data));
+            }, (errorResponse) {
+                onFailure(errorResponse);
+            });
+        } catch (exception) {
+            print("Exception@Account->register() -> $exception");
+            onError();
+        }
+    }
+
+    void registerWithGoogle(
+        String accessToken,
+        bool isArtist, 
+        onSuccess(Account account), 
+        onFailure(NetworkResponse errorResponse), 
+        onError(), 
+        { String artisticName = "" }
+    ) {
+        var data = {
+            "access_token": accessToken,
+            "is_artist": isArtist,
+            "artistic_name": artisticName == "" ? null : artisticName
+        };
+        try {
+            Network.post("/auth/register/google", data, (response) {
+                onSuccess(Account.fromJson(response.data));
+            }, (errorResponse) {
+                onFailure(errorResponse);
+            });
+        } catch (exception) {
+            print("Exception@Account->registerWithGoogle() -> $exception");
+            onError();
+        }
+    }
+
     Future<List<Playlist>> loadPlaylists() async {
         var data = {
             "{accountId}": accountId    
@@ -82,5 +138,37 @@ class Account {
             }
         }
         return playlists;
+    }
+
+    Future<List<AccountSong>> fetchAccountSongs() async {
+        var data = {
+            "{accountId}": accountId
+        };
+        NetworkResponse response = await Network.futureGet("/account/{accountId}/accountsongs", data);
+        accountSongs.clear();
+        if (response.status == "success") {
+            for (var accountSongJson in response.data) {
+                accountSongs.add(AccountSong.fromJson(accountSongJson));
+            }
+        }
+        return accountSongs;
+    }
+
+    void addAccountSongs(List<File> files, onSuccess(), onFailure(NetworkResponse errorResponse), onError()) {
+        var data = {
+            "{accountId}": accountId
+        };
+        try {
+            Network.postMultimedia("/account/{accountId}/accountsongs", data, files, (response) {
+                for (var accountSongJson in response.data) {
+                    accountSongs.add(AccountSong.fromJson(accountSongJson));
+                }
+                onSuccess();
+            }, (errorResponse) {
+                onFailure(errorResponse);
+            });
+        } catch (exception) {
+            onError();
+        }
     }
 }

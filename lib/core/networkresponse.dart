@@ -14,7 +14,7 @@ class NetworkResponse {
     factory NetworkResponse.fromJson(Map<String, dynamic> json) {
         return NetworkResponse(
             status: json["status"],
-            message: json["message"],
+            message: json["message"] ?? null,
             data: json["data"],
             json: json
         );

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:musify/core/models/song.dart';
 import 'package:musify/core/session.dart';
+import 'package:musify/screens/add_song_to_playlist.dart';
 
 class SongList extends StatefulWidget {
     final List<Song> songs;
@@ -30,7 +31,7 @@ class _SongListState extends State<SongList> {
                     width: double.infinity,
                     child: InkWell(
                         onTap: () {
-                            Session.player.state.playSong(widget.songs[index]);
+                            Session.player.state.playSong(song: widget.songs[index]);
                         },
                         child: Container(
                             child: Row(
@@ -55,10 +56,25 @@ class _SongListState extends State<SongList> {
                                             )
                                         ],
                                     ),
-                                    InkWell(
-                                        child: Icon(Icons.more_horiz),
-                                        onTap: () {
-                                        }
+                                    DropdownButton(
+                                        items: [
+                                            DropdownMenuItem(
+                                                child: Text("Agregar a lista de reproducción", style: TextStyle(fontSize: 14)),
+                                                value: "addToPlaylist",
+                                            )
+                                        ],
+                                        icon: Icon(Icons.more_horiz),
+                                        onChanged: (value) {
+                                            if (value == "addToPlaylist") {
+                                                Navigator.push(
+                                                    context, MaterialPageRoute(
+                                                        builder: (context) => AddSongToPlaylistScreen(
+                                                            songToAdd: widget.songs[index]
+                                                        )
+                                                    )
+                                                );
+                                            }
+                                        },
                                     )
                                 ],
                             ),

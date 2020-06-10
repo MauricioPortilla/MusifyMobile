@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:musify/core/models/playlist.dart';
 import 'package:musify/core/models/song.dart';
+import 'package:musify/core/session.dart';
+import 'package:musify/core/ui.dart';
 import 'package:musify/core/ui/playlistlist.dart';
 
 class AddSongToPlaylistScreen extends StatelessWidget {
@@ -10,20 +12,20 @@ class AddSongToPlaylistScreen extends StatelessWidget {
     
     @override
     Widget build(BuildContext context) {
-        return _AddSongToPlaylistPage();
+        return _AddSongToPlaylistPage(songToAdd: this.songToAdd);
     }
 }
 
 class _AddSongToPlaylistPage extends StatefulWidget {
+    final Song songToAdd;
+
+    _AddSongToPlaylistPage({@required this.songToAdd});
+
     _AddSongToPlaylistPageState createState() => _AddSongToPlaylistPageState();
 }
 
 class _AddSongToPlaylistPageState extends State<_AddSongToPlaylistPage> {
-    List<Playlist> playlists = <Playlist>[
-        Playlist(name: "Awesome"),
-        Playlist(name: "Mis canciones favoritas")
-    ];
-
+    
     @override
     Widget build(BuildContext context) {
         return Scaffold(
@@ -35,7 +37,7 @@ class _AddSongToPlaylistPageState extends State<_AddSongToPlaylistPage> {
                 child: Column(
                     children: <Widget>[
                         Container(
-                            child: PlaylistList(playlists: playlists, onTap: _onSelectPlaylist),
+                            child: PlaylistList(playlists: Session.account.playlists, onTap: _onSelectPlaylist),
                         ),
                     ],
                 ),
@@ -45,6 +47,16 @@ class _AddSongToPlaylistPageState extends State<_AddSongToPlaylistPage> {
     }
 
     void _onSelectPlaylist(Playlist playlist) {
-        print(playlist.name);
+        UI.createLoadingDialog(context);
+        playlist.addSong(widget.songToAdd, () {
+            Navigator.pop(context);
+            Navigator.pop(context);
+        }, (errorResponse) {
+            Navigator.pop(context);
+            UI.createErrorDialog(context, errorResponse.message);
+        }, () {
+            Navigator.pop(context);
+            UI.createErrorDialog(context, "Ocurrió un error al guardar la canción en la lista de reproducción.");
+        });
     }
 }

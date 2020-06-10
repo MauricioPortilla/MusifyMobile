@@ -1,17 +1,19 @@
 import 'dart:convert';
+import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:musify/core/core.dart';
 import 'package:musify/core/networkresponse.dart';
 import 'package:musify/core/session.dart';
 import 'package:http/http.dart' as http;
+import 'package:path/path.dart';
 
 class Network {
     static void get(
         String resource, 
         Map<String, dynamic> data, 
-        onSuccess(Map<String, dynamic> response), 
-        onFailure(Map<String, dynamic> errorResponse)
+        onSuccess(NetworkResponse response), 
+        onFailure(NetworkResponse errorResponse)
     ) async {
         try {
             String query = resource;
@@ -29,15 +31,15 @@ class Network {
             );
             Map<String, dynamic> jsonDecoded = json.decode(response.body);
             if (jsonDecoded["status"] == "success") {
-                onSuccess(jsonDecoded);
+                onSuccess(NetworkResponse.fromJson(jsonDecoded));
             } else {
-                onFailure(jsonDecoded);
+                onFailure(NetworkResponse.fromJson(jsonDecoded));
             }
         } catch (exception) {
-            onFailure(<String, dynamic> { 
-                "status": "failure", 
-                "message": "No se pudo establecer una conexión con el servidor." 
-            });
+            onFailure(NetworkResponse(
+                status: "failure", 
+                message: "No se pudo establecer una conexión con el servidor."
+            ));
             throw exception;
         }
     }
@@ -58,7 +60,7 @@ class Network {
                 }
             );
             var jsonResponse = json.decode(response.body);
-            return NetworkResponse(status: jsonResponse["status"], data: jsonResponse["data"], message: jsonResponse["message"] ?? null);
+            return NetworkResponse.fromJson(jsonResponse);
         } catch (exception) {
             throw exception;
         }
@@ -68,7 +70,7 @@ class Network {
         String resource, 
         Map<String, dynamic> data, 
         onSuccess(Uint8List buffer), 
-        onFailure(Map<String, dynamic> data)
+        onFailure(NetworkResponse data)
     ) async {
         try {
             String query = resource;
@@ -90,10 +92,10 @@ class Network {
             }
             throw Exception();
         } catch (exception) {
-            onFailure(<String, dynamic> { 
-                "status": "failure", 
-                "message": "No se pudo establecer una conexión con el servidor." 
-            });
+            onFailure(NetworkResponse(
+                status: "failure", 
+                message: "No se pudo establecer una conexión con el servidor."
+            ));
             throw exception;
         }
     }
@@ -125,6 +127,45 @@ class Network {
             } else {
                 onFailure(NetworkResponse.fromJson(jsonDecoded));
             }
+        } catch (exception) {
+            onFailure(NetworkResponse(
+                status: "failure", 
+                message: "No se pudo establecer una conexión con el servidor."
+            ));
+            throw exception;
+        }
+    }
+
+    static void postMultimedia(
+        String resource, 
+        Map<String, dynamic> data, 
+        List<File> files,
+        onSuccess(NetworkResponse response), 
+        onFailure(NetworkResponse errorResponse)
+    ) async {
+        try {
+            String query = resource;
+            if (data != null) {
+                data.forEach((key, value) {
+                    query = query.replaceAll(key, value.toString());
+                });
+            }
+            var request = http.MultipartRequest("POST", Uri.parse(Core.SERVER_URL + query));
+            request.headers.addAll({
+                "Authorization": Session.accessToken != null ? Session.accessToken : "",
+                "Content-Type": "multipart/form-data"
+            });
+            for (var file in files) {
+                request.files.add(http.MultipartFile.fromBytes("1", await file.readAsBytes(), filename: basename(file.path)));
+            }
+            var response = await request.send();
+            response.stream.transform(utf8.decoder).listen((value) {
+                if (response.statusCode == 201) {
+                    onSuccess(NetworkResponse.fromJson(json.decode(value)));
+                } else {
+                    onFailure(NetworkResponse());
+                }
+            });
         } catch (exception) {
             onFailure(NetworkResponse(
                 status: "failure", 

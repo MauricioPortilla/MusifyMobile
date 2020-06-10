@@ -116,6 +116,7 @@ class _ConsultPlaylistsPageState extends State<_ConsultPlaylistsPage> {
                         Navigator.pop(context);
                     },
                 )
-            ]);
+            ]
+        );
     }
 }

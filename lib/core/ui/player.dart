@@ -3,10 +3,13 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_sound/flauto.dart';
 import 'package:flutter_sound/flutter_sound_player.dart';
+import 'package:musify/core/models/accountsong.dart';
 import 'package:musify/core/models/song.dart';
 import 'package:musify/core/network.dart';
 import 'package:musify/core/ui.dart';
 import 'package:musify/screens/player_screen.dart';
+
+import '../session.dart';
 
 class Player extends StatefulWidget {
     final _PlayerState state = _PlayerState();
@@ -18,6 +21,7 @@ class Player extends StatefulWidget {
 class _PlayerState extends State<Player> {
 
     Song latestPlayedSong;
+    AccountSong latestPlayedAccountSong;
     Uint8List latestPlayedSongBuffer;
     FlutterSoundPlayer player = FlutterSoundPlayer();
     double playerCurrentPosition = 0;
@@ -27,7 +31,7 @@ class _PlayerState extends State<Player> {
     Widget build(BuildContext context) {
         return GestureDetector(
             onTap: () {
-                if (latestPlayedSong != null) {
+                if (latestPlayedSong != null || latestPlayedAccountSong != null) {
                     Navigator.push(
                         context, MaterialPageRoute(
                             builder: (context) => PlayerScreen()
@@ -50,7 +54,7 @@ class _PlayerState extends State<Player> {
                                 children: <Widget>[
                                     GestureDetector(
                                         child: Text(
-                                            latestPlayedSong == null ? "" : latestPlayedSong.title,
+                                            latestPlayedSong == null ? latestPlayedAccountSong.title : latestPlayedSong.title,
                                             style: TextStyle(
                                                 fontSize: 15
                                             )
@@ -97,7 +101,7 @@ class _PlayerState extends State<Player> {
         );
     }
 
-    void playSong(Song song) async {
+    void playSong({Song song, AccountSong accountSong}) async {
         if (player.isPlaying) {
             player.stopPlayer();
         }
@@ -106,16 +110,34 @@ class _PlayerState extends State<Player> {
         if (player.isInited == t_INITIALIZED.NOT_INITIALIZED) {
             await player.initialize();
         }
-        latestPlayedSong = song;
-        var data = {
-            "{songId}": song.songId
-        };
-        Network.getStreamBuffer("/stream/song/{songId}/highQuality", data, (buffer) {
-            latestPlayedSongBuffer = buffer;
-            _playSong(buffer);
-        }, (errorResponse) {
-            UI.createErrorDialog(context, errorResponse["message"]);
-        });
+        if ((song == null && accountSong == null) || (song != null && accountSong != null)) {
+            return;
+        }
+        if (song != null) {
+            latestPlayedSong = song;
+            latestPlayedAccountSong = null;
+            var data = {
+                "{songId}": song.songId
+            };
+            Network.getStreamBuffer("/stream/song/{songId}/${Session.songStreamingQuality}", data, (buffer) {
+                latestPlayedSongBuffer = buffer;
+                _playSong(buffer);
+            }, (errorResponse) {
+                UI.createErrorDialog(context, errorResponse.message);
+            });
+        } else if (accountSong != null) {
+            latestPlayedAccountSong = accountSong;
+            latestPlayedSong = null;
+            var data = {
+                "{accountSongId}": accountSong.accountSongId
+            };
+            Network.getStreamBuffer("/stream/accountsong/{accountSongId}", data, (buffer) {
+                latestPlayedSongBuffer = buffer;
+                _playSong(buffer);
+            }, (errorResponse) {
+                UI.createErrorDialog(context, errorResponse.message);
+            });
+        }
     }
 
     void _playSong(Uint8List buffer) async {

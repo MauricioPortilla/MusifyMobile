@@ -6,6 +6,7 @@ import 'package:musify/core/ui.dart';
 import 'package:musify/core/ui/player.dart';
 import 'package:musify/main_menu.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:musify/screens/register_screen.dart';
 
 void main() async {
     WidgetsFlutterBinding.ensureInitialized();
@@ -91,6 +92,16 @@ class _MusifyState extends State<MusifyScreen> {
                             width: double.infinity,
                             margin: EdgeInsets.only(top: 10),
                         ),
+                        Container(
+                            child: RaisedButton(
+                                onPressed: _registerButton,
+                                child: Text("Registrarse"),
+                                color: Colors.lightBlue,
+                                textColor: Colors.white,
+                            ),
+                            width: double.infinity,
+                            margin: EdgeInsets.only(top: 20),
+                        ),
                     ],
                 ),
             )
@@ -144,5 +155,9 @@ class _MusifyState extends State<MusifyScreen> {
         Navigator.push(context, MaterialPageRoute(
             builder: (context) => Session.mainMenu
         ));
+    }
+
+    void _registerButton() {
+        Navigator.push(context, MaterialPageRoute(builder: (context) => RegisterScreen()));
     }
 }

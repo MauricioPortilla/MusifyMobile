@@ -9,6 +9,7 @@ class Session {
     static Account account;
     static String accessToken;
     static Player player;
+    static String songStreamingQuality = "highquality";
     static MainMenuScreen mainMenu;
     static ListQueue homeTabWidgetQueue = ListQueue();
 

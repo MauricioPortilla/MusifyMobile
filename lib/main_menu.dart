@@ -1,9 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:musify/core/models/song.dart';
 import 'package:musify/core/session.dart';
-import 'package:musify/screens/add_song_to_playlist.dart';
 import 'package:musify/screens/consult_account_songs.dart';
 import 'package:musify/screens/home_screen.dart';
 import 'package:musify/screens/search_screen.dart';
@@ -62,27 +60,35 @@ class _MainMenuPageState extends State<_MainMenuPage> with SingleTickerProviderS
                         Container(
                             child: ListView(
                                 children: <Widget>[
-                                    FlatButton(
-                                        child: Text("Consultar biblioteca propia"),
-                                        onPressed: () {
-                                            Navigator.push(context, MaterialPageRoute(
-                                                builder: (context) => ConsultAccountSongsScreen()
-                                            ));
-                                        },
-                                    ),
-                                    FlatButton(
-                                        child: Text("Agregar canción a playlist"),
-                                        onPressed: () {
-                                            Navigator.push(context, MaterialPageRoute(
-                                                builder: (context) => AddSongToPlaylistScreen(songToAdd: Song(songId: 1))
-                                            ));
-                                        },
-                                    ),
+                                    
                                 ],
                             )
                         ),
                         Container(
-                            child: HistoryScreen()
+                            child: ListView(
+                                children: <Widget>[
+                                    FlatButton(
+                                        child: Text("Consultar biblioteca propia"),
+                                        onPressed: () {
+                                            Session.homePush(ConsultAccountSongsScreen());
+                                        },
+                                    ),
+                                    FlatButton(
+                                        child: Text("Consultar historial"),
+                                        onPressed: () {
+                                            Navigator.push(context, MaterialPageRoute(
+                                                builder: (context) => HistoryScreen()
+                                            ));
+                                        },
+                                    ),
+                                    FlatButton(
+                                        child: Text("Cerrar sesión"),
+                                        onPressed: () {
+                                            Navigator.pop(context);
+                                        },
+                                    ),
+                                ],
+                            )
                         ),
                     ],
                 ),

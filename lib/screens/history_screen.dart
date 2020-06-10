@@ -1,8 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:musify/core/models/album.dart';
-import 'package:musify/core/models/artist.dart';
-import 'package:musify/core/models/song.dart';
-import 'package:musify/core/ui/songlist.dart';
 
 class HistoryScreen extends StatelessWidget {
     @override

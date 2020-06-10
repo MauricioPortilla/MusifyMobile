@@ -64,4 +64,38 @@ class Playlist {
             throw exception;
         }
     }
+
+    void addSong(Song song, onSuccess(), onFailure(NetworkResponse errorResponse), onError()) {
+        try {
+            var data = {
+                "{playlistId}": playlistId,
+                "song_id": song.songId
+            };
+            Network.post("/playlist/{playlistId}/song", data, (response) {
+                onSuccess();
+            }, (errorResponse) {
+                onFailure(errorResponse);
+            });
+        } catch (exception) {
+            print("Exception@Playlist->addSong() -> $exception");
+            onError();
+        }
+    }
+
+    void containsSong(Song song, onSuccess(), onFailure(NetworkResponse errorResponse), onError()) {
+        try {
+            var data = {
+                "{playlistId}": playlistId,
+                "{songId}": song.songId
+            };
+            Network.get("/playlist/{playlistId}/song/{songId}", data, (response) {
+                onSuccess();
+            }, (errorResponse) {
+                onFailure(errorResponse);
+            });
+        } catch (exception) {
+            print("Exception@Playlist->addSong() -> $exception");
+            onError();
+        }
+    }
 }

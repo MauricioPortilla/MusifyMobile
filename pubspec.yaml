@@ -27,6 +27,8 @@ dependencies:
   intl: ^0.16.1
   cached_network_image: ^2.2.0+1
   flutter_config: ^1.0.7
+  file_picker: ^1.10.0
+  path: ^1.6.4
 
 dev_dependencies:
   flutter_test:
