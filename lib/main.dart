@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_config/flutter_config.dart';
+import 'package:musify/core/core.dart';
 import 'package:musify/core/models/account.dart';
 import 'package:musify/core/session.dart';
 import 'package:musify/core/ui.dart';
@@ -113,9 +114,16 @@ class _MusifyState extends State<MusifyScreen> {
             _passwordTextFieldController.text.isNotEmpty;
     }
 
+    bool _validateFieldsData() {
+        return RegExp(Core.REGEX_EMAIL).hasMatch(_emailTextFieldController.text);
+    }
+
     void _loginButton() {
         if (!_validateFields()) {
             UI.createErrorDialog(context, "Faltan campos por completar.");
+            return;
+        } else if (!_validateFieldsData()) {
+            UI.createErrorDialog(context, "Debes introducir datos válidos.");
             return;
         }
         UI.createLoadingDialog(context);
@@ -139,12 +147,15 @@ class _MusifyState extends State<MusifyScreen> {
                     });
                 }).catchError((error) {
                     print("Error on _HomePageState->_googleLoginButton() -> $error");
+                    UI.createErrorDialog(context, "Error al establecer una conexión.");
                 });
             }).catchError((error) {
                 print("Error on _HomePageState->_googleLoginButton() -> $error");
+                UI.createErrorDialog(context, "Error al establecer una conexión.");
             });
         } catch (exception) {
-            print(exception);
+            print("Error on _HomePageState->_googleLoginButton() -> $exception");
+            UI.createErrorDialog(context, "Error al establecer una conexión.");
         }
     }
 

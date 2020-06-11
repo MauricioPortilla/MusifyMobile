@@ -54,7 +54,7 @@ class _PlayerState extends State<Player> {
                                 children: <Widget>[
                                     GestureDetector(
                                         child: Text(
-                                            latestPlayedSong == null ? latestPlayedAccountSong.title : latestPlayedSong.title,
+                                            latestPlayedSong == null ? (latestPlayedAccountSong != null ? latestPlayedAccountSong.title : "") : latestPlayedSong.title,
                                             style: TextStyle(
                                                 fontSize: 15
                                             )

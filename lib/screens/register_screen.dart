@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:musify/core/core.dart';
 import 'package:musify/core/models/account.dart';
 import 'package:musify/core/ui.dart';
+import 'package:musify/screens/register_google_screen.dart';
 
 class RegisterScreen extends StatelessWidget {
     @override
@@ -20,6 +23,12 @@ class _RegisterPageState extends State<_RegisterPage> {
     TextEditingController _lastNameTextFieldController = TextEditingController();
     TextEditingController _artisticNameTextFieldController = TextEditingController();
     bool imAnArtist = false;
+    final GoogleSignIn googleSignIn = GoogleSignIn(
+        scopes: [
+            'email',
+            'profile'
+        ],
+    );
 
     @override
     Widget build(BuildContext context) {
@@ -120,9 +129,18 @@ class _RegisterPageState extends State<_RegisterPage> {
             imAnArtist ? _artisticNameTextFieldController.text.isNotEmpty : true;
     }
 
+    bool _validateFieldsData() {
+        return RegExp(Core.REGEX_EMAIL).hasMatch(_emailTextFieldController.text) &&
+            RegExp(Core.REGEX_ONLY_LETTERS).hasMatch(_nameTextFieldController.text) &&
+            RegExp(Core.REGEX_ONLY_LETTERS).hasMatch(_lastNameTextFieldController.text);
+    }
+
     void _registerButton() {
         if (!_validateFields()) {
             UI.createErrorDialog(context, "Faltan campos por completar.");
+            return;
+        } else if (!_validateFieldsData()) {
+            UI.createErrorDialog(context, "Debes introducir datos válidos.");
             return;
         }
         UI.createLoadingDialog(context);
@@ -154,7 +172,26 @@ class _RegisterPageState extends State<_RegisterPage> {
         }, artisticName: _artisticNameTextFieldController.text);
     }
 
-    void _googleRegisterButton() {
-
+    Future<void> _googleRegisterButton() async {
+        try {
+            await googleSignIn.signIn().then((result) {
+                result.authentication.then((googleKey) {
+                    Navigator.pushReplacement(
+                        context, MaterialPageRoute(
+                            builder: (context) => RegisterGoogleScreen(accessToken: googleKey.accessToken)
+                        )
+                    );
+                }).catchError((error) {
+                    print("Error on _HomePageState->_googleLoginButton() -> $error");
+                    UI.createErrorDialog(context, "Error al establecer una conexión.");
+                });
+            }).catchError((error) {
+                print("Error on _HomePageState->_googleLoginButton() -> $error");
+                UI.createErrorDialog(context, "Error al establecer una conexión.");
+            });
+        } catch (exception) {
+            print("Error on _HomePageState->_googleLoginButton() -> $exception");
+            UI.createErrorDialog(context, "Error al establecer una conexión.");
+        }
     }
 }

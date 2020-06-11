@@ -16,6 +16,20 @@ class UI {
             }
         );
     }
+
+    static void createSuccessDialog(
+        BuildContext context, String message
+    ) {
+        createDialog(context, "¡Éxito!", Text(message), <Widget>[
+            FlatButton(
+                child: Text("Cerrar"),
+                onPressed: () {
+                    Navigator.pop(context);
+                }
+            )
+        ]);
+    }
+
     static void createErrorDialog(
         BuildContext context, String errorResponseMessage
     ) {
