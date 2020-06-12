@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:musify/core/models/song.dart';
 import 'package:musify/core/session.dart';
 import 'package:musify/screens/add_song_to_playlist.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SongList extends StatefulWidget {
     final List<Song> songs;
@@ -59,12 +60,16 @@ class _SongListState extends State<SongList> {
                                     DropdownButton(
                                         items: [
                                             DropdownMenuItem(
-                                                child: Text("Agregar a lista de reproducción", style: TextStyle(fontSize: 14)),
+                                                child: Text("Agregar a una lista de reproducción", style: TextStyle(fontSize: 14)),
                                                 value: "addToPlaylist",
+                                            ),
+                                            DropdownMenuItem(
+                                                child: Text("Agregar a la cola de reproducción", style: TextStyle(fontSize: 14)),
+                                                value: "addToPlayQueue",
                                             )
                                         ],
                                         icon: Icon(Icons.more_horiz),
-                                        onChanged: (value) {
+                                        onChanged: (value) async {
                                             if (value == "addToPlaylist") {
                                                 Navigator.push(
                                                     context, MaterialPageRoute(
@@ -73,6 +78,11 @@ class _SongListState extends State<SongList> {
                                                         )
                                                     )
                                                 );
+                                            }
+                                            if (value == "addToPlayQueue") {
+                                                Session.songsIdPlayQueue.add(widget.songs[index].songId.toString());
+                                                SharedPreferences prefs = await SharedPreferences.getInstance();
+                                                prefs.setStringList("songsIdPlayQueue" + Session.account.accountId.toString(), Session.songsIdPlayQueue);
                                             }
                                         },
                                     )

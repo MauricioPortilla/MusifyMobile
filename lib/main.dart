@@ -168,6 +168,15 @@ class _MusifyState extends State<MusifyScreen> {
         if (prefs.getStringList("songsIdPlayHistory" + account.accountId.toString()) != null){
             Session.songsIdPlayHistory = prefs.getStringList("songsIdPlayHistory" + account.accountId.toString());
         }
+        if (prefs.getStringList("songsIdPlayQueue" + account.accountId.toString()) != null){
+            Session.songsIdPlayQueue = prefs.getStringList("songsIdPlayQueue" + account.accountId.toString());
+        }
+        if (prefs.getStringList("genresIdRadioStations" + account.accountId.toString()) != null){
+            Session.genresIdRadioStations = prefs.getStringList("genresIdRadioStations" + account.accountId.toString());
+        }
+        if (prefs.getString("songStreamingQuality" + account.accountId.toString()) != null){
+            Session.songStreamingQuality = prefs.getString("songStreamingQuality" + account.accountId.toString());
+        }
         Navigator.push(context, MaterialPageRoute(
             builder: (context) => Session.mainMenu
         ));

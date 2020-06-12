@@ -4,23 +4,23 @@ import 'package:musify/core/models/song.dart';
 import 'package:musify/core/session.dart';
 import 'package:musify/core/ui/songlist.dart';
 
-class HistoryScreen extends StatelessWidget {
+class PlayQueueScreen extends StatelessWidget {
     @override
     Widget build(BuildContext context) {
-        return _HistoryPage();
+        return _PlayQueuePage();
     }
 }
 
-class _HistoryPage extends StatefulWidget {
-    _HistoryPageState createState() => _HistoryPageState();
+class _PlayQueuePage extends StatefulWidget {
+    _PlayQueuePageState createState() => _PlayQueuePageState();
 }
 
-class _HistoryPageState extends State<_HistoryPage> {
+class _PlayQueuePageState extends State<_PlayQueuePage> {
     @override
     Widget build(BuildContext context) {
         return Scaffold(
             appBar: AppBar(
-                title: Text("Historial de reproducción"),
+                title: Text("Cola de reproducción"),
                 centerTitle: true,
                 automaticallyImplyLeading: false,
                 leading: IconButton(
@@ -33,6 +33,16 @@ class _HistoryPageState extends State<_HistoryPage> {
             body: Container(
                 child: Column(
                     children: <Widget>[
+                      Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: <Widget>[
+                                RaisedButton(
+                                    child: Icon(Icons.delete_forever),
+                                    onPressed: () => _deletePlayQueueButton(),
+                                    color: Colors.red,
+                                ),
+                            ],
+                        ),
                       Container(
                         child: _songList(),
                       ),
@@ -45,11 +55,18 @@ class _HistoryPageState extends State<_HistoryPage> {
 
     FutureBuilder<List<Song>> _songList() {
         List<int> songsId = List<int>();
-        for (int i = Session.songsIdPlayHistory.length - 1; i >= 0; i--){
-            songsId.add(int.parse(Session.songsIdPlayHistory.elementAt(i)));
+        for (String songId in Session.songsIdPlayQueue){
+            songsId.add(int.parse(songId));
         }
         return FutureFactory<List<Song>>().networkFuture(Song.fetchSongById(songsId), (data) {
             return SongList(songs: data);
+        });
+    }
+
+    void _deletePlayQueueButton() async {
+        Session.songsIdPlayQueue = List<String>();
+        setState(() {
+          build(context);
         });
     }
 }

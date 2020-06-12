@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:musify/core/session.dart';
 import 'package:musify/screens/consult_account_songs.dart';
 import 'package:musify/screens/home_screen.dart';
+import 'package:musify/screens/play_queue_screen.dart';
 import 'package:musify/screens/search_screen.dart';
 import 'package:musify/screens/history_screen.dart';
 
@@ -71,6 +72,12 @@ class _MainMenuPageState extends State<_MainMenuPage> with SingleTickerProviderS
                                         child: Text("Consultar biblioteca propia"),
                                         onPressed: () {
                                             Session.homePush(ConsultAccountSongsScreen());
+                                        },
+                                    ),
+                                    FlatButton(
+                                        child: Text("Consultar cola de reproducción"),
+                                        onPressed: () {
+                                            Session.homePush(PlayQueueScreen());
                                         },
                                     ),
                                     FlatButton(
