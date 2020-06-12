@@ -68,4 +68,22 @@ class Song {
         }
         return songs;
     }
+
+    static Future<List<Song>> fetchSongById(List<int> songsId) async {
+        List<Song> songs = <Song>[];
+        for (var songId in songsId){
+          var data = {
+              "{song_id}": songId
+          };
+          NetworkResponse response = await Network.futureGet("/song/{song_id}", data);
+          var song;
+          if (response.status == "success") {
+            song = Song.fromJson(response.data);
+            Album album = await song.loadAlbum();
+            await album.loadArtists();
+            songs.add(song);
+          }
+        }
+        return songs;
+    }
 }

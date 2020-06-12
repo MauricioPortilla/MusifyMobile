@@ -76,9 +76,7 @@ class _MainMenuPageState extends State<_MainMenuPage> with SingleTickerProviderS
                                     FlatButton(
                                         child: Text("Consultar historial"),
                                         onPressed: () {
-                                            Navigator.push(context, MaterialPageRoute(
-                                                builder: (context) => HistoryScreen()
-                                            ));
+                                            Session.homePush(HistoryScreen());
                                         },
                                     ),
                                     FlatButton(

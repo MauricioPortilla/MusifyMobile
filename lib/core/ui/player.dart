@@ -8,6 +8,7 @@ import 'package:musify/core/models/song.dart';
 import 'package:musify/core/network.dart';
 import 'package:musify/core/ui.dart';
 import 'package:musify/screens/player_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../session.dart';
 
@@ -115,6 +116,12 @@ class _PlayerState extends State<Player> {
         }
         if (song != null) {
             latestPlayedSong = song;
+            if (Session.songsIdPlayHistory.length == 50){
+                Session.songsIdPlayHistory.removeAt(0);
+            }
+            Session.songsIdPlayHistory.add(latestPlayedSong.songId.toString());
+            SharedPreferences prefs = await SharedPreferences.getInstance();
+            prefs.setStringList("songsIdPlayHistory" + Session.account.accountId.toString(), Session.songsIdPlayHistory);
             latestPlayedAccountSong = null;
             var data = {
                 "{songId}": song.songId

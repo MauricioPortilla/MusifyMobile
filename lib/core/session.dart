@@ -12,6 +12,9 @@ class Session {
     static String songStreamingQuality = "highquality";
     static MainMenuScreen mainMenu;
     static ListQueue homeTabWidgetQueue = ListQueue();
+    static List<String> songsIdPlayHistory = List<String>();
+    static List<String> songsIdPlayQueue = List<String>();
+    static List<String> genresIdRadioStations = List<String>();
 
     static void homePush(Widget content) {
         homeTabWidgetQueue.addLast(content);

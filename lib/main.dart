@@ -8,6 +8,7 @@ import 'package:musify/core/ui/player.dart';
 import 'package:musify/main_menu.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:musify/screens/register_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
     WidgetsFlutterBinding.ensureInitialized();
@@ -159,10 +160,14 @@ class _MusifyState extends State<MusifyScreen> {
         }
     }
 
-    void _onSuccessfulLogin(Account account) {
+    Future<void> _onSuccessfulLogin(Account account) async {
         Session.account = account;
         Session.mainMenu = MainMenuScreen();
         Session.player = Player();
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        if (prefs.getStringList("songsIdPlayHistory" + account.accountId.toString()) != null){
+            Session.songsIdPlayHistory = prefs.getStringList("songsIdPlayHistory" + account.accountId.toString());
+        }
         Navigator.push(context, MaterialPageRoute(
             builder: (context) => Session.mainMenu
         ));
