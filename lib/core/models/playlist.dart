@@ -34,6 +34,8 @@ class Playlist {
                 var song = Song.fromJson(songJson);
                 Album album = await song.loadAlbum();
                 await album.loadArtists();
+                await song.loadGenre();
+                await song.loadArtists();
                 songs.add(song);
             }
         }

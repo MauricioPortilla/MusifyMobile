@@ -1,4 +1,5 @@
 import 'package:musify/core/models/album.dart';
+import 'package:musify/core/models/artist.dart';
 import 'package:musify/core/models/genre.dart';
 import 'package:musify/core/network.dart';
 import 'package:musify/core/networkresponse.dart';
@@ -13,6 +14,7 @@ class Song {
     final String duration;
     final String songLocation;
     final String status;
+    final List<Artist> artists = <Artist>[];
 
     Song({
         this.songId,
@@ -49,6 +51,31 @@ class Song {
         return album;
     }
 
+    Future<Genre> loadGenre() async {
+        var data = {
+            "{genreId}": genreId
+        };
+        NetworkResponse response = await Network.futureGet("/genre/{genreId}", data);
+        if (response.status == "success") {
+            genre = Genre.fromJson(response.data);
+        }
+        return genre;
+    }
+
+    Future<List<Artist>> loadArtists() async {
+        var data = {
+            "{songId}": songId
+        };
+        NetworkResponse response = await Network.futureGet("/song/{songId}/artists", data);
+        if (response.status == "success") {
+            artists.clear();
+            for (var artistResponse in response.data) {
+                artists.add(Artist.fromJson(artistResponse));
+            }
+        }
+        return artists;
+    }
+
     static Future<List<Song>> fetchSongByTitleCoincidences(String title) async {
         List<Song> songs = <Song>[];
         if (title.isEmpty) {
@@ -63,6 +90,8 @@ class Song {
                 var song = Song.fromJson(songResponse);
                 Album album = await song.loadAlbum();
                 await album.loadArtists();
+                await song.loadGenre();
+                await song.loadArtists();
                 songs.add(song);
             }
         }
@@ -72,18 +101,31 @@ class Song {
     static Future<List<Song>> fetchSongById(List<int> songsId) async {
         List<Song> songs = <Song>[];
         for (var songId in songsId){
-          var data = {
-              "{song_id}": songId
-          };
-          NetworkResponse response = await Network.futureGet("/song/{song_id}", data);
-          var song;
-          if (response.status == "success") {
-            song = Song.fromJson(response.data);
-            Album album = await song.loadAlbum();
-            await album.loadArtists();
-            songs.add(song);
-          }
+            var data = {
+                "{song_id}": songId
+            };
+            NetworkResponse response = await Network.futureGet("/song/{song_id}", data);
+            var song;
+            if (response.status == "success") {
+                song = Song.fromJson(response.data);
+                Album album = await song.loadAlbum();
+                await album.loadArtists();
+                await song.loadGenre();
+                await song.loadArtists();
+                songs.add(song);
+            }
         }
         return songs;
+    }
+
+    String artistsNames() {
+        String artistsNames = "";
+        for (Artist artist in artists) {
+            if (artistsNames.isNotEmpty) {
+                artistsNames += ", ";
+            }
+            artistsNames += artist.artisticName;
+        }
+        return artistsNames;
     }
 }

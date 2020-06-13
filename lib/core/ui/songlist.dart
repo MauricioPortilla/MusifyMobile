@@ -52,9 +52,16 @@ class _SongListState extends State<SongList> {
                                             Row(
                                                 children: <Widget>[
                                                     Text("Canción - ", style: TextStyle(fontSize: 13)),
-                                                    Text(widget.songs[index].album.artistsNames())
+                                                    Text(widget.songs[index].artistsNames())
                                                 ],
-                                            )
+                                            ),
+                                            Container(
+                                                child: Text(
+                                                    widget.songs[index].genre.name,
+                                                    textAlign: TextAlign.left,
+                                                ),
+                                                margin: EdgeInsets.only(bottom: 3),
+                                            ),
                                         ],
                                     ),
                                     DropdownButton(

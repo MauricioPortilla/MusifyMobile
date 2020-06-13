@@ -61,6 +61,8 @@ class Album {
             for (var songJson in response.data) {
                 var song = Song.fromJson(songJson);
                 song.album = this;
+                await song.loadGenre();
+                await song.loadArtists();
                 songs.add(song);
             }
         }
