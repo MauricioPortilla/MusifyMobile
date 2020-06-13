@@ -33,7 +33,7 @@ class _PlayQueuePageState extends State<_PlayQueuePage> {
             body: Container(
                 child: Column(
                     children: <Widget>[
-                      Row(
+                        Row(
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: <Widget>[
                                 RaisedButton(
@@ -43,9 +43,9 @@ class _PlayQueuePageState extends State<_PlayQueuePage> {
                                 ),
                             ],
                         ),
-                      Container(
-                        child: _songList(),
-                      ),
+                        Container(
+                            child: _songList(),
+                        ),
                     ],
                 ),
                 padding: EdgeInsets.fromLTRB(15, 5, 15, 15),
