@@ -18,6 +18,7 @@ class _PlayerSettingsPageState extends State<_PlayerSettingsPage> {
     bool mediumSelected = false;
     bool highSelected = false;
     bool automaticSelected = false;
+
     @override
     Widget build(BuildContext context) {
         _loadQuality();
@@ -134,16 +135,12 @@ class _PlayerSettingsPageState extends State<_PlayerSettingsPage> {
     void _loadQuality() {
         if (Session.songStreamingQuality == "lowquality") {
             lowSelected = true;
+        } else if (Session.songStreamingQuality == "mediumquality") {
+            mediumSelected = true;
+        } else if (Session.songStreamingQuality == "highquality") {
+            highSelected = true;
         } else {
-            if (Session.songStreamingQuality == "mediumquality") {
-                mediumSelected = true;
-            } else {
-                if (Session.songStreamingQuality == "highquality") {
-                    highSelected = true;
-                } else {
-                    automaticSelected = true;
-                }
-            }
+            automaticSelected = true;
         }
     }
 
@@ -151,16 +148,13 @@ class _PlayerSettingsPageState extends State<_PlayerSettingsPage> {
         SharedPreferences prefs = await SharedPreferences.getInstance();
         if (lowSelected) {
             Session.songStreamingQuality = "lowquality";
+        } else if (mediumSelected) {
+            Session.songStreamingQuality = "mediumquality";
+        } else if (highSelected) {
+            Session.songStreamingQuality = "highquality";
         } else {
-            if (mediumSelected) {
-                Session.songStreamingQuality = "mediumquality";
-            } else {
-                if (highSelected) {
-                    Session.songStreamingQuality = "highquality";
-                } else {
-                    //Session.songStreamingQuality = "automaticquality";
-                }
-            }
+            // TODO: Set automatic quality
+            //Session.songStreamingQuality = "automaticquality";
         }
         prefs.setString("songStreamingQuality" + Session.account.accountId.toString(), Session.songStreamingQuality);
     }

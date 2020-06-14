@@ -86,7 +86,7 @@ class Network {
                     "Authorization": Session.accessToken != null ? Session.accessToken : ""
                 }
             );
-            if (response.contentLength > 0) {
+            if (response.statusCode == 200) {
                 onSuccess(response.bodyBytes);
                 return;
             }
@@ -195,6 +195,41 @@ class Network {
                     "Authorization": Session.accessToken != null ? Session.accessToken : ""
                 },
                 body: jsonEncode(data)
+            );
+            Map<String, dynamic> jsonDecoded = json.decode(response.body);
+            if (jsonDecoded["status"] == "success") {
+                onSuccess(NetworkResponse.fromJson(jsonDecoded));
+            } else {
+                onFailure(NetworkResponse.fromJson(jsonDecoded));
+            }
+        } catch (exception) {
+            onFailure(NetworkResponse(
+                status: "failure", 
+                message: "No se pudo establecer una conexión con el servidor."
+            ));
+            throw exception;
+        }
+    }
+
+    static void delete(
+        String resource,
+        Map<String, dynamic> data,
+        onSuccess(NetworkResponse response),
+        onFailure(NetworkResponse errorResponse)
+    ) async {
+        try {
+            String query = resource;
+            if (data != null) {
+                data.forEach((key, value) {
+                    query = query.replaceAll(key, value.toString());
+                });
+            }
+            final http.Response response = await http.delete(
+                Core.SERVER_URL + query,
+                headers: <String, String> {
+                    "Content-Type": "application/json; charset=UTF-8",
+                    "Authorization": Session.accessToken != null ? Session.accessToken : ""
+                }
             );
             Map<String, dynamic> jsonDecoded = json.decode(response.body);
             if (jsonDecoded["status"] == "success") {

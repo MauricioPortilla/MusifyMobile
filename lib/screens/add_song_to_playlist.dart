@@ -49,6 +49,8 @@ class _AddSongToPlaylistPageState extends State<_AddSongToPlaylistPage> {
     void _onSelectPlaylist(Playlist playlist) {
         UI.createLoadingDialog(context);
         playlist.addSong(widget.songToAdd, () {
+            setState(() {
+            });
             Navigator.pop(context);
             Navigator.pop(context);
         }, (errorResponse) {

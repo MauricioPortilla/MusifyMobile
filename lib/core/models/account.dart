@@ -171,4 +171,21 @@ class Account {
             onError();
         }
     }
+
+    void deleteAccountSong(AccountSong accountSong, onSuccess(), onFailure(NetworkResponse errorResponse), onError()) {
+        var data = {
+            "{accountId}": accountId,
+            "{accountSongId}": accountSong.accountSongId
+        };
+        try {
+            Network.delete("/account/{accountId}/accountsong/{accountSongId}", data, (response) {
+                accountSongs.remove(accountSong);
+                onSuccess();
+            }, (errorResponse) {
+                onFailure(errorResponse);
+            });
+        } catch (exception) {
+            onError();
+        }
+    }
 }

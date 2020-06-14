@@ -78,17 +78,15 @@ class _ConsultPlaylistsPageState extends State<_ConsultPlaylistsPage> {
         UI.createDialog(
             context, 
             "Nueva lista de reproducción", 
-            Column(
-                children: <Widget>[
-                    TextField(
-                        controller: playlistNameTextFieldController,
-                        decoration: InputDecoration(
-                            labelText: "Nombre"
-                        ),
-                        maxLength: 20,
-                        maxLengthEnforced: true,
+            Expanded(
+                child: TextField(
+                    controller: playlistNameTextFieldController,
+                    decoration: InputDecoration(
+                        labelText: "Nombre"
                     ),
-                ],
+                    maxLength: 20,
+                    maxLengthEnforced: true,
+                ),
             ), [
                 FlatButton(
                     child: Text("Crear"),

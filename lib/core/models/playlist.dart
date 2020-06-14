@@ -74,6 +74,7 @@ class Playlist {
                 "song_id": song.songId
             };
             Network.post("/playlist/{playlistId}/song", data, (response) {
+                songs.add(song);
                 onSuccess();
             }, (errorResponse) {
                 onFailure(errorResponse);
@@ -97,6 +98,38 @@ class Playlist {
             });
         } catch (exception) {
             print("Exception@Playlist->addSong() -> $exception");
+            onError();
+        }
+    }
+
+    void delete(onSuccess(), onFailure(NetworkResponse errorResponse), onError()) {
+        var data = {
+            "{playlistId}": playlistId
+        };
+        try {
+            Network.delete("/playlist/{playlistId}", data, (response) {
+                onSuccess();
+            }, (errorResponse) {
+                onFailure(errorResponse);
+            });
+        } catch (exception) {
+            onError();
+        }
+    }
+
+    void deleteSong(Song song, onSuccess(), onFailure(NetworkResponse errorResponse), onError()) {
+        var data = {
+            "{playlistId}": playlistId,
+            "{songId}": song.songId
+        };
+        try {
+            Network.delete("/playlist/{playlistId}/songs/{songId}", data, (response) {
+                songs.remove(song);
+                onSuccess();
+            }, (errorResponse) {
+                onFailure(errorResponse);
+            });
+        } catch (exception) {
             onError();
         }
     }

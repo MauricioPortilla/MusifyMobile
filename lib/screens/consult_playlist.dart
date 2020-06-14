@@ -3,6 +3,7 @@ import 'package:musify/core/futurefactory.dart';
 import 'package:musify/core/models/playlist.dart';
 import 'package:musify/core/models/song.dart';
 import 'package:musify/core/session.dart';
+import 'package:musify/core/ui.dart';
 import 'package:musify/core/ui/songlist.dart';
 
 class ConsultPlaylistScreen extends StatelessWidget {
@@ -68,7 +69,7 @@ class _ConsultPlaylistScreenPageState extends State<_ConsultPlaylistScreenPage> 
                                     ),
                                     RaisedButton(
                                         child: Text("Eliminar lista"),
-                                        onPressed: () {},
+                                        onPressed: () => deletePlaylist(),
                                     ),
                                 ],
                             ),
@@ -85,7 +86,34 @@ class _ConsultPlaylistScreenPageState extends State<_ConsultPlaylistScreenPage> 
 
     FutureBuilder<List<Song>> _songList() {
         return FutureFactory<List<Song>>().networkFuture(widget.playlist.loadSongs(), (data) {
-            return SongList(songs: data);
+            return SongList(songs: data, playlistAssociated: widget.playlist);
         });
+    }
+
+    void deletePlaylist() {
+        UI.createDialog(context, "Eliminar lista", Text("¿Desea eliminar esta lista?"), [
+            FlatButton(
+                child: Text("Sí"),
+                onPressed: () {
+                    Navigator.pop(context);
+                    UI.createLoadingDialog(context);
+                    widget.playlist.delete(() {
+                        Session.account.playlists.remove(widget.playlist);
+                        Navigator.pop(context);
+                        Session.homePop();
+                    }, (errorResponse) {
+                        Navigator.pop(context);
+                        UI.createErrorDialog(context, errorResponse.message);
+                    }, () {
+                        Navigator.pop(context);
+                        UI.createErrorDialog(context, "No se pudo establecer una conexión con el servidor.");
+                    });
+                },
+            ),
+            FlatButton(
+                child: Text("No"),
+                onPressed: () => Navigator.pop(context),
+            )
+        ]);
     }
 }

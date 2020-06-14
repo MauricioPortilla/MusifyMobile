@@ -27,7 +27,7 @@ class _SearchPageState extends State<_SearchPage> with SingleTickerProviderState
 
     @override
     void initState() {
-        _tabController = TabController(length: 1, vsync: this);
+        _tabController = TabController(length: 3, vsync: this);
         super.initState();
     }
     

@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:musify/core/models/playlist.dart';
 import 'package:musify/core/models/song.dart';
 import 'package:musify/core/session.dart';
+import 'package:musify/core/ui.dart';
 import 'package:musify/screens/add_song_to_playlist.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SongList extends StatefulWidget {
     final List<Song> songs;
+    final Playlist playlistAssociated;
 
-    SongList({@required this.songs});
+    SongList({@required this.songs, this.playlistAssociated});
 
     @override
     State<StatefulWidget> createState() {
@@ -65,16 +68,7 @@ class _SongListState extends State<SongList> {
                                         ],
                                     ),
                                     DropdownButton(
-                                        items: [
-                                            DropdownMenuItem(
-                                                child: Text("Agregar a una lista de reproducción", style: TextStyle(fontSize: 14)),
-                                                value: "addToPlaylist",
-                                            ),
-                                            DropdownMenuItem(
-                                                child: Text("Agregar a la cola de reproducción", style: TextStyle(fontSize: 14)),
-                                                value: "addToPlayQueue",
-                                            )
-                                        ],
+                                        items: _loadSongRowDropdownItems(),
                                         icon: Icon(Icons.more_horiz),
                                         onChanged: (value) async {
                                             if (value == "addToPlaylist") {
@@ -85,11 +79,25 @@ class _SongListState extends State<SongList> {
                                                         )
                                                     )
                                                 );
-                                            }
-                                            if (value == "addToPlayQueue") {
+                                            } else if (value == "addToPlayQueue") {
                                                 Session.songsIdPlayQueue.add(widget.songs[index].songId.toString());
                                                 SharedPreferences prefs = await SharedPreferences.getInstance();
                                                 prefs.setStringList("songsIdPlayQueue" + Session.account.accountId.toString(), Session.songsIdPlayQueue);
+                                            } else if (value == "generateRadioStation") {
+                                                // TODO: Generate radio station.
+                                            } else if (value == "deleteFromPlaylist") {
+                                                UI.createLoadingDialog(context);
+                                                widget.playlistAssociated.deleteSong(widget.songs[index], () {
+                                                    Navigator.pop(context);
+                                                    setState(() {
+                                                    });
+                                                }, (errorResponse) {
+                                                    Navigator.pop(context);
+                                                    UI.createErrorDialog(context, errorResponse.message);
+                                                }, () {
+                                                    Navigator.pop(context);
+                                                    UI.createErrorDialog(context, "Error al establecer una conexión con el servidor.");
+                                                });
                                             }
                                         },
                                     )
@@ -104,5 +112,31 @@ class _SongListState extends State<SongList> {
                 );
             }
         );
+    }
+
+    List<DropdownMenuItem<String>> _loadSongRowDropdownItems() {
+        List<DropdownMenuItem<String>> items = [
+            DropdownMenuItem(
+                child: Text("Agregar a una lista de reproducción", style: TextStyle(fontSize: 14)),
+                value: "addToPlaylist",
+            ),
+            DropdownMenuItem(
+                child: Text("Agregar a la cola de reproducción", style: TextStyle(fontSize: 14)),
+                value: "addToPlayQueue",
+            ),
+            DropdownMenuItem(
+                child: Text("Generar estación de radio", style: TextStyle(fontSize: 14)),
+                value: "generateRadioStation",
+            ),
+        ];
+        if (widget.playlistAssociated != null) {
+            items.add(
+                DropdownMenuItem(
+                    child: Text("Eliminar de lista de reproducción", style: TextStyle(fontSize: 14)),
+                    value: "deleteFromPlaylist",
+                )
+            );
+        }
+        return items;
     }
 }

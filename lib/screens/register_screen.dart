@@ -42,6 +42,16 @@ class _RegisterPageState extends State<_RegisterPage> {
                     padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
                     child: Column(
                         children: <Widget>[
+                            Container(
+                                child: RaisedButton(
+                                    onPressed: _googleRegisterButton,
+                                    child: Text("Registrarse con Google"),
+                                    color: Colors.lightBlue,
+                                    textColor: Colors.white,
+                                ),
+                                width: double.infinity,
+                                margin: EdgeInsets.only(top: 10),
+                            ),
                             TextField(
                                 controller: _emailTextFieldController,
                                 decoration: InputDecoration(
@@ -98,16 +108,6 @@ class _RegisterPageState extends State<_RegisterPage> {
                                 child: RaisedButton(
                                     onPressed: _registerButton,
                                     child: Text("Registrarse"),
-                                    color: Colors.lightBlue,
-                                    textColor: Colors.white,
-                                ),
-                                width: double.infinity,
-                                margin: EdgeInsets.only(top: 10),
-                            ),
-                            Container(
-                                child: RaisedButton(
-                                    onPressed: _googleRegisterButton,
-                                    child: Text("Registrarse con Google"),
                                     color: Colors.lightBlue,
                                     textColor: Colors.white,
                                 ),

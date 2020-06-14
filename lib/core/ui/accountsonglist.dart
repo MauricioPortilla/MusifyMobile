@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:musify/core/models/accountsong.dart';
 import 'package:musify/core/session.dart';
+import 'package:musify/core/ui.dart';
 
 class AccountSongList extends StatefulWidget {
     final List<AccountSong> accountSongs;
@@ -43,10 +44,43 @@ class _AccountSongListState extends State<AccountSongList> {
                                         ),
                                         margin: EdgeInsets.only(bottom: 3),
                                     ),
-                                    InkWell(
-                                        child: Icon(Icons.more_horiz),
-                                        onTap: () {
-                                        }
+                                    DropdownButton(
+                                        items: [
+                                            DropdownMenuItem(
+                                                child: Text("Eliminar", style: TextStyle(fontSize: 14)),
+                                                value: "delete",
+                                            )
+                                        ],
+                                        icon: Icon(Icons.more_horiz),
+                                        onChanged: (value) {
+                                            if (value == "delete") {
+                                                UI.createDialog(context, "Eliminar canción", Text("¿Deseas eliminar esta canción?"), [
+                                                    FlatButton(
+                                                        child: Text("Sí"),
+                                                        onPressed: () {
+                                                            Navigator.pop(context);
+                                                            UI.createLoadingDialog(context);
+                                                            Session.account.deleteAccountSong(widget.accountSongs[index], () {
+                                                                Navigator.pop(context);
+                                                                UI.createSuccessDialog(context, "Canción eliminada.");
+                                                                setState(() {
+                                                                });
+                                                            }, (errorResponse) {
+                                                                Navigator.pop(context);
+                                                                UI.createErrorDialog(context, errorResponse.message);
+                                                            }, () {
+                                                                Navigator.pop(context);
+                                                                UI.createErrorDialog(context, "No se pudo establecer una conexión con el servidor.");
+                                                            });
+                                                        },
+                                                    ),
+                                                    FlatButton(
+                                                        child: Text("No"),
+                                                        onPressed: () => Navigator.pop(context),
+                                                    )
+                                                ]);
+                                            }
+                                        },
                                     )
                                 ],
                             ),
