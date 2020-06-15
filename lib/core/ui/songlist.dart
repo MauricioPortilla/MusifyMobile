@@ -71,6 +71,7 @@ class _SongListState extends State<SongList> {
                                         items: _loadSongRowDropdownItems(),
                                         icon: Icon(Icons.more_horiz),
                                         onChanged: (value) async {
+                                            SharedPreferences prefs = await SharedPreferences.getInstance();
                                             if (value == "addToPlaylist") {
                                                 Navigator.push(
                                                     context, MaterialPageRoute(
@@ -81,10 +82,16 @@ class _SongListState extends State<SongList> {
                                                 );
                                             } else if (value == "addToPlayQueue") {
                                                 Session.songsIdPlayQueue.add(widget.songs[index].songId.toString());
-                                                SharedPreferences prefs = await SharedPreferences.getInstance();
                                                 prefs.setStringList("songsIdPlayQueue" + Session.account.accountId.toString(), Session.songsIdPlayQueue);
                                             } else if (value == "generateRadioStation") {
-                                                // TODO: Generate radio station.
+                                                if (Session.genresIdRadioStations.length == 0 || Session.genresIdRadioStations.firstWhere((element) => element == widget.songs[index].genreId.toString()) == null) {
+                                                    Session.genresIdRadioStations.add(widget.songs[index].genreId.toString());
+                                                    prefs.setStringList("genresIdRadioStations" + Session.account.accountId.toString(), Session.genresIdRadioStations);
+                                                } else {
+                                                    UI.createLoadingDialog(context);
+                                                    Navigator.pop(context);
+                                                    UI.createErrorDialog(context, "Ya existe la estación de radio de este género.");
+                                                }
                                             } else if (value == "deleteFromPlaylist") {
                                                 UI.createLoadingDialog(context);
                                                 widget.playlistAssociated.deleteSong(widget.songs[index], () {
