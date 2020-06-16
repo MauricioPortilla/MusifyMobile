@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:musify/core/models/album.dart';
+import 'package:musify/screens/consult_album.dart';
+import '../session.dart';
 
 class AlbumList extends StatefulWidget {
     final List<Album> albums;
@@ -29,7 +31,7 @@ class _AlbumListState extends State<AlbumList> {
                     width: double.infinity,
                     child: InkWell(
                         onTap: () {
-                            
+                            Session.homePush(ConsultAlbumScreen(album: widget.albums[index]));
                         },
                         child: Container(
                             child: Row(
@@ -53,11 +55,6 @@ class _AlbumListState extends State<AlbumList> {
                                                 ],
                                             )
                                         ],
-                                    ),
-                                    InkWell(
-                                        child: Icon(Icons.more_horiz),
-                                        onTap: () {
-                                        }
                                     )
                                 ],
                             ),
