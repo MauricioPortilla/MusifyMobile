@@ -155,8 +155,10 @@ class Network {
                 "Authorization": Session.accessToken != null ? Session.accessToken : "",
                 "Content-Type": "multipart/form-data"
             });
+            int counter = 0;
             for (var file in files) {
-                request.files.add(http.MultipartFile.fromBytes("1", await file.readAsBytes(), filename: basename(file.path)));
+                request.files.add(http.MultipartFile.fromBytes(counter.toString(), await file.readAsBytes(), filename: basename(file.path)));
+                counter++;
             }
             var response = await request.send();
             response.stream.transform(utf8.decoder).listen((value) {
