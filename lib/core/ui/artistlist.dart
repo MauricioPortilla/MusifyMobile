@@ -57,11 +57,6 @@ class _ArtistListState extends State<ArtistList> {
                                                 ],
                                             )
                                         ],
-                                    ),
-                                    InkWell(
-                                        child: Icon(Icons.more_horiz),
-                                        onTap: () {
-                                        }
                                     )
                                 ],
                             ),

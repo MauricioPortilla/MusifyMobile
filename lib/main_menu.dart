@@ -6,6 +6,7 @@ import 'package:musify/screens/consult_account_songs.dart';
 import 'package:musify/screens/home_screen.dart';
 import 'package:musify/screens/play_queue_screen.dart';
 import 'package:musify/screens/player_settings_screen.dart';
+import 'package:musify/screens/radio_stations_screen.dart';
 import 'package:musify/screens/search_screen.dart';
 import 'package:musify/screens/history_screen.dart';
 
@@ -60,11 +61,7 @@ class _MainMenuPageState extends State<_MainMenuPage> with SingleTickerProviderS
                             child: SearchScreen()
                         ),
                         Container(
-                            child: ListView(
-                                children: <Widget>[
-                                    
-                                ],
-                            )
+                            child: RadioStationsScreen()
                         ),
                         Container(
                             child: ListView(

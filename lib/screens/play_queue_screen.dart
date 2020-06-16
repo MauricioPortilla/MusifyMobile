@@ -37,9 +37,8 @@ class _PlayQueuePageState extends State<_PlayQueuePage> {
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: <Widget>[
                                 RaisedButton(
-                                    child: Icon(Icons.delete_forever),
+                                    child: Text("Eliminar cola"),
                                     onPressed: () => _deletePlayQueueButton(),
-                                    color: Colors.red,
                                 ),
                             ],
                         ),

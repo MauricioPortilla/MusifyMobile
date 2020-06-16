@@ -51,7 +51,7 @@ class Album {
         return artists;
     }
 
-    Future loadSongs() async {
+    Future<List<Song>> loadSongs() async {
         var data = {
             "{albumId}": albumId
         };
@@ -66,6 +66,7 @@ class Album {
                 songs.add(song);
             }
         }
+        return songs;
     }
 
     static Future<List<Album>> fetchAlbumByNameCoincidences(String name) async {
