@@ -4,12 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:musify/core/models/account.dart';
 import 'package:musify/core/ui/player.dart';
 import 'package:musify/main_menu.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Session {
     static Account account;
     static String accessToken;
     static Player player;
     static String songStreamingQuality = "highquality";
+    static SharedPreferences preferences;
     static MainMenuScreen mainMenu;
     static ListQueue homeTabWidgetQueue = ListQueue();
     static List<String> songsIdPlayHistory = List<String>();

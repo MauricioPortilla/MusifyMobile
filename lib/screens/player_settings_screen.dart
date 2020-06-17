@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:musify/core/session.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class PlayerSettingsScreen extends StatelessWidget {
     @override
@@ -145,7 +144,6 @@ class _PlayerSettingsPageState extends State<_PlayerSettingsPage> {
     }
 
     Future<void> _saveQuality() async {
-        SharedPreferences prefs = await SharedPreferences.getInstance();
         if (lowSelected) {
             Session.songStreamingQuality = "lowquality";
         } else if (mediumSelected) {
@@ -156,6 +154,6 @@ class _PlayerSettingsPageState extends State<_PlayerSettingsPage> {
             // TODO: Set automatic quality
             //Session.songStreamingQuality = "automaticquality";
         }
-        prefs.setString("songStreamingQuality" + Session.account.accountId.toString(), Session.songStreamingQuality);
+        Session.preferences.setString("songStreamingQuality" + Session.account.accountId.toString(), Session.songStreamingQuality);
     }
 }

@@ -99,6 +99,7 @@ class _MainMenuPageState extends State<_MainMenuPage> with SingleTickerProviderS
                                     FlatButton(
                                         child: Text("Cerrar sesión"),
                                         onPressed: () {
+                                            widget.controller.close();
                                             Navigator.pop(context);
                                         },
                                     ),

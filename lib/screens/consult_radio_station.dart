@@ -5,7 +5,6 @@ import 'package:musify/core/models/song.dart';
 import 'package:musify/core/session.dart';
 import 'package:musify/core/ui.dart';
 import 'package:musify/core/ui/songlist.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class ConsultRadioStationScreen extends StatelessWidget {
     final Genre genre;
@@ -88,8 +87,7 @@ class _ConsultRadioStationScreenPageState extends State<_ConsultRadioStationScre
                     Navigator.pop(context);
                     UI.createLoadingDialog(context);
                     Session.genresIdRadioStations.remove(widget.genre.genreId.toString());
-                    SharedPreferences prefs = await SharedPreferences.getInstance();
-                    prefs.setStringList("genresIdRadioStations" + Session.account.accountId.toString(), Session.genresIdRadioStations);
+                    Session.preferences.setStringList("genresIdRadioStations" + Session.account.accountId.toString(), Session.genresIdRadioStations);
                     Navigator.pop(context);
                     Session.homePop();
                 },

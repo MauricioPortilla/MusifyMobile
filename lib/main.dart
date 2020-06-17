@@ -14,6 +14,10 @@ void main() async {
     WidgetsFlutterBinding.ensureInitialized();
     await FlutterConfig.loadEnvVariables();
     runApp(Musify());
+    Session.preferences = await SharedPreferences.getInstance();
+    if (Session.preferences.getStringList("downloadedPlaylists") == null) {
+        Session.preferences.setStringList("downloadedPlaylists", []);
+    }
 }
 
 class Musify extends StatelessWidget {
@@ -164,18 +168,17 @@ class _MusifyState extends State<MusifyScreen> {
         Session.account = account;
         Session.mainMenu = MainMenuScreen();
         Session.player = Player();
-        SharedPreferences prefs = await SharedPreferences.getInstance();
-        if (prefs.getStringList("songsIdPlayHistory" + account.accountId.toString()) != null){
-            Session.songsIdPlayHistory = prefs.getStringList("songsIdPlayHistory" + account.accountId.toString());
+        if (Session.preferences.getStringList("songsIdPlayHistory" + account.accountId.toString()) != null){
+            Session.songsIdPlayHistory = Session.preferences.getStringList("songsIdPlayHistory" + account.accountId.toString());
         }
-        if (prefs.getStringList("songsIdPlayQueue" + account.accountId.toString()) != null){
-            Session.songsIdPlayQueue = prefs.getStringList("songsIdPlayQueue" + account.accountId.toString());
+        if (Session.preferences.getStringList("songsIdPlayQueue" + account.accountId.toString()) != null){
+            Session.songsIdPlayQueue = Session.preferences.getStringList("songsIdPlayQueue" + account.accountId.toString());
         }
-        if (prefs.getStringList("genresIdRadioStations" + account.accountId.toString()) != null){
-            Session.genresIdRadioStations = prefs.getStringList("genresIdRadioStations" + account.accountId.toString());
+        if (Session.preferences.getStringList("genresIdRadioStations" + account.accountId.toString()) != null){
+            Session.genresIdRadioStations = Session.preferences.getStringList("genresIdRadioStations" + account.accountId.toString());
         }
-        if (prefs.getString("songStreamingQuality" + account.accountId.toString()) != null){
-            Session.songStreamingQuality = prefs.getString("songStreamingQuality" + account.accountId.toString());
+        if (Session.preferences.getString("songStreamingQuality" + account.accountId.toString()) != null){
+            Session.songStreamingQuality = Session.preferences.getString("songStreamingQuality" + account.accountId.toString());
         }
         Navigator.push(context, MaterialPageRoute(
             builder: (context) => Session.mainMenu

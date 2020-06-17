@@ -3,14 +3,14 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_sound/flauto.dart';
 import 'package:flutter_sound/flutter_sound_player.dart';
+import 'package:musify/core/core.dart';
 import 'package:musify/core/models/accountsong.dart';
 import 'package:musify/core/models/song.dart';
 import 'package:musify/core/network.dart';
+import 'package:musify/core/session.dart';
 import 'package:musify/core/ui.dart';
 import 'package:musify/screens/player_screen.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
-import '../session.dart';
 
 class Player extends StatefulWidget {
     final _PlayerState state = _PlayerState();
@@ -116,17 +116,19 @@ class _PlayerState extends State<Player> {
         }
         if (song != null) {
             latestPlayedSong = song;
-            if (Session.songsIdPlayHistory.length == 50){
+            if (Session.songsIdPlayHistory.length == Core.MAX_SONGS_IN_PLAY_HISTORY){
                 Session.songsIdPlayHistory.removeAt(0);
             }
             Session.songsIdPlayHistory.add(latestPlayedSong.songId.toString());
-            SharedPreferences prefs = await SharedPreferences.getInstance();
-            prefs.setStringList("songsIdPlayHistory" + Session.account.accountId.toString(), Session.songsIdPlayHistory);
+            Session.preferences.setStringList("songsIdPlayHistory" + Session.account.accountId.toString(), Session.songsIdPlayHistory);
             latestPlayedAccountSong = null;
-            var data = {
-                "{songId}": song.songId
-            };
-            Network.getStreamBuffer("/stream/song/{songId}/${Session.songStreamingQuality}", data, (buffer) {
+            if (await song.isDownloaded()) {
+                var songBuffer = await song.getDownloadedSongFileContent();
+                latestPlayedSongBuffer = songBuffer;
+                _playSong(songBuffer);
+                return;
+            }
+            song.fetchSongBuffer((buffer) {
                 latestPlayedSongBuffer = buffer;
                 _playSong(buffer);
             }, (errorResponse) {
@@ -149,8 +151,9 @@ class _PlayerState extends State<Player> {
 
     void _playSong(Uint8List buffer) async {
         await player.startPlayerFromBuffer(buffer, whenFinished: () {
-            playerCurrentPosition = 0;
-            setState(() { });
+            setState(() {
+                playerCurrentPosition = 0;
+            });
         });
         setState(() { });
         player.onPlayerStateChanged.listen((data) {
@@ -165,7 +168,7 @@ class _PlayerState extends State<Player> {
         if (player.isInited == t_INITIALIZED.NOT_INITIALIZED) {
             return;
         }
-        if (player.isPlaying) {
+        if (player.isPlaying || player.isPaused) {
             player.stopPlayer();
             _playSong(latestPlayedSongBuffer);
         }

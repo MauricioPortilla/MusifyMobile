@@ -30,6 +30,7 @@ dependencies:
   flutter_config: ^1.0.7
   file_picker: ^1.10.0
   path: ^1.6.4
+  path_provider: ^1.6.10
 
 dev_dependencies:
   flutter_test:

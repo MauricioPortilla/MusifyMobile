@@ -1,8 +1,13 @@
+import 'dart:io';
+import 'dart:typed_data';
+
 import 'package:musify/core/models/album.dart';
 import 'package:musify/core/models/artist.dart';
 import 'package:musify/core/models/genre.dart';
 import 'package:musify/core/network.dart';
 import 'package:musify/core/networkresponse.dart';
+import 'package:musify/core/session.dart';
+import 'package:path_provider/path_provider.dart';
 
 class Song {
     final int songId;
@@ -116,6 +121,26 @@ class Song {
             }
         }
         return songs;
+    }
+
+    void fetchSongBuffer(onSuccess(Uint8List buffer), onFailure(errorResponse)) {
+        Network.getStreamBuffer("/stream/song/$songId/${Session.songStreamingQuality}", null, (buffer) {
+            onSuccess(buffer);
+        }, (errorResponse) {
+            onFailure(errorResponse);
+        });
+    }
+
+    Future<bool> isDownloaded() async {
+        Directory musifyDirectory = await getApplicationDocumentsDirectory();
+        File songFile = File("${musifyDirectory.path}/$songId.bin");
+        return await songFile.exists();
+    }
+
+    Future<Uint8List> getDownloadedSongFileContent() async {
+        Directory musifyDirectory = await getApplicationDocumentsDirectory();
+        File songFile = File("${musifyDirectory.path}/$songId.bin");
+        return await songFile.readAsBytes();
     }
 
     String artistsNames() {

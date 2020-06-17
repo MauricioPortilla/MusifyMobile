@@ -134,8 +134,11 @@ class _PlayerPageState extends State<_PlayerPage> {
                                 max: Session.player.state.playerMaxPosition,
                                 value: Session.player.state.playerCurrentPosition,
                                 onChanged: (value) {
-                                    Session.player.state.player.seekToPlayer(value.toInt());
-                                    setState(() { });
+                                    try {
+                                        Session.player.state.player.seekToPlayer(value.toInt());
+                                        setState(() { });
+                                    } catch (e) {
+                                    }
                                 },
                             ),
                             Row(
