@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:musify/core/models/accountsong.dart';
+import 'package:musify/core/models/artist.dart';
 import 'package:musify/core/models/playlist.dart';
 import 'package:musify/core/network.dart';
 import 'package:musify/core/networkresponse.dart';
@@ -13,6 +14,7 @@ class Account {
     final String name;
     final String lastName;
     final DateTime creationDate;
+    Artist artist;
     List<Playlist> playlists = <Playlist>[];
     List<AccountSong> accountSongs = <AccountSong>[];
 
@@ -138,6 +140,16 @@ class Account {
             }
         }
         return playlists;
+    }
+
+    Future fetchArtist() async {
+        var data = {
+            "{accountId}": accountId    
+        };
+        NetworkResponse response = await Network.futureGet("/account/{accountId}/artist", data);
+        if (response.status == "success") {
+            artist = Artist.fromJson(response.data);
+        }
     }
 
     Future<List<AccountSong>> fetchAccountSongs() async {

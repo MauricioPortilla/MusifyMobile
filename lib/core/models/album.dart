@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:musify/core/core.dart';
@@ -37,13 +39,85 @@ class Album {
         );
     }
 
+    factory Album.json(Map<String, dynamic> json) {
+        return Album(
+            imageLocation: json["image_location"]
+        );
+    }
+
+    void save(File imageFile, List<File> songsFile, onSuccess(), onFailure(NetworkResponse errorResponse), onError()) {
+        try {
+            Network.postMultimedia("/album/songs", null, songsFile, (responseSongs) {
+                if (responseSongs.status == "success") {
+                    List<File> images = [imageFile];
+                    Network.postMultimedia("/album/image", null, images, (responseImage) {
+                        if (responseImage.status == "success") {  
+                            List<Song> songsLocation = List<Song>();
+                            for (var songJson in responseSongs.data) {
+                                songsLocation.add(Song.json(songJson));
+                            }
+                            List<Album> imageLocation = List<Album>();
+                            for (var albumJson in responseImage.data) {
+                                imageLocation.add(Album.json(albumJson));
+                            }
+                            List artistsId = List();
+                            for (Artist artist in artists) {
+                                artistsId.add({
+                                    "artist_id": artist.artistId
+                                });
+                            }
+                            List newSongs = List();
+                            int i = 0;
+                            for (Song song in songs) {
+                                List songArtistsId = List();
+                                for (Artist artist in song.artists) {
+                                    songArtistsId.add({
+                                        "artist_id": artist.artistId
+                                    });
+                                }
+                                newSongs.add({
+                                    "genre_id": song.genreId,
+                                    "title": song.title,
+                                    "duration": songsLocation.elementAt(i).duration,
+                                    "song_location": songsLocation.elementAt(i).songLocation,
+                                    "artists_id": songArtistsId
+                                });
+                                i++;
+                            }
+                            var data = {
+                                "type": type,
+                                "name": name,
+                                "launch_year": launchYear,
+                                "discography": discography,
+                                "image_location": imageLocation.elementAt(0).imageLocation,
+                                "artists_id": artistsId,
+                                "new_songs": newSongs
+                            };
+                            Network.post("/album", data, (response) {
+                                onSuccess();
+                            }, (errorResponse) {
+                                onFailure(errorResponse);
+                            });
+                        }
+                    }, (errorResponse) {
+                        onFailure(errorResponse);
+                    });
+                }
+            }, (errorResponse) {
+                onFailure(errorResponse);
+            });
+        } catch (exception) {
+            onError();
+        }
+    }
+
     Future<List<Artist>> loadArtists() async {
         var data = {
             "{albumId}": albumId
         };
         NetworkResponse response = await Network.futureGet("/album/{albumId}/artists", data);
         if (response.status == "success") {
-            artists.clear();
+            //artists.clear();
             for (var artistJson in response.data) {
                 artists.add(Artist.fromJson(artistJson));
             }

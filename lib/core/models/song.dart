@@ -19,7 +19,7 @@ class Song {
     final String duration;
     final String songLocation;
     final String status;
-    final List<Artist> artists = <Artist>[];
+    List<Artist> artists = <Artist>[];
 
     Song({
         this.songId,
@@ -42,6 +42,13 @@ class Song {
             duration: json["duration"],
             songLocation: json["song_location"],
             status: json["status"]
+        );
+    }
+
+    factory Song.json(Map<String, dynamic> json) {
+        return Song(
+            songLocation: json["name"],
+            duration: json["duration"]
         );
     }
 

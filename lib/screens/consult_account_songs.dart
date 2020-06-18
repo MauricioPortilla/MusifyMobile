@@ -65,8 +65,8 @@ class _ConsultAccountSongsPageState extends State<_ConsultAccountSongsPage> {
     }
 
     void _addAccountSongButton() async {
-        List<File> files = await FilePicker.getMultiFile();
-        if (files.length == 0) {
+        List<File> files = await FilePicker.getMultiFile(type: FileType.custom, allowedExtensions: ['mp3', 'wav']);
+        if (files == null) {
             return;
         }
         UI.createLoadingDialog(context);

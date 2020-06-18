@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:musify/core/session.dart';
 import 'package:musify/screens/consult_account_songs.dart';
+import 'package:musify/screens/create_album_screen.dart';
 import 'package:musify/screens/home_screen.dart';
 import 'package:musify/screens/play_queue_screen.dart';
 import 'package:musify/screens/player_settings_screen.dart';
@@ -65,47 +66,9 @@ class _MainMenuPageState extends State<_MainMenuPage> with SingleTickerProviderS
                         ),
                         Container(
                             child: ListView(
-                                children: <Widget>[
-                                    FlatButton(
-                                        child: Text("Consultar biblioteca propia"),
-                                        onPressed: () {
-                                            Session.homePush(ConsultAccountSongsScreen());
-                                        },
-                                    ),
-                                    FlatButton(
-                                        child: Text("Consultar cola de reproducción"),
-                                        onPressed: () {
-                                            Session.homePush(PlayQueueScreen());
-                                        },
-                                    ),
-                                    FlatButton(
-                                        child: Text("Consultar historial"),
-                                        onPressed: () {
-                                            Session.homePush(HistoryScreen());
-                                        },
-                                    ),
-                                    FlatButton(
-                                        child: Text("Configuración del reproductor"),
-                                        onPressed: () {
-                                            Session.homePush(PlayerSettingsScreen());
-                                        },
-                                    ),
-                                    FlatButton(
-                                        child: Text("Crear álbum"),
-                                        onPressed: () {
-                                            //Session.homePush(CreateAlbumScreen());
-                                        },
-                                    ),
-                                    FlatButton(
-                                        child: Text("Cerrar sesión"),
-                                        onPressed: () {
-                                            widget.controller.close();
-                                            Navigator.pop(context);
-                                        },
-                                    ),
-                                ],
+                                children: _loadOptions()
                             )
-                        ),
+                        )
                     ],
                 ),
                 bottomNavigationBar: Container(
@@ -134,5 +97,53 @@ class _MainMenuPageState extends State<_MainMenuPage> with SingleTickerProviderS
                 )
             )
         );
+    }
+
+    List<FlatButton> _loadOptions() {
+        List<FlatButton> items = [
+            FlatButton(
+                child: Text("Consultar biblioteca propia"),
+                onPressed: () {
+                    Session.homePush(ConsultAccountSongsScreen());
+                },
+            ),
+            FlatButton(
+                child: Text("Consultar cola de reproducción"),
+                onPressed: () {
+                    Session.homePush(PlayQueueScreen());
+                },
+            ),
+            FlatButton(
+                child: Text("Consultar historial"),
+                onPressed: () {
+                    Session.homePush(HistoryScreen());
+                },
+            ),
+            FlatButton(
+                child: Text("Configuración del reproductor"),
+                onPressed: () {
+                    Session.homePush(PlayerSettingsScreen());
+                },
+            )
+        ];
+        if (Session.account.artist != null) {
+            items.add(
+                FlatButton(
+                    child: Text("Crear álbum"),
+                    onPressed: () {
+                        Session.homePush(CreateAlbumScreen());
+                    },
+                )
+            );
+        }
+        items.add(
+            FlatButton(
+                child: Text("Cerrar sesión"),
+                onPressed: () {
+                    Navigator.pop(context);
+                },
+            )
+        );
+        return items;
     }
 }

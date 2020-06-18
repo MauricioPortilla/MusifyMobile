@@ -65,7 +65,6 @@ class _PlayQueuePageState extends State<_PlayQueuePage> {
     void _deletePlayQueueButton() async {
         Session.songsIdPlayQueue = List<String>();
         setState(() {
-            build(context);
         });
     }
 }

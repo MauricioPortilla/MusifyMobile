@@ -33,6 +33,18 @@ class Genre {
         return genres;
     }
 
+    static Future<List<Genre>> fetchAll() async {
+        List<Genre> genres = <Genre>[];
+        NetworkResponse response = await Network.futureGet("/genres", null);
+        if (response.status == "success") {
+            for (var genreJson in response.data) {
+                var genre = Genre.fromJson(genreJson);
+                genres.add(genre);
+            }
+        }
+        return genres;
+    }
+
     Future<List<Song>> fetchSongs() async {
         List<Song> songs = <Song>[];
         var data = {
