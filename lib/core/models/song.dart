@@ -1,9 +1,11 @@
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:musify/core/models/accountsong.dart';
 import 'package:musify/core/models/album.dart';
 import 'package:musify/core/models/artist.dart';
 import 'package:musify/core/models/genre.dart';
+import 'package:musify/core/models/songtable.dart';
 import 'package:musify/core/network.dart';
 import 'package:musify/core/networkresponse.dart';
 import 'package:musify/core/session.dart';
@@ -110,21 +112,38 @@ class Song {
         return songs;
     }
 
-    static Future<List<Song>> fetchSongById(List<int> songsId) async {
-        List<Song> songs = <Song>[];
-        for (var songId in songsId){
-            var data = {
-                "{song_id}": songId
-            };
-            NetworkResponse response = await Network.futureGet("/song/{song_id}", data);
-            var song;
-            if (response.status == "success") {
-                song = Song.fromJson(response.data);
-                Album album = await song.loadAlbum();
-                await album.loadArtists();
-                await song.loadGenre();
-                await song.loadArtists();
-                songs.add(song);
+    static Future<List<SongTable>> fetchSongById(List<int> songsId) async {
+        List<SongTable> songs = <SongTable>[];
+        for (var songId in songsId) {
+            if (songId > 0) {
+                var data = {
+                    "{song_id}": songId
+                };
+                NetworkResponse response = await Network.futureGet("/song/{song_id}", data);
+                var song;
+                if (response.status == "success") {
+                    song = Song.fromJson(response.data);
+                    Album album = await song.loadAlbum();
+                    await album.loadArtists();
+                    await song.loadGenre();
+                    await song.loadArtists();
+                    songs.add(SongTable (
+                        song: song
+                    ));
+                }
+            } else {
+                var data = {
+                    "{account_id}": Session.account.accountId,
+                    "{account_song_id}": (songId * -1)
+                };
+                NetworkResponse response = await Network.futureGet("/account/{account_id}/accountsong/{account_song_id}", data);
+                var accountSongs;
+                if (response.status == "success") {
+                    accountSongs = AccountSong.fromJson(response.data);
+                    songs.add(SongTable (
+                        accountSong: accountSongs
+                    ));
+                }
             }
         }
         return songs;

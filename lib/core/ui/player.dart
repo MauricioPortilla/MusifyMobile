@@ -136,6 +136,11 @@ class _PlayerState extends State<Player> {
             });
         } else if (accountSong != null) {
             latestPlayedAccountSong = accountSong;
+            if (Session.songsIdPlayHistory.length == Core.MAX_SONGS_IN_PLAY_HISTORY){
+                Session.songsIdPlayHistory.removeAt(0);
+            }
+            Session.songsIdPlayHistory.add((latestPlayedAccountSong.accountSongId * -1).toString());
+            Session.preferences.setStringList("songsIdPlayHistory" + Session.account.accountId.toString(), Session.songsIdPlayHistory);
             latestPlayedSong = null;
             var data = {
                 "{accountSongId}": accountSong.accountSongId

@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:musify/core/futurefactory.dart';
 import 'package:musify/core/models/song.dart';
+import 'package:musify/core/models/songtable.dart';
 import 'package:musify/core/session.dart';
-import 'package:musify/core/ui/songlist.dart';
+import 'package:musify/core/ui/songtablelist.dart';
 
 class PlayQueueScreen extends StatelessWidget {
+
     @override
     Widget build(BuildContext context) {
         return _PlayQueuePage();
@@ -52,13 +54,13 @@ class _PlayQueuePageState extends State<_PlayQueuePage> {
         );
     }
 
-    FutureBuilder<List<Song>> _songList() {
+    FutureBuilder<List<SongTable>> _songList() {
         List<int> songsId = List<int>();
         for (String songId in Session.songsIdPlayQueue){
             songsId.add(int.parse(songId));
         }
-        return FutureFactory<List<Song>>().networkFuture(Song.fetchSongById(songsId), (data) {
-            return SongList(songs: data);
+        return FutureFactory<List<SongTable>>().networkFuture(Song.fetchSongById(songsId), (data) {
+            return SongTableList(songs: data, isPlayQueue: true);
         });
     }
 

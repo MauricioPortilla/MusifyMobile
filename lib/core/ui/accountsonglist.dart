@@ -47,13 +47,20 @@ class _AccountSongListState extends State<AccountSongList> {
                                     DropdownButton(
                                         items: [
                                             DropdownMenuItem(
+                                                child: Text("Agregar a la cola de reproducción", style: TextStyle(fontSize: 14)),
+                                                value: "addToPlayQueue",
+                                            ),
+                                            DropdownMenuItem(
                                                 child: Text("Eliminar", style: TextStyle(fontSize: 14)),
                                                 value: "delete",
                                             )
                                         ],
                                         icon: Icon(Icons.more_horiz),
                                         onChanged: (value) {
-                                            if (value == "delete") {
+                                            if (value == "addToPlayQueue") {
+                                                Session.songsIdPlayQueue.add((widget.accountSongs[index].accountSongId * -1).toString());
+                                                Session.preferences.setStringList("songsIdPlayQueue" + Session.account.accountId.toString(), Session.songsIdPlayQueue);
+                                            } else if (value == "delete") {
                                                 UI.createDialog(context, "Eliminar canción", Text("¿Deseas eliminar esta canción?"), [
                                                     FlatButton(
                                                         child: Text("Sí"),
