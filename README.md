@@ -1,6 +1,8 @@
 # Musify
 Una aplicación de música por streaming.
 
+![Musify CI](https://github.com/MauricioPortilla/MusifyMobile/workflows/Musify%20CI/badge.svg?branch=master)
+
 ### Contribuidores
 - Cruz Portilla Mauricio
 - Romero Peña Arturo Iván
