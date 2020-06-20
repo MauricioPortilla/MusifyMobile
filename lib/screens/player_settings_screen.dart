@@ -53,8 +53,9 @@ class _PlayerSettingsPageState extends State<_PlayerSettingsPage> {
                                 Checkbox(
                                     value: lowSelected,
                                     onChanged: (value) {
-                                      if (value){
-                                        _saveQuality();
+                                      if (value) {
+                                        Session.songStreamingQuality = "lowquality";
+                                        Session.preferences.setString("songStreamingQuality" + Session.account.accountId.toString(), "lowquality");
                                         setState(() {
                                             lowSelected = true;
                                             mediumSelected = false;
@@ -72,8 +73,9 @@ class _PlayerSettingsPageState extends State<_PlayerSettingsPage> {
                                 Checkbox(
                                     value: mediumSelected,
                                     onChanged: (value) {
-                                      if (value){
-                                        _saveQuality();
+                                      if (value) {
+                                        Session.songStreamingQuality = "mediumquality";
+                                        Session.preferences.setString("songStreamingQuality" + Session.account.accountId.toString(), "mediumquality");
                                         setState(() {
                                             lowSelected = false;
                                             mediumSelected = true;
@@ -91,8 +93,9 @@ class _PlayerSettingsPageState extends State<_PlayerSettingsPage> {
                                 Checkbox(
                                     value: highSelected,
                                     onChanged: (value) {
-                                      if (value){
-                                        _saveQuality();
+                                      if (value) {
+                                        Session.songStreamingQuality = "highquality";
+                                        Session.preferences.setString("songStreamingQuality" + Session.account.accountId.toString(), "highquality");
                                         setState(() {
                                             lowSelected = false;
                                             mediumSelected = false;
@@ -110,8 +113,9 @@ class _PlayerSettingsPageState extends State<_PlayerSettingsPage> {
                                 Checkbox(
                                     value: automaticSelected,
                                     onChanged: (value) {
-                                      if (value){
-                                        _saveQuality();
+                                      if (value) {
+                                        Session.songStreamingQuality = "automaticquality";
+                                        Session.preferences.setString("songStreamingQuality" + Session.account.accountId.toString(), "automaticquality");
                                         setState(() {
                                             lowSelected = false;
                                             mediumSelected = false;
@@ -143,7 +147,7 @@ class _PlayerSettingsPageState extends State<_PlayerSettingsPage> {
         }
     }
 
-    Future<void> _saveQuality() async {
+    /*Future<void> _saveQuality() async {
         if (lowSelected) {
             Session.songStreamingQuality = "lowquality";
         } else if (mediumSelected) {
@@ -151,9 +155,8 @@ class _PlayerSettingsPageState extends State<_PlayerSettingsPage> {
         } else if (highSelected) {
             Session.songStreamingQuality = "highquality";
         } else {
-            // TODO: Set automatic quality
-            //Session.songStreamingQuality = "automaticquality";
+            Session.songStreamingQuality = "automaticquality";
         }
         Session.preferences.setString("songStreamingQuality" + Session.account.accountId.toString(), Session.songStreamingQuality);
-    }
+    }*/
 }

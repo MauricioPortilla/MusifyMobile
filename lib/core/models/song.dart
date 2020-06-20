@@ -10,6 +10,7 @@ import 'package:musify/core/network.dart';
 import 'package:musify/core/networkresponse.dart';
 import 'package:musify/core/session.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:android_device_info/android_device_info.dart';
 
 class Song {
     final int songId;
@@ -149,8 +150,22 @@ class Song {
         return songs;
     }
 
-    void fetchSongBuffer(onSuccess(Uint8List buffer), onFailure(errorResponse)) {
-        Network.getStreamBuffer("/stream/song/$songId/${Session.songStreamingQuality}", null, (buffer) {
+    Future<void> fetchSongBuffer(onSuccess(Uint8List buffer), onFailure(errorResponse)) async {
+      String songStreamingQuality = Session.songStreamingQuality;
+        if (Session.songStreamingQuality == "automaticquality") {
+            var dataNetwork = {};
+            final memory = await AndroidDeviceInfo().getNetworkInfo();
+            dataNetwork.addAll(memory);
+            songStreamingQuality = "lowquality";
+            if (dataNetwork['wifiLinkSpeed'] != null || int.parse(dataNetwork['wifiLinkSpeed'].toString().substring(0, dataNetwork['wifiLinkSpeed'].toString().length -5)) >= 20) {
+                if (int.parse(dataNetwork['wifiLinkSpeed'].toString().substring(0, dataNetwork['wifiLinkSpeed'].toString().length -5)) <= 40) {
+                    songStreamingQuality = "mediumquality";
+                } else {
+                    songStreamingQuality = "highquality";
+                }
+            }
+        }
+        Network.getStreamBuffer("/stream/song/$songId/$songStreamingQuality", null, (buffer) {
             onSuccess(buffer);
         }, (errorResponse) {
             onFailure(errorResponse);
