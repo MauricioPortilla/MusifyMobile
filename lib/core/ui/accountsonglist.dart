@@ -32,6 +32,10 @@ class _AccountSongListState extends State<AccountSongList> {
                     child: InkWell(
                         onTap: () {
                             Session.player.state.playSong(accountSong: widget.accountSongs[index]);
+                            Session.songsIdSongList.clear();
+                            for (int i = index + 1; i < widget.accountSongs.length; i++) {
+                                Session.songsIdSongList.add(widget.accountSongs[i].accountSongId * -1);
+                            }
                         },
                         child: Container(
                             child: Row(
@@ -58,8 +62,33 @@ class _AccountSongListState extends State<AccountSongList> {
                                         icon: Icon(Icons.more_horiz),
                                         onChanged: (value) {
                                             if (value == "addToPlayQueue") {
-                                                Session.songsIdPlayQueue.add((widget.accountSongs[index].accountSongId * -1).toString());
-                                                Session.preferences.setStringList("songsIdPlayQueue" + Session.account.accountId.toString(), Session.songsIdPlayQueue);
+                                                UI.createDialog(context, "Agregar a la cola", Text("Agregar ..."), [
+                                                    FlatButton(
+                                                        child: Text("A continuación"),
+                                                        onPressed: () {
+                                                            List<String> songsIdPlayQueue = [(widget.accountSongs[index].accountSongId * -1).toString()];
+                                                            songsIdPlayQueue.addAll(Session.songsIdPlayQueue);
+                                                            Session.songsIdPlayQueue.clear();
+                                                            Session.songsIdPlayQueue.addAll(songsIdPlayQueue);
+                                                            Session.preferences.setStringList("songsIdPlayQueue" + Session.account.accountId.toString(), Session.songsIdPlayQueue);
+                                                            Navigator.pop(context);
+                                                        },
+                                                    ),
+                                                    FlatButton(
+                                                        child: Text("Al final"),
+                                                        onPressed: () {
+                                                            Session.songsIdPlayQueue.add((widget.accountSongs[index].accountSongId * -1).toString());
+                                                            Session.preferences.setStringList("songsIdPlayQueue" + Session.account.accountId.toString(), Session.songsIdPlayQueue);
+                                                            Navigator.pop(context);
+                                                        }
+                                                    ),
+                                                    FlatButton(
+                                                        child: Text("Cancelar"),
+                                                        onPressed: () {
+                                                            Navigator.pop(context);
+                                                        }
+                                                    )
+                                                ]);
                                             } else if (value == "delete") {
                                                 UI.createDialog(context, "Eliminar canción", Text("¿Deseas eliminar esta canción?"), [
                                                     FlatButton(

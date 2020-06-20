@@ -57,7 +57,7 @@ class _AlbumPanelState extends State<AlbumPanel> {
                         child: Flex(
                             direction: Axis.horizontal,
                             children: <Widget>[
-                                SongList(songs: widget.album.songs),
+                                SongList(songs: widget.album.songs, isSearch: false),
                             ],
                         )
                     ),

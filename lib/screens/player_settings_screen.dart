@@ -146,17 +146,4 @@ class _PlayerSettingsPageState extends State<_PlayerSettingsPage> {
             automaticSelected = true;
         }
     }
-
-    /*Future<void> _saveQuality() async {
-        if (lowSelected) {
-            Session.songStreamingQuality = "lowquality";
-        } else if (mediumSelected) {
-            Session.songStreamingQuality = "mediumquality";
-        } else if (highSelected) {
-            Session.songStreamingQuality = "highquality";
-        } else {
-            Session.songStreamingQuality = "automaticquality";
-        }
-        Session.preferences.setString("songStreamingQuality" + Session.account.accountId.toString(), Session.songStreamingQuality);
-    }*/
 }

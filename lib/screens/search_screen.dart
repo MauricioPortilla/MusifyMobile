@@ -97,7 +97,7 @@ class _SearchPageState extends State<_SearchPage> with SingleTickerProviderState
 
     FutureBuilder<List<Song>> _songList(String title) {
         return FutureFactory<List<Song>>().networkFuture(Song.fetchSongByTitleCoincidences(title), (data) {
-            return SongList(songs: data);
+            return SongList(songs: data, isSearch: true);
         });
     }
 

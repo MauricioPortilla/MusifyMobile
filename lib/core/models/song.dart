@@ -144,6 +144,9 @@ class Song {
                     songs.add(SongTable (
                         accountSong: accountSongs
                     ));
+                } else if (response.status == "failed") {
+                    Session.songsIdPlayQueue.remove(songId);
+                    Session.preferences.setStringList("songsIdPlayQueue" + Session.account.accountId.toString(), Session.songsIdPlayQueue);
                 }
             }
         }

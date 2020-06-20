@@ -7,8 +7,9 @@ import 'package:musify/screens/add_song_to_playlist.dart';
 class SongTableList extends StatefulWidget {
     final List<SongTable> songs;
     final bool isPlayQueue;
+    final Function onTap;
 
-    SongTableList({@required this.songs, this.isPlayQueue});
+    SongTableList({@required this.songs, @required this.onTap, this.isPlayQueue});
 
     @override
     State<StatefulWidget> createState() {
@@ -38,6 +39,15 @@ class _SongTableListState extends State<SongTableList> {
                             } else {
                                 Session.player.state.playSong(accountSong: widget.songs[index].accountSong);
                             }
+                            if (widget.isPlayQueue) {
+                                for (int i = 0; i <= index; i++) {
+                                    Session.songsIdPlayQueue.removeAt(0);
+                                }
+                                Session.preferences.setStringList("songsIdPlayQueue" + Session.account.accountId.toString(), Session.songsIdPlayQueue);
+                            } else {
+                                Session.songsIdSongList.clear();
+                            }
+                            widget.onTap();
                         },
                         child: Container(
                             child: Row(
@@ -57,12 +67,48 @@ class _SongTableListState extends State<SongTableList> {
                                                     )
                                                 );
                                             } else if (value == "addToPlayQueue") {
-                                                if (widget.songs[index].song != null) {
-                                                    Session.songsIdPlayQueue.add(widget.songs[index].song.songId.toString());
-                                                } else {
-                                                    Session.songsIdPlayQueue.add((widget.songs[index].accountSong.accountSongId * -1).toString());
-                                                }
-                                                Session.preferences.setStringList("songsIdPlayQueue" + Session.account.accountId.toString(), Session.songsIdPlayQueue);
+                                                UI.createDialog(context, "Agregar a la cola", Text("Agregar ..."), [
+                                                    FlatButton(
+                                                        child: Text("A continuación"),
+                                                        onPressed: () {
+                                                            List<String> songsIdPlayQueue = List<String>();
+                                                            if (widget.songs[index].song != null) {
+                                                                songsIdPlayQueue.add(widget.songs[index].song.songId.toString());
+                                                            } else {
+                                                                songsIdPlayQueue.add((widget.songs[index].accountSong.accountSongId * -1).toString());
+                                                            }
+                                                            songsIdPlayQueue.addAll(Session.songsIdPlayQueue);
+                                                            Session.songsIdPlayQueue.clear();
+                                                            Session.songsIdPlayQueue.addAll(songsIdPlayQueue);
+                                                            Session.preferences.setStringList("songsIdPlayQueue" + Session.account.accountId.toString(), Session.songsIdPlayQueue);
+                                                            Navigator.pop(context);
+                                                            if (widget.isPlayQueue) {
+                                                                widget.onTap();
+                                                            }
+                                                        },
+                                                    ),
+                                                    FlatButton(
+                                                        child: Text("Al final"),
+                                                        onPressed: () {
+                                                            if (widget.songs[index].song != null) {
+                                                                Session.songsIdPlayQueue.add(widget.songs[index].song.songId.toString());
+                                                            } else {
+                                                                Session.songsIdPlayQueue.add((widget.songs[index].accountSong.accountSongId * -1).toString());
+                                                            }
+                                                            Session.preferences.setStringList("songsIdPlayQueue" + Session.account.accountId.toString(), Session.songsIdPlayQueue);
+                                                            Navigator.pop(context);
+                                                            if (widget.isPlayQueue) {
+                                                                widget.onTap();
+                                                            }
+                                                        }
+                                                    ),
+                                                    FlatButton(
+                                                        child: Text("Cancelar"),
+                                                        onPressed: () {
+                                                            Navigator.pop(context);
+                                                        }
+                                                    )
+                                                ]);
                                             } else if (value == "generateRadioStation") {
                                                 if (Session.genresIdRadioStations.length == 0 || Session.genresIdRadioStations.firstWhere((element) => element == widget.songs[index].song.genreId.toString()) == null) {
                                                     Session.genresIdRadioStations.add(widget.songs[index].song.genreId.toString());
@@ -75,6 +121,7 @@ class _SongTableListState extends State<SongTableList> {
                                             } else if (value == "deleteFromPlayQueue") {
                                                 Session.songsIdPlayQueue.removeAt(index);
                                                 Session.preferences.setStringList("songsIdPlayQueue" + Session.account.accountId.toString(), Session.songsIdPlayQueue);
+                                                widget.onTap();
                                             }
                                         },
                                     )

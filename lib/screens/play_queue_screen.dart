@@ -53,19 +53,28 @@ class _PlayQueuePageState extends State<_PlayQueuePage> {
             )
         );
     }
+    
+    void _onPlaySong() {
+        setState(() {
+        });
+    }
 
     FutureBuilder<List<SongTable>> _songList() {
         List<int> songsId = List<int>();
         for (String songId in Session.songsIdPlayQueue){
             songsId.add(int.parse(songId));
         }
+        for (int songId in Session.songsIdSongList){
+            songsId.add(songId);
+        }
         return FutureFactory<List<SongTable>>().networkFuture(Song.fetchSongById(songsId), (data) {
-            return SongTableList(songs: data, isPlayQueue: true);
+            return SongTableList(songs: data, onTap: _onPlaySong, isPlayQueue: true);
         });
     }
 
     void _deletePlayQueueButton() async {
         Session.songsIdPlayQueue = List<String>();
+        Session.preferences.setStringList("songsIdPlayQueue" + Session.account.accountId.toString(), Session.songsIdPlayQueue);
         setState(() {
         });
     }

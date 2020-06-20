@@ -8,8 +8,9 @@ import 'package:musify/screens/add_song_to_playlist.dart';
 class SongList extends StatefulWidget {
     final List<Song> songs;
     final Playlist playlistAssociated;
+    final bool isSearch;
 
-    SongList({@required this.songs, this.playlistAssociated});
+    SongList({@required this.songs, this.playlistAssociated, this.isSearch});
 
     @override
     State<StatefulWidget> createState() {
@@ -35,6 +36,12 @@ class _SongListState extends State<SongList> {
                     child: InkWell(
                         onTap: () {
                             Session.player.state.playSong(song: widget.songs[index]);
+                            Session.songsIdSongList.clear();
+                            if (!widget.isSearch) {
+                                for (int i = index + 1; i < widget.songs.length; i++) {
+                                    Session.songsIdSongList.add(widget.songs[i].songId);
+                                }
+                            }
                         },
                         child: Container(
                             child: Row(
@@ -79,8 +86,33 @@ class _SongListState extends State<SongList> {
                                                     )
                                                 );
                                             } else if (value == "addToPlayQueue") {
-                                                Session.songsIdPlayQueue.add(widget.songs[index].songId.toString());
-                                                Session.preferences.setStringList("songsIdPlayQueue" + Session.account.accountId.toString(), Session.songsIdPlayQueue);
+                                                UI.createDialog(context, "Agregar a la cola", Text("Agregar ..."), [
+                                                    FlatButton(
+                                                        child: Text("A continuación"),
+                                                        onPressed: () {
+                                                            List<String> songsIdPlayQueue = [widget.songs[index].songId.toString()];
+                                                            songsIdPlayQueue.addAll(Session.songsIdPlayQueue);
+                                                            Session.songsIdPlayQueue.clear();
+                                                            Session.songsIdPlayQueue.addAll(songsIdPlayQueue);
+                                                            Session.preferences.setStringList("songsIdPlayQueue" + Session.account.accountId.toString(), Session.songsIdPlayQueue);
+                                                            Navigator.pop(context);
+                                                        },
+                                                    ),
+                                                    FlatButton(
+                                                        child: Text("Al final"),
+                                                        onPressed: () {
+                                                            Session.songsIdPlayQueue.add(widget.songs[index].songId.toString());
+                                                            Session.preferences.setStringList("songsIdPlayQueue" + Session.account.accountId.toString(), Session.songsIdPlayQueue);
+                                                            Navigator.pop(context);
+                                                        }
+                                                    ),
+                                                    FlatButton(
+                                                        child: Text("Cancelar"),
+                                                        onPressed: () {
+                                                            Navigator.pop(context);
+                                                        }
+                                                    )
+                                                ]);
                                             } else if (value == "generateRadioStation") {
                                                 if (Session.genresIdRadioStations.length == 0 || Session.genresIdRadioStations.firstWhere((element) => element == widget.songs[index].genreId.toString()) == null) {
                                                     Session.genresIdRadioStations.add(widget.songs[index].genreId.toString());

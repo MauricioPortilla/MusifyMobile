@@ -75,7 +75,7 @@ class _ConsultRadioStationScreenPageState extends State<_ConsultRadioStationScre
 
     FutureBuilder<List<Song>> _songList() {
         return FutureFactory<List<Song>>().networkFuture(widget.genre.fetchSongs(), (data) {
-            return SongList(songs: data);
+            return SongList(songs: data, isSearch: false);
         });
     }
 

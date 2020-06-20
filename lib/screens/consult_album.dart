@@ -64,7 +64,7 @@ class _ConsultAlbumPageState extends State<_ConsultAlbumPage> {
 
     FutureBuilder<List<Song>> _songList() {
         return FutureFactory<List<Song>>().networkFuture(widget.album.loadSongs(), (data) {
-            return SongList(songs: data);
+            return SongList(songs: data, isSearch: false);
         });
     }
 }

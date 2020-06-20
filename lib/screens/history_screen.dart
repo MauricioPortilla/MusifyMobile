@@ -43,6 +43,11 @@ class _HistoryPageState extends State<_HistoryPage> {
             )
         );
     }
+    
+    void _onPlaySong() {
+        setState(() {
+        });
+    }
 
     FutureBuilder<List<SongTable>> _songList() {
         List<int> songsId = List<int>();
@@ -50,7 +55,7 @@ class _HistoryPageState extends State<_HistoryPage> {
             songsId.add(int.parse(Session.songsIdPlayHistory.elementAt(i)));
         }
         return FutureFactory<List<SongTable>>().networkFuture(Song.fetchSongById(songsId), (data) {
-            return SongTableList(songs: data, isPlayQueue: false);
+            return SongTableList(songs: data, onTap: _onPlaySong, isPlayQueue: false);
         });
     }
 }
