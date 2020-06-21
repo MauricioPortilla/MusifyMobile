@@ -167,6 +167,7 @@ class _MusifyState extends State<MusifyScreen> {
     Future<void> _onSuccessfulLogin(Account account) async {
         Session.account = account;
         await Session.account.fetchArtist();
+        await Session.account.fetchSubscription();
         Session.mainMenu = MainMenuScreen();
         Session.player = Player();
         if (Session.preferences.getStringList("songsIdPlayHistory" + account.accountId.toString()) != null){

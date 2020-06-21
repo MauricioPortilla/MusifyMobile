@@ -35,10 +35,10 @@ class _ConsultPlaylistsPageState extends State<_ConsultPlaylistsPage> {
                             child: Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: <Widget>[
-                                    RaisedButton(
+                                    Session.account.subscription == null ? RaisedButton(
                                         child: Text("Suscribirse"),
-                                        onPressed: () {},
-                                    ),
+                                        onPressed: () => _subscribeButton(),
+                                    ) : Container(child: Text("Suscrito")),
                                     RaisedButton(
                                         child: Text("Nueva lista de reproducción"),
                                         onPressed: _createNewPlaylistButton,
@@ -116,5 +116,39 @@ class _ConsultPlaylistsPageState extends State<_ConsultPlaylistsPage> {
                 )
             ]
         );
+    }
+
+    void _subscribeButton() {
+        UI.createDialog(context, "Suscribirse", Text("¿Desea suscribirse?"), [
+            FlatButton(
+                child: Text("Sí"),
+                onPressed: () {
+                    Navigator.pop(context);
+                    _subscribe();
+                },
+            ),
+            FlatButton(
+                child: Text("No"),
+                onPressed: () {
+                    Navigator.pop(context);
+                },
+            )
+        ]);
+    }
+
+    void _subscribe() {
+        UI.createLoadingDialog(context);
+        Session.account.subscribe(() {
+            Navigator.pop(context);
+            UI.createSuccessDialog(context, "Cuenta suscrita.");
+            setState(() {
+            });
+        }, (errorResponse) {
+            Navigator.pop(context);
+            UI.createErrorDialog(context, errorResponse.message);
+        }, () {
+            Navigator.pop(context);
+            UI.createErrorDialog(context, "Ocurrió un error al intentar suscribirse.");
+        });
     }
 }

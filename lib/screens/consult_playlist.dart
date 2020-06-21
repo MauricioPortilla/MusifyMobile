@@ -67,7 +67,12 @@ class _ConsultPlaylistScreenPageState extends State<_ConsultPlaylistScreenPage> 
                                         value: _isDownloadSwitched,
                                         onChanged: (value) {
                                             setState(() {
-                                                _isDownloadSwitched = value;
+                                                if (Session.account.subscription == null) {
+                                                    _isDownloadSwitched = false;
+                                                    UI.createErrorDialog(context, "No tienes una suscripción activa.");
+                                                } else {
+                                                    _isDownloadSwitched = value;
+                                                }
                                                 _downloadSwitch();
                                             });
                                         },

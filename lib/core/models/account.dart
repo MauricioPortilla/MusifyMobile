@@ -4,6 +4,7 @@ import 'package:musify/core/models/accountsong.dart';
 import 'package:musify/core/models/artist.dart';
 import 'package:musify/core/models/playlist.dart';
 import 'package:musify/core/models/song.dart';
+import 'package:musify/core/models/subscription.dart';
 import 'package:musify/core/network.dart';
 import 'package:musify/core/networkresponse.dart';
 import 'package:musify/core/session.dart';
@@ -18,6 +19,7 @@ class Account {
     Artist artist;
     List<Playlist> playlists = <Playlist>[];
     List<AccountSong> accountSongs = <AccountSong>[];
+    Subscription subscription;
 
     Account({
         this.accountId,
@@ -271,6 +273,30 @@ class Account {
         };
         try {
             Network.delete("/song/${song.songId}/songdislike", data, (response) {
+                onSuccess();
+            }, (errorResponse) {
+                onFailure(errorResponse);
+            });
+        } catch (exception) {
+            onError();
+        }
+    }
+
+    Future fetchSubscription() async {
+        try {
+            var response = await Network.futureGet("/subscription", null);
+            if (response.status == "success") {
+                subscription = Subscription.fromJson(response.data);
+            }
+        } catch (exception) {
+            throw exception;
+        }
+    }
+
+    void subscribe(onSuccess(), onFailure(NetworkResponse errorResponse), onError()) {
+        try {
+            Network.post("/subscription", null, (response) {
+                subscription = Subscription.fromJson(response.data);
                 onSuccess();
             }, (errorResponse) {
                 onFailure(errorResponse);

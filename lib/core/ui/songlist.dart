@@ -73,70 +73,24 @@ class _SongListState extends State<SongList> {
                                             ),
                                         ],
                                     ),
-                                    DropdownButton(
-                                        items: _loadSongRowDropdownItems(),
-                                        icon: Icon(Icons.more_horiz),
-                                        onChanged: (value) async {
-                                            if (value == "addToPlaylist") {
-                                                Navigator.push(
-                                                    context, MaterialPageRoute(
-                                                        builder: (context) => AddSongToPlaylistScreen(
-                                                            songToAdd: widget.songs[index]
-                                                        )
-                                                    )
-                                                );
-                                            } else if (value == "addToPlayQueue") {
-                                                UI.createDialog(context, "Agregar a la cola", Text("Agregar ..."), [
-                                                    FlatButton(
-                                                        child: Text("A continuación"),
-                                                        onPressed: () {
-                                                            List<String> songsIdPlayQueue = [widget.songs[index].songId.toString()];
-                                                            songsIdPlayQueue.addAll(Session.songsIdPlayQueue);
-                                                            Session.songsIdPlayQueue.clear();
-                                                            Session.songsIdPlayQueue.addAll(songsIdPlayQueue);
-                                                            Session.preferences.setStringList("songsIdPlayQueue" + Session.account.accountId.toString(), Session.songsIdPlayQueue);
-                                                            Navigator.pop(context);
-                                                        },
-                                                    ),
-                                                    FlatButton(
-                                                        child: Text("Al final"),
-                                                        onPressed: () {
-                                                            Session.songsIdPlayQueue.add(widget.songs[index].songId.toString());
-                                                            Session.preferences.setStringList("songsIdPlayQueue" + Session.account.accountId.toString(), Session.songsIdPlayQueue);
-                                                            Navigator.pop(context);
-                                                        }
-                                                    ),
-                                                    FlatButton(
-                                                        child: Text("Cancelar"),
-                                                        onPressed: () {
-                                                            Navigator.pop(context);
-                                                        }
-                                                    )
-                                                ]);
-                                            } else if (value == "generateRadioStation") {
-                                                if (Session.genresIdRadioStations.length == 0 || Session.genresIdRadioStations.firstWhere((element) => element == widget.songs[index].genreId.toString()) == null) {
-                                                    Session.genresIdRadioStations.add(widget.songs[index].genreId.toString());
-                                                    Session.preferences.setStringList("genresIdRadioStations" + Session.account.accountId.toString(), Session.genresIdRadioStations);
-                                                } else {
-                                                    UI.createLoadingDialog(context);
-                                                    Navigator.pop(context);
-                                                    UI.createErrorDialog(context, "Ya existe la estación de radio de este género.");
+                                    Container(
+                                        width: 150,
+                                        child: DropdownButton(
+                                            isExpanded: true,
+                                            items: _loadSongRowDropdownItems(),
+                                            icon: Icon(Icons.more_horiz),
+                                            onChanged: (value) async {
+                                                if (value == "addToPlaylist") {
+                                                    _addToPlaylist(widget.songs[index]);
+                                                } else if (value == "addToPlayQueue") {
+                                                    _addToPlayQueue(widget.songs[index]);
+                                                } else if (value == "generateRadioStation") {
+                                                    _generateRadioStation(widget.songs[index]);
+                                                } else if (value == "deleteFromPlaylist") {
+                                                    _deleteFromPlaylist(widget.songs[index]);
                                                 }
-                                            } else if (value == "deleteFromPlaylist") {
-                                                UI.createLoadingDialog(context);
-                                                widget.playlistAssociated.deleteSong(widget.songs[index], () {
-                                                    Navigator.pop(context);
-                                                    setState(() {
-                                                    });
-                                                }, (errorResponse) {
-                                                    Navigator.pop(context);
-                                                    UI.createErrorDialog(context, errorResponse.message);
-                                                }, () {
-                                                    Navigator.pop(context);
-                                                    UI.createErrorDialog(context, "Error al establecer una conexión con el servidor.");
-                                                });
-                                            }
-                                        },
+                                            },
+                                        )
                                     )
                                 ],
                             ),
@@ -175,5 +129,73 @@ class _SongListState extends State<SongList> {
             );
         }
         return items;
+    }
+
+    void _addToPlaylist(Song song) {
+        Navigator.push(
+            context, MaterialPageRoute(
+                builder: (context) => AddSongToPlaylistScreen(
+                    songToAdd: song
+                )
+            )
+        );
+    }
+
+    void _addToPlayQueue(Song song) {
+        UI.createDialog(context, "Agregar a la cola", Text("Agregar ..."), [
+            FlatButton(
+                child: Text("A continuación"),
+                onPressed: () {
+                    List<String> songsIdPlayQueue = [song.songId.toString()];
+                    songsIdPlayQueue.addAll(Session.songsIdPlayQueue);
+                    Session.songsIdPlayQueue.clear();
+                    Session.songsIdPlayQueue.addAll(songsIdPlayQueue);
+                    Session.preferences.setStringList("songsIdPlayQueue" + Session.account.accountId.toString(), Session.songsIdPlayQueue);
+                    Navigator.pop(context);
+                },
+            ),
+            FlatButton(
+                child: Text("Al final"),
+                onPressed: () {
+                    Session.songsIdPlayQueue.add(song.songId.toString());
+                    Session.preferences.setStringList("songsIdPlayQueue" + Session.account.accountId.toString(), Session.songsIdPlayQueue);
+                    Navigator.pop(context);
+                }
+            ),
+            FlatButton(
+                child: Text("Cancelar"),
+                onPressed: () {
+                    Navigator.pop(context);
+                }
+            )
+        ]);
+    }
+
+    void _generateRadioStation(Song song) {
+        if (Session.genresIdRadioStations.length == 0 || 
+            Session.genresIdRadioStations.firstWhere((element) => element == song.genreId.toString()) == null
+        ) {
+            Session.genresIdRadioStations.add(song.genreId.toString());
+            Session.preferences.setStringList("genresIdRadioStations" + Session.account.accountId.toString(), Session.genresIdRadioStations);
+        } else {
+            UI.createLoadingDialog(context);
+            Navigator.pop(context);
+            UI.createErrorDialog(context, "Ya existe la estación de radio de este género.");
+        }
+    }
+
+    void _deleteFromPlaylist(Song song) {
+        UI.createLoadingDialog(context);
+        widget.playlistAssociated.deleteSong(song, () {
+            Navigator.pop(context);
+            setState(() {
+            });
+        }, (errorResponse) {
+            Navigator.pop(context);
+            UI.createErrorDialog(context, errorResponse.message);
+        }, () {
+            Navigator.pop(context);
+            UI.createErrorDialog(context, "Error al establecer una conexión con el servidor.");
+        });
     }
 }
