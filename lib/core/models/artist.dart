@@ -49,8 +49,8 @@ class Artist {
             albums.clear();
             for (var albumResponse in response.data) {
                 var album = Album.fromJson(albumResponse);
-                await album.loadSongs();
-                await album.loadArtists();
+                await album.fetchSongs();
+                await album.fetchArtists();
                 albums.add(album);
             }
         }

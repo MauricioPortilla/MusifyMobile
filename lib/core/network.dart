@@ -226,14 +226,13 @@ class Network {
                     query = query.replaceAll(key, value.toString());
                 });
             }
-            final http.Response response = await http.delete(
-                Core.SERVER_URL + query,
-                headers: <String, String> {
-                    "Content-Type": "application/json; charset=UTF-8",
-                    "Authorization": Session.accessToken != null ? Session.accessToken : ""
-                }
+            final response = await http.Client().send(
+                http.Request("DELETE", Uri.parse(Core.SERVER_URL + query))
+                    ..headers["Content-Type"] = "application/json; charset=UTF-8"
+                    ..headers["Authorization"] = Session.accessToken != null ? Session.accessToken : ""
+                    ..body = json.encode(data)
             );
-            Map<String, dynamic> jsonDecoded = json.decode(response.body);
+            Map<String, dynamic> jsonDecoded = json.decode(await response.stream.bytesToString());
             if (jsonDecoded["status"] == "success") {
                 onSuccess(NetworkResponse.fromJson(jsonDecoded));
             } else {

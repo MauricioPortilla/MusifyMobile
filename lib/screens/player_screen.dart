@@ -3,7 +3,10 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:musify/core/models/accountsong.dart';
+import 'package:musify/core/models/song.dart';
 import 'package:musify/core/session.dart';
+import 'package:musify/core/ui.dart';
 import 'package:musify/screens/consult_artist.dart';
 
 class PlayerScreen extends StatelessWidget {
@@ -20,6 +23,10 @@ class _PlayerPage extends StatefulWidget {
 
 class _PlayerPageState extends State<_PlayerPage> {
     Timer sliderUpdater;
+    Song latestPlayedSong = Session.player.state.latestPlayedSong;
+    AccountSong latestPlayedAccountSong = Session.player.state.latestPlayedAccountSong;
+    bool _isLikeButtonEnabled = true;
+    bool _isDislikeButtonEnabled = true;
 
     _PlayerPageState() {
         sliderUpdater = Timer.periodic(Duration(seconds: 1), (timer) {
@@ -37,8 +44,6 @@ class _PlayerPageState extends State<_PlayerPage> {
 
     @override
     Widget build(BuildContext context) {
-        var latestPlayedSong = Session.player.state.latestPlayedSong;
-        var latestPlayedAccountSong = Session.player.state.latestPlayedAccountSong;
         return Scaffold(
             appBar: AppBar(
                 title: Container(
@@ -108,24 +113,7 @@ class _PlayerPageState extends State<_PlayerPage> {
                                                 )
                                             ],
                                         ),
-                                        Row(
-                                            children: <Widget>[
-                                                Container(
-                                                    margin: EdgeInsets.only(right: 12),
-                                                    child: InkWell(
-                                                        child: Icon(Icons.thumb_up),
-                                                        onTap: () {},
-                                                    ),
-                                                ),
-                                                Container(
-                                                    margin: EdgeInsets.only(left: 12),
-                                                    child: InkWell(
-                                                        child: Icon(Icons.thumb_down),
-                                                        onTap: () {},
-                                                    ),
-                                                )
-                                            ],
-                                        )
+                                        _loadRateSongButtons()
                                     ],
                                 ),
                             ),
@@ -201,5 +189,93 @@ class _PlayerPageState extends State<_PlayerPage> {
         );
     }
 
+    Widget _loadRateSongButtons() {
+        Session.account.hasLikedSong(latestPlayedSong).then((hasLiked) {
+            if (hasLiked) {
+                setState(() {
+                    _isDislikeButtonEnabled = false;
+                    _isLikeButtonEnabled = true;
+                });
+            } else {
+                Session.account.hasDislikedSong(latestPlayedSong).then((hasDisliked) {
+                    if (hasDisliked) {
+                        setState(() {
+                            _isLikeButtonEnabled = false;
+                            _isDislikeButtonEnabled = true;
+                        });
+                    }
+                });
+            }
+        });
+        return latestPlayedSong != null ? Row(
+            children: <Widget>[
+                Container(
+                    margin: EdgeInsets.only(right: 12),
+                    child: InkWell(
+                        child: Icon(Icons.thumb_up, color: _isLikeButtonEnabled ? Colors.green.shade800 : Colors.green.shade200),
+                        onTap: () => _likeSong(),
+                        highlightColor: _isLikeButtonEnabled ? Colors.grey.shade300 : Colors.transparent,
+                        splashColor: _isLikeButtonEnabled ? Colors.grey.shade300 : Colors.transparent,
+                    ),
+                ),
+                Container(
+                    margin: EdgeInsets.only(left: 12),
+                    child: InkWell(
+                        child: Icon(Icons.thumb_down, color: _isDislikeButtonEnabled ? Colors.red : Colors.red.shade200),
+                        onTap: () => _dislikeSong(),
+                        highlightColor: _isDislikeButtonEnabled ? Colors.grey.shade300 : Colors.transparent,
+                        splashColor: _isDislikeButtonEnabled ? Colors.grey.shade300 : Colors.transparent,
+                    ),
+                )
+            ],
+        ) : Container();
+    }
 
+    void _likeSong() {
+        if (_isLikeButtonEnabled && _isDislikeButtonEnabled) {
+            Session.account.likeSong(latestPlayedSong, () {
+                setState(() {
+                    _isDislikeButtonEnabled = false;
+                });
+            }, (errorResponse) {
+                UI.createErrorDialog(context, errorResponse.message);
+            }, () {
+                UI.createErrorDialog(context, "Ocurrió un error al procesar tu solicitud.");
+            });
+        } else if (_isLikeButtonEnabled && !_isDislikeButtonEnabled) {
+            Session.account.unlikeSong(latestPlayedSong, () {
+                setState(() {
+                    _isDislikeButtonEnabled = true;
+                });
+            }, (errorResponse) {
+                UI.createErrorDialog(context, errorResponse.message);
+            }, () {
+                UI.createErrorDialog(context, "Ocurrió un error al procesar tu solicitud.");
+            });
+        }
+    }
+
+    void _dislikeSong() {
+        if (_isLikeButtonEnabled && _isDislikeButtonEnabled) {
+            Session.account.dislikeSong(latestPlayedSong, () {
+                setState(() {
+                    _isLikeButtonEnabled = false;
+                });
+            }, (errorResponse) {
+                UI.createErrorDialog(context, errorResponse.message);
+            }, () {
+                UI.createErrorDialog(context, "Ocurrió un error al procesar tu solicitud.");
+            });
+        } else if (!_isLikeButtonEnabled && _isDislikeButtonEnabled) {
+            Session.account.undislikeSong(latestPlayedSong, () {
+                setState(() {
+                    _isLikeButtonEnabled = true;
+                });
+            }, (errorResponse) {
+                UI.createErrorDialog(context, errorResponse.message);
+            }, () {
+                UI.createErrorDialog(context, "Ocurrió un error al procesar tu solicitud.");
+            });
+        }
+    }
 }

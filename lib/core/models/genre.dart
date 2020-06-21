@@ -54,10 +54,10 @@ class Genre {
         if (response.status == "success") {
             for (var songJson in response.data) {
                 var song = Song.fromJson(songJson);
-                Album album = await song.loadAlbum();
-                await album.loadArtists();
-                await song.loadGenre();
-                await song.loadArtists();
+                Album album = await song.fetchAlbum();
+                await album.fetchArtists();
+                await song.fetchGenre();
+                await song.fetchArtists();
                 songs.add(song);
             }
         }

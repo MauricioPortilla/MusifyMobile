@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:musify/core/models/accountsong.dart';
 import 'package:musify/core/models/artist.dart';
 import 'package:musify/core/models/playlist.dart';
+import 'package:musify/core/models/song.dart';
 import 'package:musify/core/network.dart';
 import 'package:musify/core/networkresponse.dart';
 import 'package:musify/core/session.dart';
@@ -128,7 +129,7 @@ class Account {
         }
     }
 
-    Future<List<Playlist>> loadPlaylists() async {
+    Future<List<Playlist>> fetchPlaylists() async {
         var data = {
             "{accountId}": accountId    
         };
@@ -192,6 +193,84 @@ class Account {
         try {
             Network.delete("/account/{accountId}/accountsong/{accountSongId}", data, (response) {
                 accountSongs.remove(accountSong);
+                onSuccess();
+            }, (errorResponse) {
+                onFailure(errorResponse);
+            });
+        } catch (exception) {
+            onError();
+        }
+    }
+
+    void likeSong(Song song, onSuccess(), onFailure(NetworkResponse errorResponse), onError()) {
+        var data = {
+            "account_id": accountId
+        };
+        try {
+            Network.post("/song/${song.songId}/songlike", data, (response) {
+                onSuccess();
+            }, (errorResponse) {
+                onFailure(errorResponse);
+            });
+        } catch (exception) {
+            onError();
+        }
+    }
+
+    void dislikeSong(Song song, onSuccess(), onFailure(NetworkResponse errorResponse), onError()) {
+        var data = {
+            "account_id": accountId
+        };
+        try {
+            Network.post("/song/${song.songId}/songdislike", data, (response) {
+                onSuccess();
+            }, (errorResponse) {
+                onFailure(errorResponse);
+            });
+        } catch (exception) {
+            onError();
+        }
+    }
+
+    Future<bool> hasLikedSong(Song song) async {
+        try {
+            NetworkResponse response = await Network.futureGet("/song/${song.songId}/songlike", null);
+            return response.status == "success";
+        } catch (exception) {
+            throw exception;
+        }
+    }
+
+    Future<bool> hasDislikedSong(Song song) async {
+        try {
+            NetworkResponse response = await Network.futureGet("/song/${song.songId}/songdislike", null);
+            return response.status == "success";
+        } catch (exception) {
+            throw exception;
+        }
+    }
+
+    void unlikeSong(Song song, onSuccess(), onFailure(errorResponse), onError()) {
+        var data = {
+            "account_id": accountId
+        };
+        try {
+            Network.delete("/song/${song.songId}/songlike", data, (response) {
+                onSuccess();
+            }, (errorResponse) {
+                onFailure(errorResponse);
+            });
+        } catch (exception) {
+            onError();
+        }
+    }
+
+    void undislikeSong(Song song, onSuccess(), onFailure(errorResponse), onError()) {
+        var data = {
+            "account_id": accountId
+        };
+        try {
+            Network.delete("/song/${song.songId}/songdislike", data, (response) {
                 onSuccess();
             }, (errorResponse) {
                 onFailure(errorResponse);

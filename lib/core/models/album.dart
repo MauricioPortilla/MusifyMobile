@@ -111,13 +111,12 @@ class Album {
         }
     }
 
-    Future<List<Artist>> loadArtists() async {
+    Future<List<Artist>> fetchArtists() async {
         var data = {
             "{albumId}": albumId
         };
         NetworkResponse response = await Network.futureGet("/album/{albumId}/artists", data);
         if (response.status == "success") {
-            //artists.clear();
             for (var artistJson in response.data) {
                 artists.add(Artist.fromJson(artistJson));
             }
@@ -125,7 +124,7 @@ class Album {
         return artists;
     }
 
-    Future<List<Song>> loadSongs() async {
+    Future<List<Song>> fetchSongs() async {
         var data = {
             "{albumId}": albumId
         };
@@ -135,8 +134,8 @@ class Album {
             for (var songJson in response.data) {
                 var song = Song.fromJson(songJson);
                 song.album = this;
-                await song.loadGenre();
-                await song.loadArtists();
+                await song.fetchGenre();
+                await song.fetchArtists();
                 songs.add(song);
             }
         }
@@ -155,7 +154,7 @@ class Album {
         if (response.status == "success") {
             for (var albumResponse in response.data) {
                 var album = Album.fromJson(albumResponse);
-                await album.loadArtists();
+                await album.fetchArtists();
                 albums.add(album);
             }
         }

@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:musify/core/core.dart';
 import 'package:musify/core/models/accountsong.dart';
 import 'package:musify/core/models/album.dart';
 import 'package:musify/core/models/artist.dart';
@@ -55,7 +56,7 @@ class Song {
         );
     }
 
-    Future<Album> loadAlbum() async {
+    Future<Album> fetchAlbum() async {
         var data = {
             "{albumId}": albumId
         };
@@ -66,7 +67,7 @@ class Song {
         return album;
     }
 
-    Future<Genre> loadGenre() async {
+    Future<Genre> fetchGenre() async {
         var data = {
             "{genreId}": genreId
         };
@@ -77,7 +78,7 @@ class Song {
         return genre;
     }
 
-    Future<List<Artist>> loadArtists() async {
+    Future<List<Artist>> fetchArtists() async {
         var data = {
             "{songId}": songId
         };
@@ -103,10 +104,10 @@ class Song {
         if (response.status == "success") {
             for (var songResponse in response.data) {
                 var song = Song.fromJson(songResponse);
-                Album album = await song.loadAlbum();
-                await album.loadArtists();
-                await song.loadGenre();
-                await song.loadArtists();
+                Album album = await song.fetchAlbum();
+                await album.fetchArtists();
+                await song.fetchGenre();
+                await song.fetchArtists();
                 songs.add(song);
             }
         }
@@ -125,9 +126,9 @@ class Song {
                 if (response.status == "success") {
                     song = Song.fromJson(response.data);
                     Album album = await song.loadAlbum();
-                    await album.loadArtists();
-                    await song.loadGenre();
-                    await song.loadArtists();
+                    await album.fetchArtists();
+                    await song.fetchGenre();
+                    await song.fetchArtists();
                     songs.add(SongTable (
                         song: song
                     ));
@@ -154,18 +155,14 @@ class Song {
     }
 
     Future<void> fetchSongBuffer(onSuccess(Uint8List buffer), onFailure(errorResponse)) async {
-      String songStreamingQuality = Session.songStreamingQuality;
+        String songStreamingQuality = Session.songStreamingQuality;
         if (Session.songStreamingQuality == "automaticquality") {
-            var dataNetwork = {};
-            final memory = await AndroidDeviceInfo().getNetworkInfo();
-            dataNetwork.addAll(memory);
             songStreamingQuality = "lowquality";
-            if (dataNetwork['wifiLinkSpeed'] != null || int.parse(dataNetwork['wifiLinkSpeed'].toString().substring(0, dataNetwork['wifiLinkSpeed'].toString().length -5)) >= 20) {
-                if (int.parse(dataNetwork['wifiLinkSpeed'].toString().substring(0, dataNetwork['wifiLinkSpeed'].toString().length -5)) <= 40) {
-                    songStreamingQuality = "mediumquality";
-                } else {
-                    songStreamingQuality = "highquality";
-                }
+            final networkSpeed = await Core.calculateNetworkSpeed();
+            if (networkSpeed == -1 || (networkSpeed >= 20 && networkSpeed <= 40)) {
+                songStreamingQuality = "mediumquality";
+            } else if (networkSpeed > 40) {
+                songStreamingQuality = "highquality";
             }
         }
         Network.getStreamBuffer("/stream/song/$songId/$songStreamingQuality", null, (buffer) {

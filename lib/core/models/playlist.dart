@@ -23,7 +23,7 @@ class Playlist {
         );
     }
 
-    Future<List<Song>> loadSongs() async {
+    Future<List<Song>> fetchSongs() async {
         var data = {
             "{playlistId}": playlistId
         };
@@ -32,10 +32,10 @@ class Playlist {
         if (response.status == "success") {
             for (var songJson in response.data) {
                 var song = Song.fromJson(songJson);
-                Album album = await song.loadAlbum();
-                await album.loadArtists();
-                await song.loadGenre();
-                await song.loadArtists();
+                Album album = await song.fetchAlbum();
+                await album.fetchArtists();
+                await song.fetchGenre();
+                await song.fetchArtists();
                 songs.add(song);
             }
         }

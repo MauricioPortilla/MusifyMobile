@@ -98,7 +98,7 @@ class _ConsultPlaylistScreenPageState extends State<_ConsultPlaylistScreenPage> 
     }
 
     FutureBuilder<List<Song>> _songList() {
-        return FutureFactory<List<Song>>().networkFuture(widget.playlist.loadSongs(), (data) {
+        return FutureFactory<List<Song>>().networkFuture(widget.playlist.fetchSongs(), (data) {
             return SongList(songs: data, playlistAssociated: widget.playlist, isSearch: false);
         });
     }

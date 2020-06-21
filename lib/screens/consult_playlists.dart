@@ -68,7 +68,7 @@ class _ConsultPlaylistsPageState extends State<_ConsultPlaylistsPage> {
     }
 
     FutureBuilder<List<Playlist>> _playlistListUI() {
-        return FutureFactory<List<Playlist>>().networkFuture(Session.account.loadPlaylists(), (data) {
+        return FutureFactory<List<Playlist>>().networkFuture(Session.account.fetchPlaylists(), (data) {
             return PlaylistList(playlists: data, onTap: _onSelectPlaylist);
         });
     }
