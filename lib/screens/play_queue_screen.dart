@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:musify/core/futurefactory.dart';
-import 'package:musify/core/models/song.dart';
 import 'package:musify/core/models/songtable.dart';
 import 'package:musify/core/session.dart';
 import 'package:musify/core/ui/songtablelist.dart';
@@ -67,7 +66,7 @@ class _PlayQueuePageState extends State<_PlayQueuePage> {
         for (int songId in Session.songsIdSongList){
             songsId.add(songId);
         }
-        return FutureFactory<List<SongTable>>().networkFuture(Song.fetchSongsById(songsId), (data) {
+        return FutureFactory<List<SongTable>>().networkFuture(SongTable.fetchSongsById(songsId), (data) {
             return SongTableList(songs: data, onTap: _onPlaySong, isPlayQueue: true);
         });
     }

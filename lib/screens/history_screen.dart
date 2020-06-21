@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:musify/core/futurefactory.dart';
-import 'package:musify/core/models/song.dart';
 import 'package:musify/core/models/songtable.dart';
 import 'package:musify/core/session.dart';
 import 'package:musify/core/ui/songtablelist.dart';
@@ -54,7 +53,7 @@ class _HistoryPageState extends State<_HistoryPage> {
         for (int i = Session.songsIdPlayHistory.length - 1; i >= 0; i--){
             songsId.add(int.parse(Session.songsIdPlayHistory.elementAt(i)));
         }
-        return FutureFactory<List<SongTable>>().networkFuture(Song.fetchSongsById(songsId), (data) {
+        return FutureFactory<List<SongTable>>().networkFuture(SongTable.fetchSongsById(songsId), (data) {
             return SongTableList(songs: data, onTap: _onPlaySong, isPlayQueue: false);
         });
     }

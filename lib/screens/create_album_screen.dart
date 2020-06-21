@@ -341,7 +341,7 @@ class _CreateAlbumPageState extends State<_CreateAlbumPage> {
             UI.createLoadingDialog(context);
             album.save(imageFile, songsFile, () {
                 Navigator.pop(context);
-                UI.createDialog(context, "Álbum creado", Text("Se creó el álbum con éxito."), [
+                UI.createDialog(context, "Álbum creado", Text("Se creó el álbum con éxito. Las canciones aún se están procesando."), [
                     FlatButton(
                         child: Text("Volver"),
                         onPressed: () {

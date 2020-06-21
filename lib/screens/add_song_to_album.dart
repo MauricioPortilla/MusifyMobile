@@ -59,7 +59,7 @@ class _AddSongToAlbumPageState extends State<_AddSongToAlbumPage> {
                             decoration: InputDecoration(
                                 labelText: "Nombre"
                             ),
-                            maxLength: 25,
+                            maxLength: 255,
                             maxLengthEnforced: true,
                         ),
                         Container(
@@ -138,10 +138,10 @@ class _AddSongToAlbumPageState extends State<_AddSongToAlbumPage> {
         songFile = await FilePicker.getFile(type: FileType.custom, allowedExtensions: ['mp3', 'wav']);
         if (songFile != null) {
             songName = songFile.toString().split('/').last.substring(0, songFile.toString().split('/').last.length - 1);
-            if (songName.length > 25) {
-                _nameTextFieldController.text = songName.substring(0, 25);
+            if (songName.length > 255) {
+                _nameTextFieldController.text = songName.split('.').first.substring(0, 255);
             } else {
-                _nameTextFieldController.text = songName;
+                _nameTextFieldController.text = songName.split('.').first;
             }
             setState(() {
             });
