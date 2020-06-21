@@ -67,7 +67,7 @@ class _PlayQueuePageState extends State<_PlayQueuePage> {
         for (int songId in Session.songsIdSongList){
             songsId.add(songId);
         }
-        return FutureFactory<List<SongTable>>().networkFuture(Song.fetchSongById(songsId), (data) {
+        return FutureFactory<List<SongTable>>().networkFuture(Song.fetchSongsById(songsId), (data) {
             return SongTableList(songs: data, onTap: _onPlaySong, isPlayQueue: true);
         });
     }

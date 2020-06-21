@@ -159,6 +159,7 @@ class _PlayerState extends State<Player> {
             setState(() {
                 playerCurrentPosition = 0;
             });
+            nextButtonOnTap();
         });
         setState(() { });
         player.onPlayerStateChanged.listen((data) {
@@ -176,6 +177,23 @@ class _PlayerState extends State<Player> {
         if (player.isPlaying || player.isPaused) {
             player.stopPlayer();
             _playSong(latestPlayedSongBuffer);
+        } else if (player.isStopped) {
+            if (Session.songsIdPlayHistory.length == 0) {
+                return;
+            }
+            // TODO: Check if last in history is a Song or an AccountSong and play it.
+            Song.fetchSongById(int.parse(Session.songsIdPlayHistory.last), (song) {
+                Navigator.pop(context);
+                playSong(song: song);
+                setState(() {
+                });
+            }, (errorResponse) {
+                Navigator.pop(context);
+                UI.createErrorDialog(context, errorResponse.message);
+            }, () {
+                Navigator.pop(context);
+                UI.createErrorDialog(context, "Ocurrió un error al intentar reproducir la canción.");
+            });
         }
     }
 
@@ -197,5 +215,19 @@ class _PlayerState extends State<Player> {
         if (player.isInited == t_INITIALIZED.NOT_INITIALIZED) {
             return;
         }
+        if (Session.songsIdPlayQueue.length == 0) {
+            return;
+        }
+        // TODO: Check if next in queue is a Song or an AccountSong and play it.
+        Song.fetchSongById(int.parse(Session.songsIdPlayQueue.first), (song) {
+            playSong(song: song);
+            setState(() {
+                Session.songsIdPlayQueue.removeRange(0, 1);
+            });
+        }, (errorResponse) {
+            UI.createErrorDialog(context, errorResponse.message);
+        }, () {
+            UI.createErrorDialog(context, "Ocurrió un error al intentar reproducir la canción.");
+        });
     }
 }

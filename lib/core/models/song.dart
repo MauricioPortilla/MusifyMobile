@@ -114,7 +114,28 @@ class Song {
         return songs;
     }
 
-    static Future<List<SongTable>> fetchSongById(List<int> songsId) async {
+    static void fetchSongById(
+        int songId, onSuccess(Song song), 
+        onFailure(NetworkResponse errorResponse), 
+        onError()
+    ) {
+        try {
+            Network.get("/song/$songId", null, (response) async {
+                var song = Song.fromJson(response.data);
+                Album album = await song.fetchAlbum();
+                await album.fetchArtists();
+                await song.fetchGenre();
+                await song.fetchArtists();
+                onSuccess(song);
+            }, (errorResponse) {
+                onFailure(errorResponse);
+            });
+        } catch (exception) {
+            onError();
+        }
+    }
+
+    static Future<List<SongTable>> fetchSongsById(List<int> songsId) async {
         List<SongTable> songs = <SongTable>[];
         for (var songId in songsId) {
             if (songId > 0) {
@@ -125,7 +146,7 @@ class Song {
                 var song;
                 if (response.status == "success") {
                     song = Song.fromJson(response.data);
-                    Album album = await song.loadAlbum();
+                    Album album = await song.fetchAlbum();
                     await album.fetchArtists();
                     await song.fetchGenre();
                     await song.fetchArtists();
