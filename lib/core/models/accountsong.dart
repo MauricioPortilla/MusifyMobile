@@ -1,3 +1,7 @@
+import 'package:musify/core/network.dart';
+import 'package:musify/core/networkresponse.dart';
+import 'package:musify/core/session.dart';
+
 class AccountSong {
     final int accountSongId;
     final int accountId;
@@ -24,5 +28,22 @@ class AccountSong {
             songLocation: json["song_location"],
             uploadDate: DateTime.parse(json["upload_date"])
         );
+    }
+
+    static void fetchAccountSongById(
+        int accountSongId, onSuccess(AccountSong accountSong), 
+        onFailure(NetworkResponse errorResponse), 
+        onError()
+    ) {
+        try {
+            Network.get("/account/${Session.account.accountId}/accountsong/$accountSongId", null, (response) async {
+                var accountSong = AccountSong.fromJson(response.data);
+                onSuccess(accountSong);
+            }, (errorResponse) {
+                onFailure(errorResponse);
+            });
+        } catch (exception) {
+            onError();
+        }
     }
 }

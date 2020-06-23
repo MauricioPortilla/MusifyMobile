@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:musify/core/core.dart';
 import 'package:musify/core/models/songtable.dart';
 import 'package:musify/core/session.dart';
 import 'package:musify/core/ui.dart';
@@ -34,6 +35,10 @@ class _SongTableListState extends State<SongTableList> {
                     width: double.infinity,
                     child: InkWell(
                         onTap: () {
+                            Session.historyIndex = Session.songsIdPlayHistory.length - 1;
+                            if (Session.songsIdPlayHistory.length == Core.MAX_SONGS_IN_PLAY_HISTORY){
+                                Session.historyIndex--;
+                            }
                             if (widget.songs[index].song != null) {
                                 Session.player.state.playSong(song: widget.songs[index].song);
                             } else {
@@ -41,7 +46,11 @@ class _SongTableListState extends State<SongTableList> {
                             }
                             if (widget.isPlayQueue) {
                                 for (int i = 0; i <= index; i++) {
-                                    Session.songsIdPlayQueue.removeAt(0);
+                                    if (Session.songsIdPlayQueue.length > 0) { 
+                                        Session.songsIdPlayQueue.removeAt(0);
+                                    } else {
+                                        Session.songsIdSongList.removeAt(0);
+                                    }
                                 }
                                 Session.preferences.setStringList("songsIdPlayQueue" + Session.account.accountId.toString(), Session.songsIdPlayQueue);
                             } else {

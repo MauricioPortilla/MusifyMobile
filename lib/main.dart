@@ -173,6 +173,7 @@ class _MusifyState extends State<MusifyScreen> {
         if (Session.preferences.getStringList("songsIdPlayHistory" + account.accountId.toString()) != null){
             Session.songsIdPlayHistory = Session.preferences.getStringList("songsIdPlayHistory" + account.accountId.toString());
         }
+        Session.historyIndex = Session.songsIdPlayHistory.length - 2; 
         if (Session.preferences.getStringList("songsIdPlayQueue" + account.accountId.toString()) != null){
             Session.songsIdPlayQueue = Session.preferences.getStringList("songsIdPlayQueue" + account.accountId.toString());
         }
@@ -182,6 +183,7 @@ class _MusifyState extends State<MusifyScreen> {
         if (Session.preferences.getString("songStreamingQuality" + account.accountId.toString()) != null){
             Session.songStreamingQuality = Session.preferences.getString("songStreamingQuality" + account.accountId.toString());
         }
+        _passwordTextFieldController.text = "";
         Navigator.push(context, MaterialPageRoute(
             builder: (context) => Session.mainMenu
         ));

@@ -174,26 +174,39 @@ class _PlayerState extends State<Player> {
         if (player.isInited == t_INITIALIZED.NOT_INITIALIZED) {
             return;
         }
-        if (player.isPlaying || player.isPaused) {
+        if (playerCurrentPosition / 1000 >= 3) {
             player.stopPlayer();
             _playSong(latestPlayedSongBuffer);
-        } else if (player.isStopped) {
-            if (Session.songsIdPlayHistory.length == 0) {
-                return;
-            }
-            // TODO: Check if last in history is a Song or an AccountSong and play it.
-            Song.fetchSongById(int.parse(Session.songsIdPlayHistory.last), (song) {
-                Navigator.pop(context);
-                playSong(song: song);
-                setState(() {
+        } else if (Session.historyIndex >= 0) {
+            if (int.parse(Session.songsIdPlayHistory.elementAt(Session.historyIndex)) > 0) {
+                Song.fetchSongById(int.parse(Session.songsIdPlayHistory.elementAt(Session.historyIndex)), (song) {
+                    Session.historyIndex--;
+                    if (Session.songsIdPlayHistory.length == Core.MAX_SONGS_IN_PLAY_HISTORY){
+                        Session.historyIndex--;
+                    }
+                    playSong(song: song);
+                    setState(() {
+                    });
+                }, (errorResponse) {
+                    UI.createErrorDialog(context, errorResponse.message);
+                }, () {
+                    UI.createErrorDialog(context, "Ocurrió un error al intentar reproducir la canción.");
                 });
-            }, (errorResponse) {
-                Navigator.pop(context);
-                UI.createErrorDialog(context, errorResponse.message);
-            }, () {
-                Navigator.pop(context);
-                UI.createErrorDialog(context, "Ocurrió un error al intentar reproducir la canción.");
-            });
+            } else {
+                AccountSong.fetchAccountSongById(int.parse(Session.songsIdPlayHistory.elementAt(Session.historyIndex)) * -1, (accountSong) {
+                    Session.historyIndex--;
+                    if (Session.songsIdPlayHistory.length == Core.MAX_SONGS_IN_PLAY_HISTORY){
+                        Session.historyIndex--;
+                    }
+                    playSong(accountSong: accountSong);
+                    setState(() {
+                    });
+                }, (errorResponse) {
+                    UI.createErrorDialog(context, errorResponse.message);
+                }, () {
+                    UI.createErrorDialog(context, "Ocurrió un error al intentar reproducir la canción.");
+                });
+            }
         }
     }
 
@@ -215,19 +228,48 @@ class _PlayerState extends State<Player> {
         if (player.isInited == t_INITIALIZED.NOT_INITIALIZED) {
             return;
         }
-        if (Session.songsIdPlayQueue.length == 0) {
-            return;
+        if (Session.songsIdPlayQueue.length > 0 || Session.songsIdSongList.length > 0) {
+            int id;
+            if (Session.songsIdPlayQueue.length > 0) {
+                id = int.parse(Session.songsIdPlayQueue.first);
+            } else {
+                id = Session.songsIdSongList.first;
+            }
+            if (id > 0) {
+                Song.fetchSongById(id, (song) {
+                    playSong(song: song);
+                    setState(() {
+                        if (Session.songsIdPlayQueue.length > 0) {
+                            Session.songsIdPlayQueue.removeAt(0);
+                            Session.preferences.setStringList("songsIdPlayQueue" + Session.account.accountId.toString(), Session.songsIdPlayQueue);
+                        } else {
+                            Session.songsIdSongList.removeAt(0);
+                        }
+                    });
+                    print("Hola" + Session.mainMenu.page.controller.toString());
+                    print("Hola" + Session.homeTabWidgetQueue.last.toString());
+                }, (errorResponse) {
+                    UI.createErrorDialog(context, errorResponse.message);
+                }, () {
+                    UI.createErrorDialog(context, "Ocurrió un error al intentar reproducir la canción.");
+                });
+            } else {
+                AccountSong.fetchAccountSongById(id * -1, (accountSong) {
+                    playSong(accountSong: accountSong);
+                    setState(() {
+                        if (Session.songsIdPlayQueue.length > 0) {
+                            Session.songsIdPlayQueue.removeAt(0);
+                            Session.preferences.setStringList("songsIdPlayQueue" + Session.account.accountId.toString(), Session.songsIdPlayQueue);
+                        } else {
+                            Session.songsIdSongList.removeAt(0);
+                        }
+                    });
+                }, (errorResponse) {
+                    UI.createErrorDialog(context, errorResponse.message);
+                }, () {
+                    UI.createErrorDialog(context, "Ocurrió un error al intentar reproducir la canción.");
+                });
+            }
         }
-        // TODO: Check if next in queue is a Song or an AccountSong and play it.
-        Song.fetchSongById(int.parse(Session.songsIdPlayQueue.first), (song) {
-            playSong(song: song);
-            setState(() {
-                Session.songsIdPlayQueue.removeRange(0, 1);
-            });
-        }, (errorResponse) {
-            UI.createErrorDialog(context, errorResponse.message);
-        }, () {
-            UI.createErrorDialog(context, "Ocurrió un error al intentar reproducir la canción.");
-        });
     }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:musify/core/core.dart';
 import 'package:musify/core/models/playlist.dart';
 import 'package:musify/core/models/song.dart';
 import 'package:musify/core/session.dart';
@@ -35,6 +36,10 @@ class _SongListState extends State<SongList> {
                     width: double.infinity,
                     child: InkWell(
                         onTap: () {
+                            Session.historyIndex = Session.songsIdPlayHistory.length - 1;
+                            if (Session.songsIdPlayHistory.length == Core.MAX_SONGS_IN_PLAY_HISTORY){
+                                Session.historyIndex--;
+                            }
                             Session.player.state.playSong(song: widget.songs[index]);
                             Session.songsIdSongList.clear();
                             if (!widget.isSearch) {

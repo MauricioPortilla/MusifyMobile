@@ -18,6 +18,7 @@ class Session {
     static List<String> songsIdPlayQueue = List<String>();
     static List<String> genresIdRadioStations = List<String>();
     static List<int> songsIdSongList = List<int>();
+    static int historyIndex;
 
     static void homePush(Widget content) {
         homeTabWidgetQueue.addLast(content);
