@@ -173,7 +173,7 @@ class _MusifyState extends State<MusifyScreen> {
         if (Session.preferences.getStringList("songsIdPlayHistory" + account.accountId.toString()) != null){
             Session.songsIdPlayHistory = Session.preferences.getStringList("songsIdPlayHistory" + account.accountId.toString());
         }
-        Session.historyIndex = Session.songsIdPlayHistory.length - 2; 
+        Session.historyIndex = Session.songsIdPlayHistory.length - 1; 
         if (Session.preferences.getStringList("songsIdPlayQueue" + account.accountId.toString()) != null){
             Session.songsIdPlayQueue = Session.preferences.getStringList("songsIdPlayQueue" + account.accountId.toString());
         }

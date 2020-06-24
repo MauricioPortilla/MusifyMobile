@@ -343,10 +343,21 @@ class _CreateAlbumPageState extends State<_CreateAlbumPage> {
                 Navigator.pop(context);
                 UI.createDialog(context, "Álbum creado", Text("Se creó el álbum con éxito. Las canciones aún se están procesando."), [
                     FlatButton(
-                        child: Text("Volver"),
+                        child: Text("Cerrar"),
                         onPressed: () {
+                            _nameTextFieldController.text = "";
+                            _discographyTextFieldController.text = "";
+                            launchYear = null;
+                            imageName = "";
+                            imageFile = null;
+                            _searchTextFieldController.text = "";
+                            artists.clear();
+                            artists.add(Session.account.artist);
+                            songs.clear();
+                            songsFile.clear();
+                            setState(() {
+                            });
                             Navigator.pop(context);
-                            Session.homePop();
                             return;
                         },
                     )

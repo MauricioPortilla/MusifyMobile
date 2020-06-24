@@ -246,8 +246,6 @@ class _PlayerState extends State<Player> {
                             Session.songsIdSongList.removeAt(0);
                         }
                     });
-                    print("Hola" + Session.mainMenu.page.controller.toString());
-                    print("Hola" + Session.homeTabWidgetQueue.last.toString());
                 }, (errorResponse) {
                     UI.createErrorDialog(context, errorResponse.message);
                 }, () {
