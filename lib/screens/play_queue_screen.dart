@@ -39,7 +39,7 @@ class _PlayQueuePageState extends State<_PlayQueuePage> {
                             children: <Widget>[
                                 RaisedButton(
                                     child: Text("Eliminar cola"),
-                                    onPressed: () => _deletePlayQueueButton(),
+                                    onPressed: Session.songsIdPlayQueue.length > 0 ? () => _deletePlayQueueButton() : null,
                                 ),
                             ],
                         ),

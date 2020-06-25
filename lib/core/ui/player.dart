@@ -165,7 +165,11 @@ class _PlayerState extends State<Player> {
         player.onPlayerStateChanged.listen((data) {
             if (data != null) {
                 playerMaxPosition = data.duration;
-                playerCurrentPosition = data.currentPosition;
+                if (data.currentPosition > data.duration) {
+                    playerCurrentPosition = data.duration;
+                } else {
+                    playerCurrentPosition = data.currentPosition;
+                }
             }
         });
     }

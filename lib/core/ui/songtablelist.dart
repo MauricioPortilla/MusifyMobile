@@ -131,8 +131,12 @@ class _SongTableListState extends State<SongTableList> {
                                                         UI.createErrorDialog(context, "Ya existe la estación de radio de este género.");
                                                     }
                                                 } else if (value == "deleteFromPlayQueue") {
-                                                    Session.songsIdPlayQueue.removeAt(index);
-                                                    Session.preferences.setStringList("songsIdPlayQueue" + Session.account.accountId.toString(), Session.songsIdPlayQueue);
+                                                    if (index < Session.songsIdPlayQueue.length) {
+                                                        Session.songsIdPlayQueue.removeAt(index);
+                                                        Session.preferences.setStringList("songsIdPlayQueue" + Session.account.accountId.toString(), Session.songsIdPlayQueue);
+                                                    } else {
+                                                        Session.songsIdSongList.removeAt(index - Session.songsIdPlayQueue.length);
+                                                    }
                                                     widget.onTap();
                                                 }
                                             },
