@@ -237,6 +237,7 @@ class _PlayerState extends State<Player> {
             }
             if (id > 0) {
                 Song.fetchSongById(id, (song) {
+                    Session.historyIndex = Session.songsIdPlayHistory.length - 1;
                     playSong(song: song);
                     setState(() {
                         if (Session.songsIdPlayQueue.length > 0) {
@@ -253,6 +254,7 @@ class _PlayerState extends State<Player> {
                 });
             } else {
                 AccountSong.fetchAccountSongById(id * -1, (accountSong) {
+                    Session.historyIndex = Session.songsIdPlayHistory.length - 1;
                     playSong(accountSong: accountSong);
                     setState(() {
                         if (Session.songsIdPlayQueue.length > 0) {
