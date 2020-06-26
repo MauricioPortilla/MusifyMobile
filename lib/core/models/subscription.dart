@@ -18,8 +18,8 @@ class Subscription {
             subscriptionId: json["subscription_id"],
             accountId: json["account_id"],
             cost: json["cost"],
-            startDate: json["start_date"],
-            endDate: json["end_date"]
+            startDate: DateTime.parse(json["start_date"]),
+            endDate: DateTime.parse(json["end_date"])
         );
     }
 }

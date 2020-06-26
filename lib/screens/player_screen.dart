@@ -32,6 +32,10 @@ class _PlayerPageState extends State<_PlayerPage> {
         sliderUpdater = Timer.periodic(Duration(seconds: 1), (timer) {
             if (Session.player.state.player.isPlaying) {
                 setState(() { });
+            } else if (Session.player.state.player.isStopped && Session.player.state.playerCurrentPosition == Session.player.state.playerMaxPosition) {
+                setState(() {
+                    Session.player.state.playerCurrentPosition = 0;
+                });
             }
         });
     }
@@ -122,10 +126,13 @@ class _PlayerPageState extends State<_PlayerPage> {
                                 max: Session.player.state.playerMaxPosition,
                                 value: Session.player.state.playerCurrentPosition,
                                 onChanged: (value) {
-                                    try {
-                                        Session.player.state.player.seekToPlayer(value.toInt());
-                                        setState(() { });
-                                    } catch (e) {
+                                    if (Session.player.state.playerCurrentPosition == 0 && Session.player.state.player.isStopped) {
+                                        return;
+                                    }
+                                    if (Session.player.state.playerMaxPosition != Session.player.state.playerCurrentPosition) {
+                                        setState(() {
+                                            Session.player.state.player.seekToPlayer(value.toInt());
+                                        });
                                     }
                                 },
                             ),
@@ -190,23 +197,25 @@ class _PlayerPageState extends State<_PlayerPage> {
     }
 
     Widget _loadRateSongButtons() {
-        Session.account.hasLikedSong(latestPlayedSong).then((hasLiked) {
-            if (hasLiked) {
-                setState(() {
-                    _isDislikeButtonEnabled = false;
-                    _isLikeButtonEnabled = true;
-                });
-            } else {
-                Session.account.hasDislikedSong(latestPlayedSong).then((hasDisliked) {
-                    if (hasDisliked) {
-                        setState(() {
-                            _isLikeButtonEnabled = false;
-                            _isDislikeButtonEnabled = true;
-                        });
-                    }
-                });
-            }
-        });
+        if (latestPlayedSong != null) {
+            Session.account.hasLikedSong(latestPlayedSong).then((hasLiked) {
+                if (hasLiked) {
+                    setState(() {
+                        _isDislikeButtonEnabled = false;
+                        _isLikeButtonEnabled = true;
+                    });
+                } else {
+                    Session.account.hasDislikedSong(latestPlayedSong).then((hasDisliked) {
+                        if (hasDisliked) {
+                            setState(() {
+                                _isLikeButtonEnabled = false;
+                                _isDislikeButtonEnabled = true;
+                            });
+                        }
+                    });
+                }
+            });
+        }
         return latestPlayedSong != null ? Row(
             children: <Widget>[
                 Container(
