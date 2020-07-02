@@ -101,17 +101,17 @@ class Album {
                         Network.post("/album", data, (response) {
                             onSuccess();
                         }, onFailure, () {
-                            print("Exception@Album->save()");
+                            print("Exception@Album->save3()");
                             onError();
                         });
                     }
                 }, onFailure, () {
-                    print("Exception@Album->save()");
+                    print("Exception@Album->save2()");
                     onError();
                 });
             }
         }, onFailure, () {
-            print("Exception@Album->save()");
+            print("Exception@Album->save1()");
             onError();
         });
     }

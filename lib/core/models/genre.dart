@@ -17,7 +17,7 @@ class Genre {
         );
     }
 
-    static Future<List<Genre>> fetchGenreById(List<int> genresId) async {
+    static Future<List<Genre>> fetchGenresById(List<int> genresId) async {
         List<Genre> genres = <Genre>[];
         try {
             for (var genreId in genresId){

@@ -3,7 +3,6 @@ import 'package:musify/core/futurefactory.dart';
 import 'package:musify/core/models/album.dart';
 import 'package:musify/core/models/artist.dart';
 import 'package:musify/core/session.dart';
-import 'package:musify/core/ui.dart';
 import 'package:musify/core/ui/album_panel.dart';
 
 class ConsultArtistScreen extends StatelessWidget {

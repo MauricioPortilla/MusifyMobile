@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:musify/core/futurefactory.dart';
 import 'package:musify/core/models/genre.dart';
 import 'package:musify/core/session.dart';
-import 'package:musify/core/ui.dart';
 import 'package:musify/core/ui/genrelist.dart';
 
 import 'consult_radio_station.dart';
@@ -49,7 +48,7 @@ class _RadioStationsPageState extends State<_RadioStationsPage> {
         for (String genreId in Session.genresIdRadioStations){
             genresId.add(int.parse(genreId));
         }
-        return FutureFactory<List<Genre>>().networkFuture(Genre.fetchGenreById(genresId), (data) {
+        return FutureFactory<List<Genre>>().networkFuture(Genre.fetchGenresById(genresId), (data) {
             return GenreList(genres: data, onTap: _onSelectGenre);
         }, () {
             return Center(child: Text("Ocurrió un error al cargar las estaciones de radio."));

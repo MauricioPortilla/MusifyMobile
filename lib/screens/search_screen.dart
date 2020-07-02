@@ -3,7 +3,6 @@ import 'package:musify/core/futurefactory.dart';
 import 'package:musify/core/models/album.dart';
 import 'package:musify/core/models/artist.dart';
 import 'package:musify/core/models/song.dart';
-import 'package:musify/core/ui.dart';
 import 'package:musify/core/ui/albumlist.dart';
 import 'package:musify/core/ui/artistlist.dart';
 import 'package:musify/core/ui/songlist.dart';

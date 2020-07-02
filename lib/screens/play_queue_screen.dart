@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:musify/core/futurefactory.dart';
 import 'package:musify/core/models/songtable.dart';
 import 'package:musify/core/session.dart';
-import 'package:musify/core/ui.dart';
 import 'package:musify/core/ui/songtablelist.dart';
 
 class PlayQueueScreen extends StatelessWidget {

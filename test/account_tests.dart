@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_config/flutter_config.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:musify/core/models/account.dart';
+import 'package:musify/core/models/accountsong.dart';
 import 'package:musify/core/models/song.dart';
 import 'package:musify/core/networkresponse.dart';
 
@@ -110,6 +113,40 @@ void main() async {
         Account.login("freya@arkanapp.com", "1230", expectAsync1<void, Account>((account) async {
             var accountSongs = await account.fetchAccountSongs();
             expect(accountSongs != null, true);
+        }), (errorResponse) {
+            fail("Account songs not fetched. Unsuccessful login");
+        }, () {
+            fail("Exception raised");
+        });
+    });
+
+    test("TEST: Add account songs", () {
+        Account.login("freya@arkanapp.com", "1230", expectAsync1<void, Account>((account) async {
+            List<File> songsFile = [File('/storage/emulated/0/Download/CanciónCuenta1.mp3')];
+            account.addAccountSongs(songsFile, expectAsync0(() {
+                expect(true, true);
+            }), (errorResponse) {
+                fail("Song not rated. Unsuccessful like");
+            }, () {
+                fail("Exception raised");
+            });
+        }), (errorResponse) {
+            fail("Account songs not fetched. Unsuccessful login");
+        }, () {
+            fail("Exception raised");
+        });
+    });
+
+    test("TEST: Delete account song", () {
+        Account.login("freya@arkanapp.com", "1230", expectAsync1<void, Account>((account) async {
+            AccountSong accountSong = AccountSong(accountId: account.accountId, accountSongId: 1);
+            account.deleteAccountSong(accountSong, expectAsync0(() {
+                expect(true, true);
+            }), (errorResponse) {
+                fail("Song not rated. Unsuccessful like");
+            }, () {
+                fail("Exception raised");
+            });
         }), (errorResponse) {
             fail("Account songs not fetched. Unsuccessful login");
         }, () {
