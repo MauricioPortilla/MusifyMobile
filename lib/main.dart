@@ -58,59 +58,61 @@ class _MusifyState extends State<MusifyScreen> {
                 title: Text(widget.title),
                 centerTitle: true,
             ),
-            body: Container(
-                padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
-                child: Column(
-                    children: <Widget>[
-                        TextField(
-                            controller: _emailTextFieldController,
-                            decoration: InputDecoration(
-                                labelText: "Correo electrónico"
+            body: SingleChildScrollView(
+                child: Container(
+                    padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
+                    child: Column(
+                        children: <Widget>[
+                            TextField(
+                                controller: _emailTextFieldController,
+                                decoration: InputDecoration(
+                                    labelText: "Correo electrónico"
+                                ),
+                                maxLength: 100,
+                                maxLengthEnforced: true,
+                                keyboardType: TextInputType.emailAddress,
                             ),
-                            maxLength: 100,
-                            maxLengthEnforced: true,
-                            keyboardType: TextInputType.emailAddress,
-                        ),
-                        TextField(
-                            controller: _passwordTextFieldController,
-                            decoration: InputDecoration(
-                                labelText: "Contraseña"
+                            TextField(
+                                controller: _passwordTextFieldController,
+                                decoration: InputDecoration(
+                                    labelText: "Contraseña"
+                                ),
+                                obscureText: true,
                             ),
-                            obscureText: true,
-                        ),
-                        Container(
-                            child: RaisedButton(
-                                onPressed: _loginButton,
-                                child: Text("Iniciar sesión"),
-                                color: Colors.lightBlue,
-                                textColor: Colors.white,
+                            Container(
+                                child: RaisedButton(
+                                    onPressed: _loginButton,
+                                    child: Text("Iniciar sesión"),
+                                    color: Colors.lightBlue,
+                                    textColor: Colors.white,
+                                ),
+                                width: double.infinity,
+                                margin: EdgeInsets.only(top: 10),
                             ),
-                            width: double.infinity,
-                            margin: EdgeInsets.only(top: 10),
-                        ),
-                        Container(
-                            child: RaisedButton(
-                                onPressed: _googleLoginButton,
-                                child: Text("Iniciar sesión con Google"),
-                                color: Colors.lightBlue,
-                                textColor: Colors.white,
+                            Container(
+                                child: RaisedButton(
+                                    onPressed: _googleLoginButton,
+                                    child: Text("Iniciar sesión con Google"),
+                                    color: Colors.lightBlue,
+                                    textColor: Colors.white,
+                                ),
+                                width: double.infinity,
+                                margin: EdgeInsets.only(top: 10),
                             ),
-                            width: double.infinity,
-                            margin: EdgeInsets.only(top: 10),
-                        ),
-                        Container(
-                            child: RaisedButton(
-                                onPressed: _registerButton,
-                                child: Text("Registrarse"),
-                                color: Colors.lightBlue,
-                                textColor: Colors.white,
+                            Container(
+                                child: RaisedButton(
+                                    onPressed: _registerButton,
+                                    child: Text("Registrarse"),
+                                    color: Colors.lightBlue,
+                                    textColor: Colors.white,
+                                ),
+                                width: double.infinity,
+                                margin: EdgeInsets.only(top: 20),
                             ),
-                            width: double.infinity,
-                            margin: EdgeInsets.only(top: 20),
-                        ),
-                    ],
-                ),
-            )
+                        ],
+                    ),
+                )
+            ),
         );
     }
 
@@ -138,34 +140,43 @@ class _MusifyState extends State<MusifyScreen> {
         }, (errorResponse) {
             Navigator.pop(context);
             UI.createErrorDialog(context, errorResponse.message);
+        }, () {
+            UI.createErrorDialog(context, "Ocurrió un error al momento de iniciar sesión.");
         });
     }
 
     Future<void> _googleLoginButton() async {
         try {
+            UI.createLoadingDialog(context);
             await googleSignIn.signIn().then((result) {
                 result.authentication.then((googleKey) {
                     Account.loginWithGoogle(googleKey.accessToken, (account) {
                         _onSuccessfulLogin(account);
                     }, (errorResponse) {
+                        Navigator.pop(context);
                         UI.createErrorDialog(context, errorResponse.message);
+                    }, () {
+                        Navigator.pop(context);
+                        UI.createErrorDialog(context, "Ocurrió un error al momento de iniciar sesión.");
                     });
                 }).catchError((error) {
+                    Navigator.pop(context);
                     print("Error on _HomePageState->_googleLoginButton() -> $error");
                     UI.createErrorDialog(context, "Error al establecer una conexión.");
                 });
             }).catchError((error) {
+                Navigator.pop(context);
                 print("Error on _HomePageState->_googleLoginButton() -> $error");
                 UI.createErrorDialog(context, "Error al establecer una conexión.");
             });
         } catch (exception) {
+            Navigator.pop(context);
             print("Error on _HomePageState->_googleLoginButton() -> $exception");
             UI.createErrorDialog(context, "Error al establecer una conexión.");
         }
     }
 
     Future<void> _onSuccessfulLogin(Account account) async {
-        Session.account = account;
         await Session.account.fetchArtist();
         await Session.account.fetchSubscription();
         Session.mainMenu = MainMenuScreen();
@@ -184,6 +195,7 @@ class _MusifyState extends State<MusifyScreen> {
             Session.songStreamingQuality = Session.preferences.getString("songStreamingQuality" + account.accountId.toString());
         }
         _passwordTextFieldController.text = "";
+        Navigator.pop(context);
         Navigator.push(context, MaterialPageRoute(
             builder: (context) => Session.mainMenu
         ));

@@ -35,15 +35,12 @@ class AccountSong {
         onFailure(NetworkResponse errorResponse), 
         onError()
     ) {
-        try {
-            Network.get("/account/${Session.account.accountId}/accountsong/$accountSongId", null, (response) async {
-                var accountSong = AccountSong.fromJson(response.data);
-                onSuccess(accountSong);
-            }, (errorResponse) {
-                onFailure(errorResponse);
-            });
-        } catch (exception) {
+        Network.get("/account/${Session.account.accountId}/accountsong/$accountSongId", null, (response) async {
+            var accountSong = AccountSong.fromJson(response.data);
+            onSuccess(accountSong);
+        }, onFailure, () {
+            print("Exception@AccountSong->fetchAccountSongById()");
             onError();
-        }
+        });
     }
 }

@@ -87,7 +87,7 @@ class _RegisterGooglePageState extends State<_RegisterGooglePage> {
             UI.createErrorDialog(context, errorResponse.message);
         }, () {
             Navigator.pop(context);
-            UI.createErrorDialog(context, "Error al establecer una conexión.");
+            UI.createErrorDialog(context, "Ocurrió un error al momento de registrar la cuenta.");
         });
     }
 }

@@ -76,6 +76,8 @@ class _ConsultRadioStationScreenPageState extends State<_ConsultRadioStationScre
     FutureBuilder<List<Song>> _songList() {
         return FutureFactory<List<Song>>().networkFuture(widget.genre.fetchSongs(), (data) {
             return SongList(songs: data, isSearch: false);
+        }, () {
+            return Center(child: Text("Ocurrió un error al cargar la estación de radio."));
         });
     }
 

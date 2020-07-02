@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:musify/core/ui.dart';
 
 class FutureFactory<T> {
-    FutureBuilder<T> networkFuture(Future<T> networkCall, Widget onSuccess(T data)) {
+    FutureBuilder<T> networkFuture(Future<T> networkCall, Widget onSuccess(T data), onFailure()) {
         return FutureBuilder(
             future: networkCall,
             builder: (context, snapshot) {
                 if (snapshot.hasData) {
                     return onSuccess(snapshot.data);
                 } else if (snapshot.hasError) {
-                    UI.createErrorDialog(context, "Error interno del servidor.");
-                    return Column();
+                    return onFailure();
                 }
                 return Container(
                     width: double.infinity,

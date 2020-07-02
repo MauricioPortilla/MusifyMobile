@@ -3,50 +3,59 @@ import 'package:flutter_config/flutter_config.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:musify/core/models/account.dart';
 import 'package:musify/core/models/song.dart';
+import 'package:musify/core/networkresponse.dart';
 
 void main() async {
     WidgetsFlutterBinding.ensureInitialized();
     await FlutterConfig.loadEnvVariables();
     test("TEST: Login successful with true credentials", () {
-        Account.login("mlum@arkanapp.com", "1234", (account) {
+        Account.login("freya@arkanapp.com", "1230", expectAsync1<void, Account>((account) {
             expect(account != null, true);
-        }, (errorResponse) {
+        }), (errorResponse) {
             fail("Unsuccessful login");
+        }, () {
+            fail("Exception raised");
         });
     });
+
     test("TEST: Login not successful with false credentials", () {
-        Account.login("mlum@arkanapp.com", "123450", (account) {
+        Account.login("freya@arkanapp.com", "12300", (account) {
             fail("Successful login");
-        }, (errorResponse) {
+        }, expectAsync1<void, NetworkResponse>((errorResponse) {
             expect(errorResponse != null, true);
+        }), () {
+            fail("Exception raised");
         });
     });
+
     test("TEST: Register successful with no artist data", () {
         Account account = Account(
             email: "kyara@arkanapp.com", password: "1234", 
             name: "Kyara", lastName: "Cothran"
         );
-        account.register(false, (account) {
+        account.register(false, expectAsync1<void, Account>((account) {
             expect(account != null, true);
-        }, (errorResponse) {
+        }), (errorResponse) {
             fail("Unsuccessful register");
         }, () {
             fail("Unsuccessful register");
         });
     });
+
     test("TEST: Register successful with artist data", () {
         Account account = Account(
             email: "kyara2@arkanapp.com", password: "1234", 
             name: "Kyara", lastName: "Cothran"
         );
-        account.register(true, (account) {
+        account.register(true, expectAsync1<void, Account>((account) {
             expect(account != null, true);
-        }, (errorResponse) {
+        }), (errorResponse) {
             fail("Unsuccessful register");
         }, () {
             fail("Unsuccessful register");
         }, artisticName: "Kyara");
     });
+
     test("TEST: Register not successful with no artist data - Reason: Registered email", () {
         Account account = Account(
             email: "kyara@arkanapp.com", password: "1234", 
@@ -54,12 +63,13 @@ void main() async {
         );
         account.register(false, (account) {
             fail("Successful register");
-        }, (errorResponse) {
+        }, expectAsync1<void, NetworkResponse>((errorResponse) {
             expect(errorResponse != null, true);
-        }, () {
+        }), () {
             fail("Exception raised");
         });
     });
+
     test("TEST: Register not successful with artist data - Reason: Registered artist", () {
         Account account = Account(
             email: "kyara3@arkanapp.com", password: "1234", 
@@ -67,115 +77,142 @@ void main() async {
         );
         account.register(true, (account) {
             fail("Successful register");
-        }, (errorResponse) {
+        }, expectAsync1<void, NetworkResponse>((errorResponse) {
             expect(errorResponse != null, true);
-        }, () {
+        }), () {
             fail("Exception raised");
         }, artisticName: "Kyara");
     });
+
     test("TEST: Fetch playlists", () {
-        Account.login("mlum@arkanapp.com", "1234", (account) async {
+        Account.login("freya@arkanapp.com", "1230", expectAsync1<void, Account>((account) async {
             var playlists = await account.fetchPlaylists();
             expect(playlists != null, true);
-        }, (errorResponse) {
+        }), (errorResponse) {
             fail("Playlist not fetched. Unsuccessful login");
+        }, () {
+            fail("Exception raised");
         });
     });
+
     test("TEST: Fetch artist", () {
-        Account.login("mlum@arkanapp.com", "1234", (account) async {
-            var artist = await account.fetchArtist();
-            expect(artist != null, true);
-        }, (errorResponse) {
+        Account.login("freya@arkanapp.com", "1230", expectAsync1<void, Account>((account) async {
+            await account.fetchArtist();
+            expect(account.artist != null, true);
+        }), (errorResponse) {
             fail("Artist not fetched. Unsuccessful login");
+        }, () {
+            fail("Exception raised");
         });
     });
+
     test("TEST: Fetch account songs", () {
-        Account.login("mlum@arkanapp.com", "1234", (account) async {
+        Account.login("freya@arkanapp.com", "1230", expectAsync1<void, Account>((account) async {
             var accountSongs = await account.fetchAccountSongs();
             expect(accountSongs != null, true);
-        }, (errorResponse) {
+        }), (errorResponse) {
             fail("Account songs not fetched. Unsuccessful login");
+        }, () {
+            fail("Exception raised");
         });
     });
+    
     test("TEST: Song rate: Like", () {
-        Account.login("mlum@arkanapp.com", "1234", (account) async {
+        Account.login("freya@arkanapp.com", "1230", expectAsync1<void, Account>((account) async {
             var song = Song(songId: 1);
-            account.likeSong(song, () async {
+            account.likeSong(song, expectAsync0(() async {
                 var hasLikedSong = await account.hasLikedSong(song);
                 expect(hasLikedSong == true, true);
-            }, (errorResponse) {
+            }), (errorResponse) {
                 fail("Song not rated. Unsuccessful like");
             }, () {
                 fail("Exception raised");
             });
-        }, (errorResponse) {
+        }), (errorResponse) {
             fail("Song not rated. Unsuccessful login");
+        }, () {
+            fail("Exception raised");
         });
     });
+
     test("TEST: Song rate: Dislike", () {
-        Account.login("mlum@arkanapp.com", "1234", (account) async {
+        Account.login("freya@arkanapp.com", "1230", expectAsync1<void, Account>((account) async {
             var song = Song(songId: 1);
-            account.dislikeSong(song, () async {
+            account.dislikeSong(song, expectAsync0(() async {
                 var hasDislikedSong = await account.hasDislikedSong(song);
                 expect(hasDislikedSong == true, true);
-            }, (errorResponse) {
+            }), (errorResponse) {
                 fail("Song not rated. Unsuccessful dislike");
             }, () {
                 fail("Exception raised");
             });
-        }, (errorResponse) {
+        }), (errorResponse) {
             fail("Song not rated. Unsuccessful login");
+        }, () {
+            fail("Exception raised");
         });
     });
+
     test("TEST: Song unrate: Like", () {
-        Account.login("mlum@arkanapp.com", "1234", (account) async {
+        Account.login("freya@arkanapp.com", "1230", expectAsync1<void, Account>((account) async {
             var song = Song(songId: 1);
-            account.unlikeSong(song, () async {
+            account.unlikeSong(song, expectAsync0(() async {
                 var hasLikedSong = await account.hasLikedSong(song);
                 expect(hasLikedSong == false, true);
-            }, (errorResponse) {
+            }), (errorResponse) {
                 fail("Song not unrated. Unsuccessful unlike");
             }, () {
                 fail("Exception raised");
             });
-        }, (errorResponse) {
+        }), (errorResponse) {
             fail("Song not unrated. Unsuccessful login");
+        }, () {
+            fail("Exception raised");
         });
     });
+    
     test("TEST: Song unrate: Dislike", () {
-        Account.login("mlum@arkanapp.com", "1234", (account) async {
+        Account.login("freya@arkanapp.com", "1230", expectAsync1<void, Account>((account) async {
             var song = Song(songId: 1);
-            account.undislikeSong(song, () async {
+            account.undislikeSong(song, expectAsync0(() async {
                 var hasDislikedSong = await account.hasDislikedSong(song);
                 expect(hasDislikedSong == false, true);
-            }, (errorResponse) {
+            }), (errorResponse) {
                 fail("Song not unrated. Unsuccessful undislike");
             }, () {
                 fail("Exception raised");
             });
-        }, (errorResponse) {
+        }), (errorResponse) {
             fail("Song not unrated. Unsuccessful login");
+        }, () {
+            fail("Exception raised");
         });
     });
+    
     test("TEST: Subscribe", () {
-        Account.login("mlum@arkanapp.com", "1234", (account) async {
-            account.subscribe(() {
+        Account.login("kyara@arkanapp.com", "1234", expectAsync1<void, Account>((account) async {
+            account.subscribe(expectAsync0(() {
                 expect(account.subscription != null, true);
-            }, (errorResponse) {
+            }), (errorResponse) {
                 fail("Account not subscribed. Unsuccessful subscription");
             }, () {
                 fail("Exception raised");
             });
-        }, (errorResponse) {
+        }), (errorResponse) {
             fail("Account not subscribed. Unsuccessful login");
+        }, () {
+            fail("Exception raised");
         });
     });
+
     test("TEST: Fetch subscription", () {
-        Account.login("mlum@arkanapp.com", "1234", (account) async {
-            var subscription = await account.fetchSubscription();
-            expect(subscription != null, true);
-        }, (errorResponse) {
+        Account.login("freya@arkanapp.com", "1230", expectAsync1<void, Account>((account) async {
+            await account.fetchSubscription();
+            expect(account.subscription != null, true);
+        }), (errorResponse) {
             fail("Subscription not fetched. Unsuccessful login");
+        }, () {
+            fail("Exception raised");
         });
     });
 }

@@ -105,6 +105,8 @@ class _ConsultPlaylistScreenPageState extends State<_ConsultPlaylistScreenPage> 
     FutureBuilder<List<Song>> _songList() {
         return FutureFactory<List<Song>>().networkFuture(widget.playlist.fetchSongs(), (data) {
             return SongList(songs: data, playlistAssociated: widget.playlist, isSearch: false);
+        }, () {
+            return Center(child: Text("Ocurrió un error al cargar la lista de reproducción."));
         });
     }
 
@@ -149,6 +151,9 @@ class _ConsultPlaylistScreenPageState extends State<_ConsultPlaylistScreenPage> 
                     song.fetchSongBuffer((buffer) async {
                         await songFile.writeAsBytes(buffer, mode: FileMode.writeOnly, flush: true);
                     }, (errorResponse) {
+                        UI.createErrorDialog(context, "Ocurrió un error al intentar descargar ${song.title}.");
+                    }, () {
+                        UI.createErrorDialog(context, "Ocurrió un error al intentar descargar ${song.title}.");
                     });
                 }
             }

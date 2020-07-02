@@ -30,30 +30,40 @@ class Artist {
         var data = {
             "{artisticName}": artisticName
         };
-        NetworkResponse response = await Network.futureGet("/artist/search/{artisticName}", data);
-        if (response.status == "success") {
-            for (var artistResponse in response.data) {
-                var artist = Artist.fromJson(artistResponse);
-                artists.add(artist);
+        try {
+            NetworkResponse response = await Network.futureGet("/artist/search/{artisticName}", data);
+            if (response.status == "success") {
+                for (var artistResponse in response.data) {
+                    var artist = Artist.fromJson(artistResponse);
+                    artists.add(artist);
+                }
             }
+            return artists;
+        } catch (exception) {
+            print("Exception@Artist->fetchAlbumByArtisticNameCoincidences()");
+            throw exception;
         }
-        return artists;
     }
 
     Future<List<Album>> fetchAlbums() async {
         var data = {
             "{artistId}": artistId
         };
-        NetworkResponse response = await Network.futureGet("/artist/{artistId}/albums", data);
-        if (response.status == "success") {
-            albums.clear();
-            for (var albumResponse in response.data) {
-                var album = Album.fromJson(albumResponse);
-                await album.fetchSongs();
-                await album.fetchArtists();
-                albums.add(album);
+        try {
+            NetworkResponse response = await Network.futureGet("/artist/{artistId}/albums", data);
+            if (response.status == "success") {
+                albums.clear();
+                for (var albumResponse in response.data) {
+                    var album = Album.fromJson(albumResponse);
+                    await album.fetchSongs();
+                    await album.fetchArtists();
+                    albums.add(album);
+                }
             }
+            return albums;
+        } catch (exception) {
+            print("Exception@Artist->fetchAlbumByArtisticNameCoincidences()");
+            throw exception;
         }
-        return albums;
     }
 }

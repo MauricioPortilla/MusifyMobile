@@ -173,6 +173,8 @@ class _CreateAlbumPageState extends State<_CreateAlbumPage> {
     FutureBuilder<List<Artist>> _artistList(String artisticName) {
         return FutureFactory<List<Artist>>().networkFuture(Artist.fetchAlbumByArtisticNameCoincidences(artisticName), (data) {
             return _artistsFoundListView(data);
+        }, () {
+            return Center(child: Text("Ocurrió un error al cargar los artistas."));
         });
     }
 

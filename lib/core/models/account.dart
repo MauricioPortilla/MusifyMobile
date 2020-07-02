@@ -45,38 +45,42 @@ class Account {
         String email, 
         String password, 
         onSuccess(Account account), 
-        onFailure(NetworkResponse errorResponse)
+        onFailure(NetworkResponse errorResponse),
+        onError()
     ) {
         var data = {
             "email": email,
             "password": password
         };
-        try {
-            Network.post("/auth/login", data, (response) {
-                Session.accessToken = response.json["access_token"];
-                onSuccess(Account.fromJson(response.data));
-            }, (errorResponse) {
-                onFailure(errorResponse);
-            });
-        } catch (exception) {
-            print("Exception@Account->login() -> $exception");
-        }
+        Network.post("/auth/login", data, (response) {
+            Session.accessToken = response.json["access_token"];
+            Account account = Account.fromJson(response.data);
+            Session.account = account;
+            onSuccess(account);
+        }, onFailure, () {
+            print("Exception@Account->login()");
+            onError();
+        });
     }
 
-    static void loginWithGoogle(String accessToken, onSuccess(Account account), onFailure(NetworkResponse errorResponse)) {
+    static void loginWithGoogle(
+        String accessToken, 
+        onSuccess(Account account), 
+        onFailure(NetworkResponse errorResponse),
+        onError()
+    ) {
         var data = {
             "access_token": accessToken
         };
-        try {
-            Network.post("/auth/login/google", data, (response) {
-                Session.accessToken = response.json["access_token"];
-                onSuccess(Account.fromJson(response.data));
-            }, (errorResponse) {
-                onFailure(errorResponse);
-            });
-        } catch (exception) {
-            print("Exception@Account->loginWithGoogle() -> $exception");
-        }
+        Network.post("/auth/login/google", data, (response) {
+            Session.accessToken = response.json["access_token"];
+            Account account = Account.fromJson(response.data);
+            Session.account = account;
+            onSuccess(account);
+        }, onFailure, () {
+            print("Exception@Account->loginWithGoogle()");
+            onError();
+        });
     }
 
     void register(
@@ -94,16 +98,12 @@ class Account {
             "is_artist": isArtist,
             "artistic_name": artisticName == "" ? null : artisticName
         };
-        try {
-            Network.post("/auth/register", data, (response) {
-                onSuccess(Account.fromJson(response.data));
-            }, (errorResponse) {
-                onFailure(errorResponse);
-            });
-        } catch (exception) {
-            print("Exception@Account->register() -> $exception");
+        Network.post("/auth/register", data, (response) {
+            onSuccess(Account.fromJson(response.data));
+        }, onFailure, () {
+            print("Exception@Account->register()");
             onError();
-        }
+        });
     }
 
     void registerWithGoogle(
@@ -119,39 +119,43 @@ class Account {
             "is_artist": isArtist,
             "artistic_name": artisticName == "" ? null : artisticName
         };
-        try {
-            Network.post("/auth/register/google", data, (response) {
-                onSuccess(Account.fromJson(response.data));
-            }, (errorResponse) {
-                onFailure(errorResponse);
-            });
-        } catch (exception) {
-            print("Exception@Account->registerWithGoogle() -> $exception");
+        Network.post("/auth/register/google", data, (response) {
+            onSuccess(Account.fromJson(response.data));
+        }, onFailure, () {
+            print("Exception@Account->registerWithGoogle()");
             onError();
-        }
+        });
     }
 
     Future<List<Playlist>> fetchPlaylists() async {
         var data = {
             "{accountId}": accountId    
         };
-        NetworkResponse response = await Network.futureGet("/account/{accountId}/playlists", data);
-        playlists.clear();
-        if (response.status == "success") {
-            for (var playlistJson in response.data) {
-                playlists.add(Playlist.fromJson(playlistJson));
+        try {
+            NetworkResponse response = await Network.futureGet("/account/{accountId}/playlists", data);
+            playlists.clear();
+            if (response.status == "success") {
+                for (var playlistJson in response.data) {
+                    playlists.add(Playlist.fromJson(playlistJson));
+                }
             }
+            return playlists;
+        } catch (exception) {
+            throw exception;
         }
-        return playlists;
     }
 
     Future fetchArtist() async {
         var data = {
             "{accountId}": accountId    
         };
-        NetworkResponse response = await Network.futureGet("/account/{accountId}/artist", data);
-        if (response.status == "success") {
-            artist = Artist.fromJson(response.data);
+        try {
+            NetworkResponse response = await Network.futureGet("/account/{accountId}/artist", data);
+            if (response.status == "success") {
+                artist = Artist.fromJson(response.data);
+            }
+        } catch (exception) {
+            throw exception;
         }
     }
 
@@ -159,32 +163,33 @@ class Account {
         var data = {
             "{accountId}": accountId
         };
-        NetworkResponse response = await Network.futureGet("/account/{accountId}/accountsongs", data);
-        accountSongs.clear();
-        if (response.status == "success") {
-            for (var accountSongJson in response.data) {
-                accountSongs.add(AccountSong.fromJson(accountSongJson));
+        try {
+            NetworkResponse response = await Network.futureGet("/account/{accountId}/accountsongs", data);
+            accountSongs.clear();
+            if (response.status == "success") {
+                for (var accountSongJson in response.data) {
+                    accountSongs.add(AccountSong.fromJson(accountSongJson));
+                }
             }
+            return accountSongs;
+        } catch (exception) {
+            throw exception;
         }
-        return accountSongs;
     }
 
     void addAccountSongs(List<File> files, onSuccess(), onFailure(NetworkResponse errorResponse), onError()) {
         var data = {
             "{accountId}": accountId
         };
-        try {
-            Network.postMultimedia("/account/{accountId}/accountsongs", data, files, (response) {
-                for (var accountSongJson in response.data) {
-                    accountSongs.add(AccountSong.fromJson(accountSongJson));
-                }
-                onSuccess();
-            }, (errorResponse) {
-                onFailure(errorResponse);
-            });
-        } catch (exception) {
+        Network.postMultimedia("/account/{accountId}/accountsongs", data, files, (response) {
+            for (var accountSongJson in response.data) {
+                accountSongs.add(AccountSong.fromJson(accountSongJson));
+            }
+            onSuccess();
+        }, onFailure, () {
             onError();
-        }
+            print("Exception@Account->addAccountSongs()");
+        });
     }
 
     void deleteAccountSong(AccountSong accountSong, onSuccess(), onFailure(NetworkResponse errorResponse), onError()) {
@@ -192,46 +197,39 @@ class Account {
             "{accountId}": accountId,
             "{accountSongId}": accountSong.accountSongId
         };
-        try {
-            Network.delete("/account/{accountId}/accountsong/{accountSongId}", data, (response) {
-                accountSongs.remove(accountSong);
-                onSuccess();
-            }, (errorResponse) {
-                onFailure(errorResponse);
-            });
-        } catch (exception) {
+        Network.delete("/account/{accountId}/accountsong/{accountSongId}", data, (response) {
+            accountSongs.remove(accountSong);
+            onSuccess();
+        }, onFailure, () {
             onError();
-        }
+            print("Exception@Account->deleteAccountSong()");
+        });
     }
 
     void likeSong(Song song, onSuccess(), onFailure(NetworkResponse errorResponse), onError()) {
         var data = {
             "account_id": accountId
         };
-        try {
-            Network.post("/song/${song.songId}/songlike", data, (response) {
-                onSuccess();
-            }, (errorResponse) {
-                onFailure(errorResponse);
-            });
-        } catch (exception) {
+        Network.post("/song/${song.songId}/songlike", data, (response) {
+            onSuccess();
+        }, onFailure, () {
             onError();
-        }
+            print("Exception@Account->likeSong()");
+        });
     }
 
     void dislikeSong(Song song, onSuccess(), onFailure(NetworkResponse errorResponse), onError()) {
         var data = {
             "account_id": accountId
         };
-        try {
-            Network.post("/song/${song.songId}/songdislike", data, (response) {
-                onSuccess();
-            }, (errorResponse) {
-                onFailure(errorResponse);
-            });
-        } catch (exception) {
+        Network.post("/song/${song.songId}/songdislike", data, (response) {
+            onSuccess();
+        }, (errorResponse) {
+            onFailure(errorResponse);
+        }, () {
             onError();
-        }
+            print("Exception@Account->dislikeSong()");
+        });
     }
 
     Future<bool> hasLikedSong(Song song) async {
@@ -239,6 +237,7 @@ class Account {
             NetworkResponse response = await Network.futureGet("/song/${song.songId}/songlike", null);
             return response.status == "success";
         } catch (exception) {
+            print("Exception@Account->hasLikedSong()");
             throw exception;
         }
     }
@@ -248,38 +247,33 @@ class Account {
             NetworkResponse response = await Network.futureGet("/song/${song.songId}/songdislike", null);
             return response.status == "success";
         } catch (exception) {
+            print("Exception@Account->hasDislikedSong()");
             throw exception;
         }
     }
 
-    void unlikeSong(Song song, onSuccess(), onFailure(errorResponse), onError()) {
+    void unlikeSong(Song song, onSuccess(), onFailure(NetworkResponse errorResponse), onError()) {
         var data = {
             "account_id": accountId
         };
-        try {
-            Network.delete("/song/${song.songId}/songlike", data, (response) {
-                onSuccess();
-            }, (errorResponse) {
-                onFailure(errorResponse);
-            });
-        } catch (exception) {
+        Network.delete("/song/${song.songId}/songlike", data, (response) {
+            onSuccess();
+        }, onFailure, () {
             onError();
-        }
+            print("Exception@Account->unlikeSong()");
+        });
     }
 
-    void undislikeSong(Song song, onSuccess(), onFailure(errorResponse), onError()) {
+    void undislikeSong(Song song, onSuccess(), onFailure(NetworkResponse errorResponse), onError()) {
         var data = {
             "account_id": accountId
         };
-        try {
-            Network.delete("/song/${song.songId}/songdislike", data, (response) {
-                onSuccess();
-            }, (errorResponse) {
-                onFailure(errorResponse);
-            });
-        } catch (exception) {
+        Network.delete("/song/${song.songId}/songdislike", data, (response) {
+            onSuccess();
+        }, onFailure, () {
             onError();
-        }
+            print("Exception@Account->undislikeSong()");
+        });
     }
 
     Future fetchSubscription() async {
@@ -289,20 +283,18 @@ class Account {
                 subscription = Subscription.fromJson(response.data);
             }
         } catch (exception) {
+            print("Exception@Account->fetchSubscription()");
             throw exception;
         }
     }
 
     void subscribe(onSuccess(), onFailure(NetworkResponse errorResponse), onError()) {
-        try {
-            Network.post("/subscription", null, (response) {
-                subscription = Subscription.fromJson(response.data);
-                onSuccess();
-            }, (errorResponse) {
-                onFailure(errorResponse);
-            });
-        } catch (exception) {
+        Network.post("/subscription", null, (response) {
+            subscription = Subscription.fromJson(response.data);
+            onSuccess();
+        }, onFailure, () {
             onError();
-        }
+            print("Exception@Account->subscribe()");
+        });
     }
 }

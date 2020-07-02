@@ -19,30 +19,40 @@ class Genre {
 
     static Future<List<Genre>> fetchGenreById(List<int> genresId) async {
         List<Genre> genres = <Genre>[];
-        for (var genreId in genresId){
-            var data = {
-                "{genre_id}": genreId
-            };
-            NetworkResponse response = await Network.futureGet("/genre/{genre_id}", data);
-            var genre;
-            if (response.status == "success") {
-                genre = Genre.fromJson(response.data);
-                genres.add(genre);
+        try {
+            for (var genreId in genresId){
+                var data = {
+                    "{genre_id}": genreId
+                };
+                NetworkResponse response = await Network.futureGet("/genre/{genre_id}", data);
+                var genre;
+                if (response.status == "success") {
+                    genre = Genre.fromJson(response.data);
+                    genres.add(genre);
+                }
             }
+            return genres;
+        } catch (exception) {
+            print("Exception@Genre->fetchGenreById()");
+            throw exception;
         }
-        return genres;
     }
 
     static Future<List<Genre>> fetchAll() async {
         List<Genre> genres = <Genre>[];
-        NetworkResponse response = await Network.futureGet("/genres", null);
-        if (response.status == "success") {
-            for (var genreJson in response.data) {
-                var genre = Genre.fromJson(genreJson);
-                genres.add(genre);
+        try {
+            NetworkResponse response = await Network.futureGet("/genres", null);
+            if (response.status == "success") {
+                for (var genreJson in response.data) {
+                    var genre = Genre.fromJson(genreJson);
+                    genres.add(genre);
+                }
             }
+            return genres;
+        } catch (exception) {
+            print("Exception@Genre->fetchAll()");
+            throw exception;
         }
-        return genres;
     }
 
     Future<List<Song>> fetchSongs() async {
@@ -50,17 +60,22 @@ class Genre {
         var data = {
             "{genre_id}": genreId
         };
-        NetworkResponse response = await Network.futureGet("/genre/{genre_id}/songs", data);
-        if (response.status == "success") {
-            for (var songJson in response.data) {
-                var song = Song.fromJson(songJson);
-                Album album = await song.fetchAlbum();
-                await album.fetchArtists();
-                await song.fetchGenre();
-                await song.fetchArtists();
-                songs.add(song);
+        try {
+            NetworkResponse response = await Network.futureGet("/genre/{genre_id}/songs", data);
+            if (response.status == "success") {
+                for (var songJson in response.data) {
+                    var song = Song.fromJson(songJson);
+                    Album album = await song.fetchAlbum();
+                    await album.fetchArtists();
+                    await song.fetchGenre();
+                    await song.fetchArtists();
+                    songs.add(song);
+                }
             }
+            return songs;
+        } catch (exception) {
+            print("Exception@Genre->fetchSongs()");
+            throw exception;
         }
-        return songs;
     }
 }

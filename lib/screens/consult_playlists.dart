@@ -70,6 +70,8 @@ class _ConsultPlaylistsPageState extends State<_ConsultPlaylistsPage> {
     FutureBuilder<List<Playlist>> _playlistListUI() {
         return FutureFactory<List<Playlist>>().networkFuture(Session.account.fetchPlaylists(), (data) {
             return PlaylistList(playlists: data, onTap: _onSelectPlaylist);
+        }, () {
+            return Center(child: Text("Ocurrió un error al cargar las listas de reproducción."));
         });
     }
 
@@ -101,6 +103,8 @@ class _ConsultPlaylistsPageState extends State<_ConsultPlaylistsPage> {
                                 });
                                 Navigator.pop(context);
                             }, (errorResponse) {
+                                UI.createErrorDialog(context, errorResponse.message);
+                            }, () {
                                 UI.createErrorDialog(context, "Ocurrió un error al crear la lista de reproducción.");
                             });
                         } catch (exception) {

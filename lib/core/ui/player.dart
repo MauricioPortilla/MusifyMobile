@@ -133,6 +133,8 @@ class _PlayerState extends State<Player> {
                 _playSong(buffer);
             }, (errorResponse) {
                 UI.createErrorDialog(context, errorResponse.message);
+            }, () {
+                UI.createErrorDialog(context, "Ocurrió un error al reproducir la canción.");
             });
         } else if (accountSong != null) {
             latestPlayedAccountSong = accountSong;
@@ -150,6 +152,8 @@ class _PlayerState extends State<Player> {
                 _playSong(buffer);
             }, (errorResponse) {
                 UI.createErrorDialog(context, errorResponse.message);
+            }, () {
+                UI.createErrorDialog(context, "Ocurrió un error al reproducir la canción.");
             });
         }
     }

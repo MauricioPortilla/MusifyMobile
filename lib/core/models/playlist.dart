@@ -6,7 +6,7 @@ import 'package:musify/core/networkresponse.dart';
 class Playlist {
     final int playlistId;
     final int accountId;
-    final String name;
+    String name;
     List<Song> songs = <Song>[];
 
     Playlist({
@@ -27,94 +27,85 @@ class Playlist {
         var data = {
             "{playlistId}": playlistId
         };
-        NetworkResponse response = await Network.futureGet("/playlist/{playlistId}/songs", data);
-        songs.clear();
-        if (response.status == "success") {
-            for (var songJson in response.data) {
-                var song = Song.fromJson(songJson);
-                Album album = await song.fetchAlbum();
-                await album.fetchArtists();
-                await song.fetchGenre();
-                await song.fetchArtists();
-                songs.add(song);
-            }
-        }
-        return songs;
-    }
-
-    void save(onSuccess(Playlist playlist), onFailure(NetworkResponse errorResponse)) {
         try {
-            var data = {
-                "account_id": accountId,
-                "name": name
-            };
-            if (playlistId == 0) {
-                Network.post("/playlist", data, (response) {
-                    onSuccess(Playlist.fromJson(response.data));
-                }, (errorResponse) {
-                    onFailure(errorResponse);
-                });
-            } else {
-                Network.put("/playlist", data, (response) {
-                    onSuccess(Playlist.fromJson(response.data));
-                }, (errorResponse) {
-                    onFailure(errorResponse);
-                });
+            NetworkResponse response = await Network.futureGet("/playlist/{playlistId}/songs", data);
+            songs.clear();
+            if (response.status == "success") {
+                for (var songJson in response.data) {
+                    var song = Song.fromJson(songJson);
+                    Album album = await song.fetchAlbum();
+                    await album.fetchArtists();
+                    await song.fetchGenre();
+                    await song.fetchArtists();
+                    songs.add(song);
+                }
             }
+            return songs;
         } catch (exception) {
-            print("Exception@Playlist->save() -> $exception");
+            print("Exception@Playlist->fetchSongs()");
             throw exception;
         }
     }
 
-    void addSong(Song song, onSuccess(), onFailure(NetworkResponse errorResponse), onError()) {
-        try {
-            var data = {
-                "{playlistId}": playlistId,
-                "song_id": song.songId
-            };
-            Network.post("/playlist/{playlistId}/song", data, (response) {
-                songs.add(song);
-                onSuccess();
-            }, (errorResponse) {
-                onFailure(errorResponse);
+    void save(onSuccess(Playlist playlist), onFailure(NetworkResponse errorResponse), onError()) {
+        var data = {
+            "account_id": accountId,
+            "name": name
+        };
+        if (playlistId == 0) {
+            Network.post("/playlist", data, (response) {
+                onSuccess(Playlist.fromJson(response.data));
+            }, onFailure, () {
+                print("Exception@Playlist->save()");
+                onError();
             });
-        } catch (exception) {
-            print("Exception@Playlist->addSong() -> $exception");
-            onError();
+        } else {
+            Network.put("/playlist", data, (response) {
+                onSuccess(Playlist.fromJson(response.data));
+            }, onFailure, () {
+                print("Exception@Playlist->save()");
+                onError();
+            });
         }
     }
 
-    void containsSong(Song song, onSuccess(), onFailure(NetworkResponse errorResponse), onError()) {
-        try {
-            var data = {
-                "{playlistId}": playlistId,
-                "{songId}": song.songId
-            };
-            Network.get("/playlist/{playlistId}/song/{songId}", data, (response) {
-                onSuccess();
-            }, (errorResponse) {
-                onFailure(errorResponse);
-            });
-        } catch (exception) {
-            print("Exception@Playlist->addSong() -> $exception");
+    void addSong(Song song, onSuccess(), onFailure(NetworkResponse errorResponse), onError()) {
+        var data = {
+            "{playlistId}": playlistId,
+            "song_id": song.songId
+        };
+        Network.post("/playlist/{playlistId}/song", data, (response) {
+            songs.add(song);
+            onSuccess();
+        }, onFailure, () {
+            print("Exception@Playlist->addSong()");
             onError();
-        }
+        });
+    }
+
+    void containsSong(Song song, onSuccess(), onFailure(NetworkResponse errorResponse), onError()) {
+        var data = {
+            "{playlistId}": playlistId,
+            "{songId}": song.songId
+        };
+        Network.get("/playlist/{playlistId}/song/{songId}", data, (response) {
+            onSuccess();
+        }, onFailure, () {
+            print("Exception@Playlist->containsSong()");
+            onError();
+        });
     }
 
     void delete(onSuccess(), onFailure(NetworkResponse errorResponse), onError()) {
         var data = {
             "{playlistId}": playlistId
         };
-        try {
-            Network.delete("/playlist/{playlistId}", data, (response) {
-                onSuccess();
-            }, (errorResponse) {
-                onFailure(errorResponse);
-            });
-        } catch (exception) {
+        Network.delete("/playlist/{playlistId}", data, (response) {
+            onSuccess();
+        }, onFailure, () {
+            print("Exception@Playlist->delete()");
             onError();
-        }
+        });
     }
 
     void deleteSong(Song song, onSuccess(), onFailure(NetworkResponse errorResponse), onError()) {
@@ -122,15 +113,12 @@ class Playlist {
             "{playlistId}": playlistId,
             "{songId}": song.songId
         };
-        try {
-            Network.delete("/playlist/{playlistId}/songs/{songId}", data, (response) {
-                songs.remove(song);
-                onSuccess();
-            }, (errorResponse) {
-                onFailure(errorResponse);
-            });
-        } catch (exception) {
+        Network.delete("/playlist/{playlistId}/songs/{songId}", data, (response) {
+            songs.remove(song);
+            onSuccess();
+        }, onFailure, () {
+            print("Exception@Playlist->deleteSong()");
             onError();
-        }
+        });
     }
 }

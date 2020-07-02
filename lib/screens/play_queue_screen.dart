@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:musify/core/futurefactory.dart';
 import 'package:musify/core/models/songtable.dart';
 import 'package:musify/core/session.dart';
+import 'package:musify/core/ui.dart';
 import 'package:musify/core/ui/songtablelist.dart';
 
 class PlayQueueScreen extends StatelessWidget {
@@ -68,6 +69,8 @@ class _PlayQueuePageState extends State<_PlayQueuePage> {
         }
         return FutureFactory<List<SongTable>>().networkFuture(SongTable.fetchSongsById(songsId), (data) {
             return SongTableList(songs: data, onTap: _onPlaySong, isPlayQueue: true);
+        }, () {
+            return Center(child: Text("Ocurrió un error al cargar las canciones."));
         });
     }
 

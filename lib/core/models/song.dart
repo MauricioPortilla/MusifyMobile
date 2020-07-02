@@ -57,36 +57,51 @@ class Song {
         var data = {
             "{albumId}": albumId
         };
-        NetworkResponse response = await Network.futureGet("/album/{albumId}", data);
-        if (response.status == "success") {
-            album = Album.fromJson(response.data);
+        try {
+            NetworkResponse response = await Network.futureGet("/album/{albumId}", data);
+            if (response.status == "success") {
+                album = Album.fromJson(response.data);
+            }
+            return album;
+        } catch (exception) {
+            print("Exception@Song->fetchAlbum()");
+            throw exception;
         }
-        return album;
     }
 
     Future<Genre> fetchGenre() async {
         var data = {
             "{genreId}": genreId
         };
-        NetworkResponse response = await Network.futureGet("/genre/{genreId}", data);
-        if (response.status == "success") {
-            genre = Genre.fromJson(response.data);
+        try {
+            NetworkResponse response = await Network.futureGet("/genre/{genreId}", data);
+            if (response.status == "success") {
+                genre = Genre.fromJson(response.data);
+            }
+            return genre;
+        } catch (exception) {
+            print("Exception@Song->fetchGenre()");
+            throw exception;
         }
-        return genre;
     }
 
     Future<List<Artist>> fetchArtists() async {
         var data = {
             "{songId}": songId
         };
-        NetworkResponse response = await Network.futureGet("/song/{songId}/artists", data);
-        if (response.status == "success") {
-            artists.clear();
-            for (var artistResponse in response.data) {
-                artists.add(Artist.fromJson(artistResponse));
+        try {
+            NetworkResponse response = await Network.futureGet("/song/{songId}/artists", data);
+            if (response.status == "success") {
+                artists.clear();
+                for (var artistResponse in response.data) {
+                    artists.add(Artist.fromJson(artistResponse));
+                }
             }
+            return artists;
+        } catch (exception) {
+            print("Exception@Song->fetchArtists()");
+            throw exception;
         }
-        return artists;
     }
 
     static Future<List<Song>> fetchSongByTitleCoincidences(String title) async {
@@ -97,42 +112,45 @@ class Song {
         var data = {
             "{title}": title
         };
-        NetworkResponse response = await Network.futureGet("/song/search/{title}", data);
-        if (response.status == "success") {
-            for (var songResponse in response.data) {
-                var song = Song.fromJson(songResponse);
-                Album album = await song.fetchAlbum();
-                await album.fetchArtists();
-                await song.fetchGenre();
-                await song.fetchArtists();
-                songs.add(song);
+        try {
+            NetworkResponse response = await Network.futureGet("/song/search/{title}", data);
+            if (response.status == "success") {
+                for (var songResponse in response.data) {
+                    var song = Song.fromJson(songResponse);
+                    Album album = await song.fetchAlbum();
+                    await album.fetchArtists();
+                    await song.fetchGenre();
+                    await song.fetchArtists();
+                    songs.add(song);
+                }
             }
+            return songs;
+        } catch (exception) {
+            print("Exception@Song->fetchSongByTitleCoincidences()");
+            throw exception;
         }
-        return songs;
     }
 
     static void fetchSongById(
-        int songId, onSuccess(Song song), 
+        int songId, 
+        onSuccess(Song song), 
         onFailure(NetworkResponse errorResponse), 
         onError()
     ) {
-        try {
-            Network.get("/song/$songId", null, (response) async {
-                var song = Song.fromJson(response.data);
-                Album album = await song.fetchAlbum();
-                await album.fetchArtists();
-                await song.fetchGenre();
-                await song.fetchArtists();
-                onSuccess(song);
-            }, (errorResponse) {
-                onFailure(errorResponse);
-            });
-        } catch (exception) {
+        Network.get("/song/$songId", null, (response) async {
+            var song = Song.fromJson(response.data);
+            Album album = await song.fetchAlbum();
+            await album.fetchArtists();
+            await song.fetchGenre();
+            await song.fetchArtists();
+            onSuccess(song);
+        }, onFailure, () {
+            print("Exception@Song->fetchSongById()");
             onError();
-        }
+        });
     }
 
-    Future<void> fetchSongBuffer(onSuccess(Uint8List buffer), onFailure(errorResponse)) async {
+    Future<void> fetchSongBuffer(onSuccess(Uint8List buffer), onFailure(errorResponse), onError()) async {
         String songStreamingQuality = Session.songStreamingQuality;
         if (Session.songStreamingQuality == "automaticquality") {
             songStreamingQuality = "lowquality";
@@ -145,8 +163,9 @@ class Song {
         }
         Network.getStreamBuffer("/stream/song/$songId/$songStreamingQuality", null, (buffer) {
             onSuccess(buffer);
-        }, (errorResponse) {
-            onFailure(errorResponse);
+        }, onFailure, () {
+            print("Exception@Song->fetchSongBuffer()");
+            onError();
         });
     }
 

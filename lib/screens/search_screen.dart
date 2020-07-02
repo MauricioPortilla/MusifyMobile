@@ -3,6 +3,7 @@ import 'package:musify/core/futurefactory.dart';
 import 'package:musify/core/models/album.dart';
 import 'package:musify/core/models/artist.dart';
 import 'package:musify/core/models/song.dart';
+import 'package:musify/core/ui.dart';
 import 'package:musify/core/ui/albumlist.dart';
 import 'package:musify/core/ui/artistlist.dart';
 import 'package:musify/core/ui/songlist.dart';
@@ -98,18 +99,24 @@ class _SearchPageState extends State<_SearchPage> with SingleTickerProviderState
     FutureBuilder<List<Song>> _songList(String title) {
         return FutureFactory<List<Song>>().networkFuture(Song.fetchSongByTitleCoincidences(title), (data) {
             return SongList(songs: data, isSearch: true);
+        }, () {
+            return Center(child: Text("Ocurrió un error al cargar la información."));
         });
     }
 
     FutureBuilder<List<Album>> _albumList(String name) {
         return FutureFactory<List<Album>>().networkFuture(Album.fetchAlbumByNameCoincidences(name), (data) {
             return AlbumList(albums: data);
+        }, () {
+            return Center(child: Text("Ocurrió un error al cargar la información."));
         });
     }
 
     FutureBuilder<List<Artist>> _artistList(String artisticName) {
         return FutureFactory<List<Artist>>().networkFuture(Artist.fetchAlbumByArtisticNameCoincidences(artisticName), (data) {
             return ArtistList(artists: data);
+        }, () {
+            return Center(child: Text("Ocurrió un error al cargar la información."));
         });
     }
 }

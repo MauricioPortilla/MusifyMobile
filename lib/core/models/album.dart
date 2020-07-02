@@ -45,101 +45,116 @@ class Album {
         );
     }
 
-    void save(File imageFile, List<File> songsFile, onSuccess(), onFailure(NetworkResponse errorResponse), onError()) {
-        try {
-            Network.postMultimedia("/album/songs", null, songsFile, (responseSongs) {
-                if (responseSongs.status == "success") {
-                    List<File> images = [imageFile];
-                    Network.postMultimedia("/album/image", null, images, (responseImage) {
-                        if (responseImage.status == "success") {  
-                            List<Song> songsLocation = List<Song>();
-                            for (var songJson in responseSongs.data) {
-                                songsLocation.add(Song.json(songJson));
-                            }
-                            List<Album> imageLocation = List<Album>();
-                            for (var albumJson in responseImage.data) {
-                                imageLocation.add(Album.json(albumJson));
-                            }
-                            List artistsId = List();
-                            for (Artist artist in artists) {
-                                artistsId.add({
+    void save(
+        File imageFile, 
+        List<File> songsFile, 
+        onSuccess(), 
+        onFailure(NetworkResponse errorResponse), 
+        onError()
+    ) {
+        Network.postMultimedia("/album/songs", null, songsFile, (responseSongs) {
+            if (responseSongs.status == "success") {
+                List<File> images = [imageFile];
+                Network.postMultimedia("/album/image", null, images, (responseImage) {
+                    if (responseImage.status == "success") {  
+                        List<Song> songsLocation = List<Song>();
+                        for (var songJson in responseSongs.data) {
+                            songsLocation.add(Song.json(songJson));
+                        }
+                        List<Album> imageLocation = List<Album>();
+                        for (var albumJson in responseImage.data) {
+                            imageLocation.add(Album.json(albumJson));
+                        }
+                        List artistsId = List();
+                        for (Artist artist in artists) {
+                            artistsId.add({
+                                "artist_id": artist.artistId
+                            });
+                        }
+                        List newSongs = List();
+                        int i = 0;
+                        for (Song song in songs) {
+                            List songArtistsId = List();
+                            for (Artist artist in song.artists) {
+                                songArtistsId.add({
                                     "artist_id": artist.artistId
                                 });
                             }
-                            List newSongs = List();
-                            int i = 0;
-                            for (Song song in songs) {
-                                List songArtistsId = List();
-                                for (Artist artist in song.artists) {
-                                    songArtistsId.add({
-                                        "artist_id": artist.artistId
-                                    });
-                                }
-                                newSongs.add({
-                                    "genre_id": song.genreId,
-                                    "title": song.title,
-                                    "duration": songsLocation.elementAt(i).duration,
-                                    "song_location": songsLocation.elementAt(i).songLocation,
-                                    "artists_id": songArtistsId
-                                });
-                                i++;
-                            }
-                            var data = {
-                                "type": type,
-                                "name": name,
-                                "launch_year": launchYear,
-                                "discography": discography,
-                                "image_location": imageLocation.elementAt(0).imageLocation,
-                                "artists_id": artistsId,
-                                "new_songs": newSongs
-                            };
-                            Network.post("/album", data, (response) {
-                                onSuccess();
-                            }, (errorResponse) {
-                                onFailure(errorResponse);
+                            newSongs.add({
+                                "genre_id": song.genreId,
+                                "title": song.title,
+                                "duration": songsLocation.elementAt(i).duration,
+                                "song_location": songsLocation.elementAt(i).songLocation,
+                                "artists_id": songArtistsId
                             });
+                            i++;
                         }
-                    }, (errorResponse) {
-                        onFailure(errorResponse);
-                    });
-                }
-            }, (errorResponse) {
-                onFailure(errorResponse);
-            });
-        } catch (exception) {
+                        var data = {
+                            "type": type,
+                            "name": name,
+                            "launch_year": launchYear,
+                            "discography": discography,
+                            "image_location": imageLocation.elementAt(0).imageLocation,
+                            "artists_id": artistsId,
+                            "new_songs": newSongs
+                        };
+                        Network.post("/album", data, (response) {
+                            onSuccess();
+                        }, onFailure, () {
+                            print("Exception@Album->save()");
+                            onError();
+                        });
+                    }
+                }, onFailure, () {
+                    print("Exception@Album->save()");
+                    onError();
+                });
+            }
+        }, onFailure, () {
+            print("Exception@Album->save()");
             onError();
-        }
+        });
     }
 
     Future<List<Artist>> fetchArtists() async {
         var data = {
             "{albumId}": albumId
         };
-        NetworkResponse response = await Network.futureGet("/album/{albumId}/artists", data);
-        if (response.status == "success") {
-            for (var artistJson in response.data) {
-                artists.add(Artist.fromJson(artistJson));
+        try {
+            NetworkResponse response = await Network.futureGet("/album/{albumId}/artists", data);
+            if (response.status == "success") {
+                for (var artistJson in response.data) {
+                    artists.add(Artist.fromJson(artistJson));
+                }
             }
+            return artists;
+        } catch (exception) {
+            print("Exception@Album->fetchArtists()");
+            throw exception;
         }
-        return artists;
     }
 
     Future<List<Song>> fetchSongs() async {
         var data = {
             "{albumId}": albumId
         };
-        NetworkResponse response = await Network.futureGet("/album/{albumId}/songs", data);
-        if (response.status == "success") {
-            songs.clear();
-            for (var songJson in response.data) {
-                var song = Song.fromJson(songJson);
-                song.album = this;
-                await song.fetchGenre();
-                await song.fetchArtists();
-                songs.add(song);
+        try {
+            NetworkResponse response = await Network.futureGet("/album/{albumId}/songs", data);
+            if (response.status == "success") {
+                songs.clear();
+                for (var songJson in response.data) {
+                    var song = Song.fromJson(songJson);
+                    song.album = this;
+                    await song.fetchGenre();
+                    await song.fetchArtists();
+                    songs.add(song);
+                }
             }
+            return songs;
+        } catch (exception) {
+            print("Exception@Album->fetchSongs()");
+            throw exception;
         }
-        return songs;
     }
 
     static Future<List<Album>> fetchAlbumByNameCoincidences(String name) async {
@@ -150,15 +165,20 @@ class Album {
         var data = {
             "{name}": name
         };
-        NetworkResponse response = await Network.futureGet("/album/search/{name}", data);
-        if (response.status == "success") {
-            for (var albumResponse in response.data) {
-                var album = Album.fromJson(albumResponse);
-                await album.fetchArtists();
-                albums.add(album);
+        try {
+            NetworkResponse response = await Network.futureGet("/album/search/{name}", data);
+            if (response.status == "success") {
+                for (var albumResponse in response.data) {
+                    var album = Album.fromJson(albumResponse);
+                    await album.fetchArtists();
+                    albums.add(album);
+                }
             }
+            return albums;
+        } catch (exception) {
+            print("Exception@Album->fetchAlbumByNameCoincidences()");
+            throw exception;
         }
-        return albums;
     }
 
     CachedNetworkImage fetchImage() {

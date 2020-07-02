@@ -151,6 +151,8 @@ class _AddSongToAlbumPageState extends State<_AddSongToAlbumPage> {
     FutureBuilder<List<Artist>> _artistList(String artisticName) {
         return FutureFactory<List<Artist>>().networkFuture(Artist.fetchAlbumByArtisticNameCoincidences(artisticName), (data) {
             return _artistsFoundListView(data);
+        }, () {
+            return Center(child: Text("Ocurrió un error al cargar los artistas."));
         });
     }
 

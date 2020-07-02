@@ -61,6 +61,8 @@ class _ConsultAccountSongsPageState extends State<_ConsultAccountSongsPage> {
     FutureBuilder<List<AccountSong>> _loadAccountSongs() {
         return FutureFactory<List<AccountSong>>().networkFuture(Session.account.fetchAccountSongs(), (data) {
             return AccountSongList(accountSongs: data);
+        }, () {
+            return Center(child: Text("Ocurrió un error al cargar las canciones."));
         });
     }
 
@@ -79,7 +81,7 @@ class _ConsultAccountSongsPageState extends State<_ConsultAccountSongsPage> {
             UI.createErrorDialog(context, errorResponse.message);
         }, () {
             Navigator.pop(context);
-            UI.createErrorDialog(context, "Ocurrió un error al subir la canción.");
+            UI.createErrorDialog(context, "Ocurrió un error al cargar las canciones.");
         });
     }
 }

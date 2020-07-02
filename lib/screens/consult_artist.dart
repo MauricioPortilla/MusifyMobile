@@ -3,6 +3,7 @@ import 'package:musify/core/futurefactory.dart';
 import 'package:musify/core/models/album.dart';
 import 'package:musify/core/models/artist.dart';
 import 'package:musify/core/session.dart';
+import 'package:musify/core/ui.dart';
 import 'package:musify/core/ui/album_panel.dart';
 
 class ConsultArtistScreen extends StatelessWidget {
@@ -64,6 +65,8 @@ class _ConsultArtistPageState extends State<_ConsultArtistPage> {
             return Column(
                 children: _albumsUI,
             );
+        }, () {
+            return Center(child: Text("Ocurrió un error al cargar las canciones."));
         });
     }
 }

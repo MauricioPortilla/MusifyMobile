@@ -13,7 +13,8 @@ class Network {
         String resource, 
         Map<String, dynamic> data, 
         onSuccess(NetworkResponse response), 
-        onFailure(NetworkResponse errorResponse)
+        onFailure(NetworkResponse errorResponse),
+        onError()
     ) async {
         try {
             String query = resource;
@@ -36,11 +37,7 @@ class Network {
                 onFailure(NetworkResponse.fromJson(jsonDecoded));
             }
         } catch (exception) {
-            onFailure(NetworkResponse(
-                status: "failure", 
-                message: "No se pudo establecer una conexión con el servidor."
-            ));
-            throw exception;
+            onError();
         }
     }
 
@@ -70,7 +67,8 @@ class Network {
         String resource, 
         Map<String, dynamic> data, 
         onSuccess(Uint8List buffer), 
-        onFailure(NetworkResponse data)
+        onFailure(NetworkResponse data),
+        onError()
     ) async {
         try {
             String query = resource;
@@ -92,11 +90,7 @@ class Network {
             }
             throw Exception();
         } catch (exception) {
-            onFailure(NetworkResponse(
-                status: "failure", 
-                message: "No se pudo establecer una conexión con el servidor."
-            ));
-            throw exception;
+            onError();
         }
     }
     
@@ -104,7 +98,8 @@ class Network {
         String resource, 
         Map<String, dynamic> data, 
         onSuccess(NetworkResponse response), 
-        onFailure(NetworkResponse errorResponse)
+        onFailure(NetworkResponse errorResponse),
+        onError()
     ) async {
         try {
             String query = resource;
@@ -128,11 +123,7 @@ class Network {
                 onFailure(NetworkResponse.fromJson(jsonDecoded));
             }
         } catch (exception) {
-            onFailure(NetworkResponse(
-                status: "failure", 
-                message: "No se pudo establecer una conexión con el servidor."
-            ));
-            throw exception;
+            onError();
         }
     }
 
@@ -141,7 +132,8 @@ class Network {
         Map<String, dynamic> data, 
         List<File> files,
         onSuccess(NetworkResponse response), 
-        onFailure(NetworkResponse errorResponse)
+        onFailure(NetworkResponse errorResponse),
+        onError()
     ) async {
         try {
             String query = resource;
@@ -169,11 +161,7 @@ class Network {
                 }
             });
         } catch (exception) {
-            onFailure(NetworkResponse(
-                status: "failure", 
-                message: "No se pudo establecer una conexión con el servidor."
-            ));
-            throw exception;
+            onError();
         }
     }
 
@@ -181,7 +169,8 @@ class Network {
         String resource,
         Map<String, dynamic> data,
         onSuccess(NetworkResponse response),
-        onFailure(NetworkResponse errorResponse)
+        onFailure(NetworkResponse errorResponse),
+        onError()
     ) async {
         try {
             String query = resource;
@@ -205,11 +194,7 @@ class Network {
                 onFailure(NetworkResponse.fromJson(jsonDecoded));
             }
         } catch (exception) {
-            onFailure(NetworkResponse(
-                status: "failure", 
-                message: "No se pudo establecer una conexión con el servidor."
-            ));
-            throw exception;
+            onError();
         }
     }
 
@@ -217,7 +202,8 @@ class Network {
         String resource,
         Map<String, dynamic> data,
         onSuccess(NetworkResponse response),
-        onFailure(NetworkResponse errorResponse)
+        onFailure(NetworkResponse errorResponse),
+        onError()
     ) async {
         try {
             String query = resource;
@@ -239,11 +225,7 @@ class Network {
                 onFailure(NetworkResponse.fromJson(jsonDecoded));
             }
         } catch (exception) {
-            onFailure(NetworkResponse(
-                status: "failure", 
-                message: "No se pudo establecer una conexión con el servidor."
-            ));
-            throw exception;
+            onError();
         }
     }
 }

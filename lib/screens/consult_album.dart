@@ -3,6 +3,7 @@ import 'package:musify/core/futurefactory.dart';
 import 'package:musify/core/models/album.dart';
 import 'package:musify/core/models/song.dart';
 import 'package:musify/core/session.dart';
+import 'package:musify/core/ui.dart';
 import 'package:musify/core/ui/songlist.dart';
 
 class ConsultAlbumScreen extends StatelessWidget {
@@ -65,6 +66,8 @@ class _ConsultAlbumPageState extends State<_ConsultAlbumPage> {
     FutureBuilder<List<Song>> _songList() {
         return FutureFactory<List<Song>>().networkFuture(widget.album.fetchSongs(), (data) {
             return SongList(songs: data, isSearch: false);
+        }, () {
+            return Center(child: Text("Ocurrió un error al cargar las canciones."));
         });
     }
 }

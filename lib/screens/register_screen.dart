@@ -168,7 +168,7 @@ class _RegisterPageState extends State<_RegisterPage> {
             UI.createErrorDialog(context, errorResponse.message);
         }, () {
             Navigator.pop(context);
-            UI.createErrorDialog(context, "Error al registrar la cuenta.");
+            UI.createErrorDialog(context, "Ocurrió un error al momento de registrar la cuenta.");
         }, artisticName: _artisticNameTextFieldController.text);
     }
 
