@@ -11,9 +11,8 @@ void main() async {
     await FlutterConfig.loadEnvVariables();
     test("TEST: Fetch account playlists", () {
         Account.login("freya@arkanapp.com", "1230", expectAsync1<void, Account>((account) async {
-            var playlist = (await account.fetchPlaylists()).first;
-            var songs = await playlist.fetchSongs();
-            expect(songs != null, true);
+            var playlist = (await account.fetchPlaylists());
+            expect(playlist != null, true);
         }), (errorResponse) {
             fail("Unsuccessful login");
         }, () {
@@ -24,7 +23,7 @@ void main() async {
     test("TEST: Create playlist", () {
         Account.login("freya@arkanapp.com", "1230", expectAsync1<void, Account>((account) {
             Playlist newPlaylist = Playlist(accountId: account.accountId, name: "Playlist 1");
-            newPlaylist.save(expectAsync1<void, Playlist>((playlist) async {
+            newPlaylist.save(expectAsync1<void, Playlist>((playlist) {
                 expect(playlist != null, true);
             }), (errorResponse) {
                 fail("Playlist not created");
@@ -42,8 +41,8 @@ void main() async {
         Account.login("freya@arkanapp.com", "1230", expectAsync1<void, Account>((account) async {
             var playlist = (await account.fetchPlaylists()).first;
             playlist.name = "Renamed Playlist";
-            playlist.save(expectAsync1<void, Playlist>((playlist) async {
-                expect(playlist.name == "Renamed Playlist", true);
+            playlist.save(expectAsync1<void, Playlist>((renamedPlaylist) {
+                expect(renamedPlaylist.name == "Renamed Playlist", true);
             }), (errorResponse) {
                 fail("Playlist not renamed");
             }, () {

@@ -77,10 +77,34 @@ class _ConsultPlaylistScreenPageState extends State<_ConsultPlaylistScreenPage> 
                                             });
                                         },
                                     ),
-                                    RaisedButton(
-                                        child: Text("Eliminar lista"),
-                                        onPressed: () => _deletePlaylist(),
-                                    ),
+                                    Container(
+                                        width: 75,
+                                        child: DropdownButton(
+                                            isExpanded: true,
+                                            icon: Icon(Icons.more_horiz),
+                                            items: [
+                                                DropdownMenuItem(
+                                                    child: Text("Eliminar lista"),
+                                                    value: 1,
+                                                ),
+                                                DropdownMenuItem(
+                                                    child: Text("Renombrar lista"),
+                                                    value: 2,
+                                                )
+                                            ],
+                                            onChanged: (value) {
+                                                if (value == 1) {
+                                                    _deletePlaylist();
+                                                } else if (value == 2) {
+                                                    _renamePlaylist();
+                                                }
+                                            },
+                                        ),
+                                    )
+                                    // RaisedButton(
+                                    //     child: Text("Eliminar lista"),
+                                    //     onPressed: () => ,
+                                    // ),
                                 ],
                             ),
                         ),
@@ -138,6 +162,54 @@ class _ConsultPlaylistScreenPageState extends State<_ConsultPlaylistScreenPage> 
                 onPressed: () => Navigator.pop(context),
             )
         ]);
+    }
+
+    void _renamePlaylist() {
+        var playlistNameTextFieldController = TextEditingController();
+        UI.createDialog(
+            context, 
+            "Renombrar lista", 
+            Expanded(
+                child: TextField(
+                    controller: playlistNameTextFieldController,
+                    decoration: InputDecoration(
+                        labelText: "Nombre"
+                    ),
+                    maxLength: 20,
+                    maxLengthEnforced: true,
+                ),
+            ), [
+                FlatButton(
+                    child: Text("Renombrar"),
+                    onPressed: () {
+                        if (playlistNameTextFieldController.text.isEmpty) {
+                            UI.createErrorDialog(context, "Debes introducir un nombre.");
+                            return;
+                        }
+                        try {
+                            widget.playlist.name = playlistNameTextFieldController.text;
+                            widget.playlist.save((_) {
+                                setState(() {
+                                });
+                                Navigator.pop(context);
+                            }, (errorResponse) {
+                                UI.createErrorDialog(context, errorResponse.message);
+                            }, () {
+                                UI.createErrorDialog(context, "Ocurrió un error al renombrar la lista de reproducción.");
+                            });
+                        } catch (exception) {
+                            UI.createErrorDialog(context, "Ocurrió un error al renombrar la lista de reproducción.");
+                        }
+                    },
+                ),
+                FlatButton(
+                    child: Text("Cancelar"),
+                    onPressed: () {
+                        Navigator.pop(context);
+                    },
+                )
+            ]
+        );
     }
 
     void _downloadSwitch() async {

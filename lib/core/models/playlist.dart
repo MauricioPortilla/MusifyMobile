@@ -60,7 +60,7 @@ class Playlist {
                 onError();
             });
         } else {
-            Network.put("/playlist", data, (response) {
+            Network.put("/playlist/$playlistId", data, (response) {
                 onSuccess(Playlist.fromJson(response.data));
             }, onFailure, () {
                 print("Exception@Playlist->save()");

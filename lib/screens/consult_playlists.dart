@@ -93,6 +93,10 @@ class _ConsultPlaylistsPageState extends State<_ConsultPlaylistsPage> {
                 FlatButton(
                     child: Text("Crear"),
                     onPressed: () {
+                        if (playlistNameTextFieldController.text.isEmpty) {
+                            UI.createErrorDialog(context, "Debes introducir un nombre.");
+                            return;
+                        }
                         Playlist newPlaylist = Playlist(
                             accountId: Session.account.accountId, 
                             name: playlistNameTextFieldController.text
