@@ -45,6 +45,7 @@ class _AccountSongListState extends State<AccountSongList> {
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: <Widget>[
                                     Container(
+                                        width: MediaQuery.of(context).size.width / 1.8,
                                         child: Text(
                                             widget.accountSongs[index].title,
                                             textAlign: TextAlign.left

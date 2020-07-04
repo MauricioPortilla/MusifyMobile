@@ -51,14 +51,22 @@ class _AddSongToPlaylistPageState extends State<_AddSongToPlaylistPage> {
 
     void _onSelectPlaylist(Playlist playlist) {
         UI.createLoadingDialog(context);
-        playlist.addSong(widget.songToAdd, () {
-            setState(() {
-            });
+        playlist.containsSong(widget.songToAdd, () {
             Navigator.pop(context);
-            Navigator.pop(context);
+            UI.createErrorDialog(context, "Esta canción ya existe en esta lista de reproducción.");
         }, (errorResponse) {
-            Navigator.pop(context);
-            UI.createErrorDialog(context, errorResponse.message);
+            playlist.addSong(widget.songToAdd, () {
+                setState(() {
+                });
+                Navigator.pop(context);
+                Navigator.pop(context);
+            }, (errorResponse) {
+                Navigator.pop(context);
+                UI.createErrorDialog(context, errorResponse.message);
+            }, () {
+                Navigator.pop(context);
+                UI.createErrorDialog(context, "Ocurrió un error al guardar la canción en la lista de reproducción.");
+            });
         }, () {
             Navigator.pop(context);
             UI.createErrorDialog(context, "Ocurrió un error al guardar la canción en la lista de reproducción.");
