@@ -41,13 +41,7 @@ class Account {
         );
     }
 
-    static void login(
-        String email, 
-        String password, 
-        onSuccess(Account account), 
-        onFailure(NetworkResponse errorResponse),
-        onError()
-    ) {
+    static void login(String email, String password, onSuccess(Account account), onFailure(NetworkResponse errorResponse), onError()) {
         var data = {
             "email": email,
             "password": password
@@ -63,12 +57,7 @@ class Account {
         });
     }
 
-    static void loginWithGoogle(
-        String accessToken, 
-        onSuccess(Account account), 
-        onFailure(NetworkResponse errorResponse),
-        onError()
-    ) {
+    static void loginWithGoogle(String accessToken, onSuccess(Account account), onFailure(NetworkResponse errorResponse), onError()) {
         var data = {
             "access_token": accessToken
         };
@@ -83,13 +72,7 @@ class Account {
         });
     }
 
-    void register(
-        bool isArtist, 
-        onSuccess(Account account), 
-        onFailure(NetworkResponse errorResponse), 
-        onError(), 
-        { String artisticName = "" }
-    ) {
+    void register(bool isArtist, onSuccess(Account account), onFailure(NetworkResponse errorResponse), onError(), { String artisticName = "" }) {
         var data = {
             "email": email,
             "password": password,
@@ -106,14 +89,7 @@ class Account {
         });
     }
 
-    void registerWithGoogle(
-        String accessToken,
-        bool isArtist, 
-        onSuccess(Account account), 
-        onFailure(NetworkResponse errorResponse), 
-        onError(), 
-        { String artisticName = "" }
-    ) {
+    void registerWithGoogle(String accessToken, bool isArtist, onSuccess(Account account), onFailure(NetworkResponse errorResponse), onError(), { String artisticName = "" }) {
         var data = {
             "access_token": accessToken,
             "is_artist": isArtist,

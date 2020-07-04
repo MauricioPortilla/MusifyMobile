@@ -25,20 +25,16 @@ class _HistoryPageState extends State<_HistoryPage> {
                 automaticallyImplyLeading: false,
                 leading: IconButton(
                     icon: Icon(Icons.arrow_back_ios),
-                    onPressed: () {
-                        Session.homePop();
-                    },
-                ),
+                    onPressed: () => Session.homePop()
+                )
             ),
             body: Container(
                 child: Column(
                     children: <Widget>[
-                      Container(
-                        child: _songList(),
-                      ),
-                    ],
+                        Container(child: _songList())
+                    ]
                 ),
-                padding: EdgeInsets.fromLTRB(15, 5, 15, 15),
+                padding: EdgeInsets.fromLTRB(15, 5, 15, 15)
             )
         );
     }

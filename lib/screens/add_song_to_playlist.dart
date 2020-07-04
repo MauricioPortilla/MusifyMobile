@@ -31,17 +31,20 @@ class _AddSongToPlaylistPageState extends State<_AddSongToPlaylistPage> {
         return Scaffold(
             appBar: AppBar(
                 title: Text("Agregar a lista de reproducción"),
-                centerTitle: true,
+                centerTitle: true
             ),
             body: Container(
                 child: Column(
                     children: <Widget>[
                         Container(
-                            child: PlaylistList(playlists: Session.account.playlists, onTap: _onSelectPlaylist),
-                        ),
-                    ],
+                            child: PlaylistList(
+                                playlists: Session.account.playlists, 
+                                onTap: _onSelectPlaylist
+                            )
+                        )
+                    ]
                 ),
-                padding: EdgeInsets.fromLTRB(15, 5, 15, 15),
+                padding: EdgeInsets.fromLTRB(15, 5, 15, 15)
             )
         );
     }

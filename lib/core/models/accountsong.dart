@@ -30,11 +30,7 @@ class AccountSong {
         );
     }
 
-    static void fetchAccountSongById(
-        int accountSongId, onSuccess(AccountSong accountSong), 
-        onFailure(NetworkResponse errorResponse), 
-        onError()
-    ) {
+    static void fetchAccountSongById(int accountSongId, onSuccess(AccountSong accountSong), onFailure(NetworkResponse errorResponse), onError()) {
         Network.get("/account/${Session.account.accountId}/accountsong/$accountSongId", null, (response) async {
             var accountSong = AccountSong.fromJson(response.data);
             onSuccess(accountSong);

@@ -41,10 +41,8 @@ class _ConsultPlaylistScreenPageState extends State<_ConsultPlaylistScreenPage> 
                 automaticallyImplyLeading: false,
                 leading: IconButton(
                     icon: Icon(Icons.arrow_back_ios),
-                    onPressed: () {
-                        Session.homePop();
-                    },
-                ),
+                    onPressed: () => Session.homePop()
+                )
             ),
             body: Container(
                 margin: EdgeInsets.only(top: 10),
@@ -75,7 +73,7 @@ class _ConsultPlaylistScreenPageState extends State<_ConsultPlaylistScreenPage> 
                                                 }
                                                 _downloadSwitch();
                                             });
-                                        },
+                                        }
                                     ),
                                     Container(
                                         width: 75,
@@ -85,11 +83,11 @@ class _ConsultPlaylistScreenPageState extends State<_ConsultPlaylistScreenPage> 
                                             items: [
                                                 DropdownMenuItem(
                                                     child: Text("Eliminar lista"),
-                                                    value: 1,
+                                                    value: 1
                                                 ),
                                                 DropdownMenuItem(
                                                     child: Text("Renombrar lista"),
-                                                    value: 2,
+                                                    value: 2
                                                 )
                                             ],
                                             onChanged: (value) {
@@ -98,22 +96,20 @@ class _ConsultPlaylistScreenPageState extends State<_ConsultPlaylistScreenPage> 
                                                 } else if (value == 2) {
                                                     _renamePlaylist();
                                                 }
-                                            },
-                                        ),
+                                            }
+                                        )
                                     )
                                     // RaisedButton(
                                     //     child: Text("Eliminar lista"),
-                                    //     onPressed: () => ,
-                                    // ),
-                                ],
-                            ),
+                                    //     onPressed: () => 
+                                    // )
+                                ]
+                            )
                         ),
-                        Container(
-                            child: _songList(),
-                        ),
-                    ],
+                        Container(child: _songList())
+                    ]
                 ),
-                padding: EdgeInsets.fromLTRB(15, 5, 15, 15),
+                padding: EdgeInsets.fromLTRB(15, 5, 15, 15)
             )
         );
     }
@@ -155,11 +151,11 @@ class _ConsultPlaylistScreenPageState extends State<_ConsultPlaylistScreenPage> 
                         Navigator.pop(context);
                         UI.createErrorDialog(context, "No se pudo establecer una conexión con el servidor.");
                     });
-                },
+                }
             ),
             FlatButton(
                 child: Text("No"),
-                onPressed: () => Navigator.pop(context),
+                onPressed: () => Navigator.pop(context)
             )
         ]);
     }
@@ -172,12 +168,10 @@ class _ConsultPlaylistScreenPageState extends State<_ConsultPlaylistScreenPage> 
             Expanded(
                 child: TextField(
                     controller: playlistNameTextFieldController,
-                    decoration: InputDecoration(
-                        labelText: "Nombre"
-                    ),
+                    decoration: InputDecoration(labelText: "Nombre"),
                     maxLength: 20,
-                    maxLengthEnforced: true,
-                ),
+                    maxLengthEnforced: true
+                )
             ), [
                 FlatButton(
                     child: Text("Renombrar"),
@@ -200,13 +194,11 @@ class _ConsultPlaylistScreenPageState extends State<_ConsultPlaylistScreenPage> 
                         } catch (exception) {
                             UI.createErrorDialog(context, "Ocurrió un error al renombrar la lista de reproducción.");
                         }
-                    },
+                    }
                 ),
                 FlatButton(
                     child: Text("Cancelar"),
-                    onPressed: () {
-                        Navigator.pop(context);
-                    },
+                    onPressed: () => Navigator.pop(context)
                 )
             ]
         );

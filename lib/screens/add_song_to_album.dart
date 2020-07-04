@@ -37,7 +37,7 @@ class _AddSongToAlbumPageState extends State<_AddSongToAlbumPage> {
         return Scaffold(
             appBar: AppBar(
                 title: Text("Agregar canción"),
-                centerTitle: true,
+                centerTitle: true
             ),
             body: SingleChildScrollView(
                 child: Column(
@@ -51,22 +51,29 @@ class _AddSongToAlbumPageState extends State<_AddSongToAlbumPage> {
                                     ),
                                     margin: EdgeInsets.only(right: 10, bottom: 25)
                                 ),
-                                Text(songName, style: TextStyle(color: Colors.blue, fontSize: 10)),
+                                Text(
+                                    songName, 
+                                    style: TextStyle(
+                                        color: Colors.blue, 
+                                        fontSize: 10
+                                    )
+                                )
                             ],
                         ),
                         TextField(
                             controller: _nameTextFieldController,
-                            decoration: InputDecoration(
-                                labelText: "Nombre"
-                            ),
+                            decoration: InputDecoration(labelText: "Nombre"),
                             maxLength: 255,
-                            maxLengthEnforced: true,
+                            maxLengthEnforced: true
                         ),
                         Container(
                             child: Row(
                                 children: <Widget>[
                                     Container(
-                                        child: Text("Género:", style: TextStyle(fontSize: 15)),
+                                        child: Text(
+                                            "Género:", 
+                                            style: TextStyle(fontSize: 15)
+                                        ),
                                         margin: EdgeInsets.only(right: 10)
                                     ),
                                     DropdownButton(
@@ -78,19 +85,17 @@ class _AddSongToAlbumPageState extends State<_AddSongToAlbumPage> {
                                             });
                                         }
                                     )
-                                ],
+                                ]
                             ),
-                            margin: EdgeInsets.only(top: 15, bottom: 25),
+                            margin: EdgeInsets.only(top: 15, bottom: 25)
                         ),
                         TextField(
                             controller: _searchTextFieldController,
-                            decoration: InputDecoration(
-                                hintText: "Artista",
-                            ),
+                            decoration: InputDecoration(hintText: "Artista"),
                             onChanged: (text) {
                                 setState(() {
                                 });
-                            },
+                            }
                         ),
                         Container(
                             child: _artistList(_searchTextFieldController.text),
@@ -105,9 +110,9 @@ class _AddSongToAlbumPageState extends State<_AddSongToAlbumPage> {
                             child: Text("Aceptar"),
                             onPressed: () => _accept()
                         )
-                    ],
+                    ]
                 ),
-                padding: EdgeInsets.fromLTRB(15, 5, 15, 15),
+                padding: EdgeInsets.fromLTRB(15, 5, 15, 15)
             )
         );
     }
@@ -186,9 +191,9 @@ class _AddSongToAlbumPageState extends State<_AddSongToAlbumPage> {
                                             textAlign: TextAlign.left
                                         )
                                     )
-                                ],
+                                ]
                             ),
-                            padding: EdgeInsets.only(top: 10, bottom: 10),
+                            padding: EdgeInsets.only(top: 10, bottom: 10)
                         )
                     )
                 );
@@ -218,7 +223,7 @@ class _AddSongToAlbumPageState extends State<_AddSongToAlbumPage> {
                                         items: [
                                             DropdownMenuItem(	
                                                 child: Text("Eliminar artista", style: TextStyle(fontSize: 14)),	
-                                                value: "deleteArtist",	
+                                                value: "deleteArtist"	
                                             )	
                                         ],
                                         icon: Icon(Icons.more_horiz),
@@ -228,13 +233,18 @@ class _AddSongToAlbumPageState extends State<_AddSongToAlbumPage> {
                                                 setState(() {
                                                 });
                                             }
-                                        },
+                                        }
                                     )
                                 ],
                             ),
                             decoration: BoxDecoration(
-                                border: Border(bottom: BorderSide(color: Colors.black, width: 0.3))
-                            ),
+                                border: Border(
+                                    bottom: BorderSide(
+                                        color: Colors.black, 
+                                        width: 0.3
+                                    )
+                                )
+                            )
                         )
                     )
                 );

@@ -31,7 +31,7 @@ class _RegisterGooglePageState extends State<_RegisterGooglePage> {
         return Scaffold(
             appBar: AppBar(
                 title: Text("Registrar cuenta"),
-                centerTitle: true,
+                centerTitle: true
             ),
             body: SingleChildScrollView(
                 child: Container(
@@ -46,31 +46,29 @@ class _RegisterGooglePageState extends State<_RegisterGooglePage> {
                                             imAnArtist = value;
                                         });
                                     },
-                                    value: imAnArtist,
-                                ),
+                                    value: imAnArtist
+                                )
                             ),
                             TextField(
                                 controller: _artisticNameTextFieldController,
-                                decoration: InputDecoration(
-                                    labelText: "Nombre artístico"
-                                ),
+                                decoration: InputDecoration(labelText: "Nombre artístico"),
                                 maxLength: 50,
                                 maxLengthEnforced: true,
-                                enabled: imAnArtist,
+                                enabled: imAnArtist
                             ),
                             Container(
                                 child: RaisedButton(
                                     onPressed: _finishRegisterWithGoogleButton,
                                     child: Text("Concluir registro con Google"),
                                     color: Colors.lightBlue,
-                                    textColor: Colors.white,
+                                    textColor: Colors.white
                                 ),
                                 width: double.infinity,
-                                margin: EdgeInsets.only(top: 10),
-                            ),
-                        ],
-                    ),
-                ),
+                                margin: EdgeInsets.only(top: 10)
+                            )
+                        ]
+                    )
+                )
             )
         );
     }

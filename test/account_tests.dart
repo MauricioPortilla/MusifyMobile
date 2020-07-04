@@ -33,8 +33,10 @@ void main() async {
 
     test("TEST: Register successful with no artist data", () {
         Account account = Account(
-            email: "kyara@arkanapp.com", password: "1234", 
-            name: "Kyara", lastName: "Cothran"
+            email: "kyara@arkanapp.com", 
+            password: "1234", 
+            name: "Kyara", 
+            lastName: "Cothran"
         );
         account.register(false, expectAsync1<void, Account>((account) {
             expect(account != null, true);
@@ -47,8 +49,10 @@ void main() async {
 
     test("TEST: Register successful with artist data", () {
         Account account = Account(
-            email: "kyara2@arkanapp.com", password: "1234", 
-            name: "Kyara", lastName: "Cothran"
+            email: "kyara2@arkanapp.com", 
+            password: "1234", 
+            name: "Kyara", 
+            lastName: "Cothran"
         );
         account.register(true, expectAsync1<void, Account>((account) {
             expect(account != null, true);
@@ -61,8 +65,10 @@ void main() async {
 
     test("TEST: Register not successful with no artist data - Reason: Registered email", () {
         Account account = Account(
-            email: "kyara@arkanapp.com", password: "1234", 
-            name: "Kyara", lastName: "Cothran"
+            email: "kyara@arkanapp.com", 
+            password: "1234", 
+            name: "Kyara", 
+            lastName: "Cothran"
         );
         account.register(false, (account) {
             fail("Successful register");
@@ -75,8 +81,10 @@ void main() async {
 
     test("TEST: Register not successful with artist data - Reason: Registered artist", () {
         Account account = Account(
-            email: "kyara3@arkanapp.com", password: "1234", 
-            name: "Kyara", lastName: "Cothran"
+            email: "kyara3@arkanapp.com", 
+            password: "1234", 
+            name: "Kyara", 
+            lastName: "Cothran"
         );
         account.register(true, (account) {
             fail("Successful register");
@@ -139,7 +147,10 @@ void main() async {
 
     test("TEST: Delete account song", () {
         Account.login("freya@arkanapp.com", "1230", expectAsync1<void, Account>((account) async {
-            AccountSong accountSong = AccountSong(accountId: account.accountId, accountSongId: 1);
+            AccountSong accountSong = AccountSong(
+                accountId: account.accountId, 
+                accountSongId: 1
+            );
             account.deleteAccountSong(accountSong, expectAsync0(() {
                 expect(true, true);
             }), (errorResponse) {

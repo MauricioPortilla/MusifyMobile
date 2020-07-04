@@ -16,9 +16,7 @@ class GenreList extends StatefulWidget {
 class _GenreListState extends State<GenreList> {
     @override
     Widget build(BuildContext context) {
-        return Expanded(
-            child: _createListView()
-        );
+        return Expanded(child: _createListView());
     }
 
     ListView _createListView() {
@@ -29,9 +27,7 @@ class _GenreListState extends State<GenreList> {
                 return Container(
                     width: double.infinity,
                     child: InkWell(
-                        onTap: () {
-                            widget.onTap(widget.genres[index]);
-                        },
+                        onTap: () => widget.onTap(widget.genres[index]),
                         child: Container(
                             child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -39,16 +35,21 @@ class _GenreListState extends State<GenreList> {
                                     Container(
                                         child: Text(
                                             widget.genres[index].name,
-                                            textAlign: TextAlign.left,
+                                            textAlign: TextAlign.left
                                         ),
-                                        margin: EdgeInsets.only(bottom: 3),
-                                    ),
-                                ],
+                                        margin: EdgeInsets.only(bottom: 3)
+                                    )
+                                ]
                             ),
                             padding: EdgeInsets.only(top: 10, bottom: 10),
                             decoration: BoxDecoration(
-                                border: Border(bottom: BorderSide(color: Colors.black, width: 0.3))
-                            ),
+                                border: Border(
+                                    bottom: BorderSide(
+                                        color: Colors.black, 
+                                        width: 0.3
+                                    )
+                                )
+                            )
                         )
                     )
                 );

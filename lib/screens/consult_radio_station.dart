@@ -35,10 +35,8 @@ class _ConsultRadioStationScreenPageState extends State<_ConsultRadioStationScre
                 automaticallyImplyLeading: false,
                 leading: IconButton(
                     icon: Icon(Icons.arrow_back_ios),
-                    onPressed: () {
-                        Session.homePop();
-                    },
-                ),
+                    onPressed: () => Session.homePop()
+                )
             ),
             body: Container(
                 margin: EdgeInsets.only(top: 10),
@@ -58,17 +56,17 @@ class _ConsultRadioStationScreenPageState extends State<_ConsultRadioStationScre
                                 children: <Widget>[
                                     RaisedButton(
                                         child: Text("Eliminar estación"),
-                                        onPressed: () => deleteRadioStation(),
-                                    ),
-                                ],
-                            ),
+                                        onPressed: () => deleteRadioStation()
+                                    )
+                                ]
+                            )
                         ),
                         Container(
-                            child: _songList(),
-                        ),
-                    ],
+                            child: _songList()
+                        )
+                    ]
                 ),
-                padding: EdgeInsets.fromLTRB(15, 5, 15, 15),
+                padding: EdgeInsets.fromLTRB(15, 5, 15, 15)
             )
         );
     }
@@ -92,11 +90,11 @@ class _ConsultRadioStationScreenPageState extends State<_ConsultRadioStationScre
                     Session.preferences.setStringList("genresIdRadioStations" + Session.account.accountId.toString(), Session.genresIdRadioStations);
                     Navigator.pop(context);
                     Session.homePop();
-                },
+                }
             ),
             FlatButton(
                 child: Text("No"),
-                onPressed: () => Navigator.pop(context),
+                onPressed: () => Navigator.pop(context)
             )
         ]);
     }

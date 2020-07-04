@@ -30,10 +30,8 @@ class _ConsultAccountSongsPageState extends State<_ConsultAccountSongsPage> {
                 automaticallyImplyLeading: false,
                 leading: IconButton(
                     icon: Icon(Icons.arrow_back_ios),
-                    onPressed: () {
-                        Session.homePop();
-                    },
-                ),
+                    onPressed: () => Session.homePop()
+                )
             ),
             body: Container(
                 child: Column(
@@ -44,16 +42,16 @@ class _ConsultAccountSongsPageState extends State<_ConsultAccountSongsPage> {
                                 RaisedButton(
                                     child: Icon(Icons.add),
                                     onPressed: () => _addAccountSongButton(),
-                                    color: Colors.green,
-                                ),
-                            ],
+                                    color: Colors.green
+                                )
+                            ]
                         ),
                         Container(
-                            child: _loadAccountSongs(),
-                        ),
-                    ],
+                            child: _loadAccountSongs()
+                        )
+                    ]
                 ),
-                padding: EdgeInsets.fromLTRB(15, 5, 15, 15),
+                padding: EdgeInsets.fromLTRB(15, 5, 15, 15)
             )
         );
     }

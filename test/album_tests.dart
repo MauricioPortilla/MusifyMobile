@@ -14,7 +14,12 @@ void main() async {
     test("TEST: Save album", () {
         Account.login("freya@arkanapp.com", "1230", expectAsync1<void, Account>((account) async {
             Artist artist = Artist(artistId: 1);
-            Album album = Album(type: "Sencillo", name: "Álbum 1", launchYear: 2020, discography: "Discografía 1");
+            Album album = Album(
+                type: "Sencillo", 
+                name: "Álbum 1", 
+                launchYear: 2020, 
+                discography: "Discografía 1"
+            );
             album.artists = [artist];
             Song song = Song(genreId: 1, title: "Canción 1");
             song.artists = [artist];

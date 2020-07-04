@@ -56,11 +56,11 @@ class _PlayerPageState extends State<_PlayerPage> {
                         style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold
-                        ),
-                    ),
+                        )
+                    )
                 ),
                 centerTitle: true,
-                backgroundColor: Colors.transparent,
+                backgroundColor: Colors.transparent
             ),
             body: SingleChildScrollView(
                 child: Container(
@@ -72,7 +72,7 @@ class _PlayerPageState extends State<_PlayerPage> {
                             Container(
                                 child: latestPlayedSong == null ? Icon(Icons.music_note, size: 150,) : latestPlayedSong.album.fetchImage(),
                                 width: MediaQuery.of(context).size.width / 1.15,
-                                height: MediaQuery.of(context).size.width / 1.15,
+                                height: MediaQuery.of(context).size.width / 1.15
                             ),
                             Container(
                                 padding: EdgeInsets.fromLTRB(13, 15, 13, 10),
@@ -89,12 +89,12 @@ class _PlayerPageState extends State<_PlayerPage> {
                                                             style: TextStyle(
                                                                 fontSize: 22,
                                                                 fontWeight: FontWeight.bold
-                                                            ),
+                                                            )
                                                         ),
                                                         constraints: BoxConstraints(
                                                             minWidth: 30,
                                                             maxWidth: MediaQuery.of(context).size.width / 1.5
-                                                        ),
+                                                        )
                                                     ),
                                                     onTap: () { }
                                                 ),
@@ -113,13 +113,13 @@ class _PlayerPageState extends State<_PlayerPage> {
                                                             artist: latestPlayedSong.album.artists[0]
                                                         ));
                                                         Navigator.pop(context);
-                                                    },
+                                                    }
                                                 )
-                                            ],
+                                            ]
                                         ),
                                         _loadRateSongButtons()
-                                    ],
-                                ),
+                                    ]
+                                )
                             ),
                             Slider(
                                 min: 0,
@@ -134,22 +134,14 @@ class _PlayerPageState extends State<_PlayerPage> {
                                             Session.player.state.player.seekToPlayer(value.toInt());
                                         });
                                     }
-                                },
+                                }
                             ),
                             Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: <Widget>[
-                                    Text(DateFormat('mm:ss').format(
-                                        DateTime.fromMillisecondsSinceEpoch(
-                                            Session.player.state.playerCurrentPosition.toInt()
-                                        )
-                                    )),
-                                    Text(DateFormat('mm:ss').format(
-                                        DateTime.fromMillisecondsSinceEpoch(
-                                            Session.player.state.playerMaxPosition.toInt()
-                                        )
-                                    ))
-                                ],
+                                    Text(DateFormat('mm:ss').format(DateTime.fromMillisecondsSinceEpoch(Session.player.state.playerCurrentPosition.toInt()))),
+                                    Text(DateFormat('mm:ss').format(DateTime.fromMillisecondsSinceEpoch(Session.player.state.playerMaxPosition.toInt())))
+                                ]
                             ),
                             Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -160,8 +152,8 @@ class _PlayerPageState extends State<_PlayerPage> {
                                         margin: EdgeInsets.only(right: 12),
                                         child: InkWell(
                                             child: Icon(Icons.skip_previous, size: 50),
-                                            onTap: Session.player.state.previousButtonOnTap,
-                                        ),
+                                            onTap: Session.player.state.previousButtonOnTap
+                                        )
                                     ),
                                     Container(
                                         width: 50,
@@ -174,9 +166,10 @@ class _PlayerPageState extends State<_PlayerPage> {
                                             ),
                                             onTap: () {
                                                 Session.player.state.playButtonOnTap();
-                                                setState(() { });
-                                            },
-                                        ),
+                                                setState(() { 
+                                                });
+                                            }
+                                        )
                                     ),
                                     Container(
                                         width: 50,
@@ -184,14 +177,14 @@ class _PlayerPageState extends State<_PlayerPage> {
                                         margin: EdgeInsets.only(right: 12),
                                         child: InkWell(
                                             child: Icon(Icons.skip_next, size: 50),
-                                            onTap: Session.player.state.nextButtonOnTap,
-                                        ),
+                                            onTap: Session.player.state.nextButtonOnTap
+                                        )
                                     )
-                                ],
+                                ]
                             )
-                        ],
-                    ),
-                ),
+                        ]
+                    )
+                )
             )
         );
     }
@@ -224,8 +217,8 @@ class _PlayerPageState extends State<_PlayerPage> {
                         child: Icon(Icons.thumb_up, color: _isLikeButtonEnabled ? Colors.green.shade800 : Colors.green.shade200),
                         onTap: () => _likeSong(),
                         highlightColor: _isLikeButtonEnabled ? Colors.grey.shade300 : Colors.transparent,
-                        splashColor: _isLikeButtonEnabled ? Colors.grey.shade300 : Colors.transparent,
-                    ),
+                        splashColor: _isLikeButtonEnabled ? Colors.grey.shade300 : Colors.transparent
+                    )
                 ),
                 Container(
                     margin: EdgeInsets.only(left: 12),
@@ -233,10 +226,10 @@ class _PlayerPageState extends State<_PlayerPage> {
                         child: Icon(Icons.thumb_down, color: _isDislikeButtonEnabled ? Colors.red : Colors.red.shade200),
                         onTap: () => _dislikeSong(),
                         highlightColor: _isDislikeButtonEnabled ? Colors.grey.shade300 : Colors.transparent,
-                        splashColor: _isDislikeButtonEnabled ? Colors.grey.shade300 : Colors.transparent,
-                    ),
+                        splashColor: _isDislikeButtonEnabled ? Colors.grey.shade300 : Colors.transparent
+                    )
                 )
-            ],
+            ]
         ) : Container();
     }
 

@@ -22,7 +22,10 @@ void main() async {
 
     test("TEST: Create playlist", () {
         Account.login("freya@arkanapp.com", "1230", expectAsync1<void, Account>((account) {
-            Playlist newPlaylist = Playlist(accountId: account.accountId, name: "Playlist 1");
+            Playlist newPlaylist = Playlist(
+                accountId: account.accountId, 
+                name: "Playlist 1"
+            );
             newPlaylist.save(expectAsync1<void, Playlist>((playlist) {
                 expect(playlist != null, true);
             }), (errorResponse) {

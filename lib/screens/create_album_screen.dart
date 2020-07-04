@@ -41,35 +41,32 @@ class _CreateAlbumPageState extends State<_CreateAlbumPage> {
                 automaticallyImplyLeading: false,
                 leading: IconButton(
                     icon: Icon(Icons.arrow_back_ios),
-                    onPressed: () {
-                        Session.homePop();
-                    },
-                ),
+                    onPressed: () => Session.homePop()
+                )
             ),
             body: SingleChildScrollView(
                 child: Column(
                     children: <Widget>[
                         TextField(
                             controller: _nameTextFieldController,
-                            decoration: InputDecoration(
-                                labelText: "Nombre"
-                            ),
+                            decoration: InputDecoration(labelText: "Nombre"),
                             maxLength: 25,
-                            maxLengthEnforced: true,
+                            maxLengthEnforced: true
                         ),
                         TextField(
                             controller: _discographyTextFieldController,
-                            decoration: InputDecoration(
-                                labelText: "Discografía"
-                            ),
+                            decoration: InputDecoration(labelText: "Discografía"),
                             maxLength: 50,
-                            maxLengthEnforced: true,
+                            maxLengthEnforced: true
                         ),
                         Container(
                             child: Row(
                                 children: <Widget>[
                                     Container(
-                                        child: Text("Año de lanzamiento:", style: TextStyle(fontSize: 15)),
+                                        child: Text(
+                                            "Año de lanzamiento:", 
+                                            style: TextStyle(fontSize: 15)
+                                        ),
                                         margin: EdgeInsets.only(right: 10)
                                     ),
                                     DropdownButton(
@@ -81,9 +78,9 @@ class _CreateAlbumPageState extends State<_CreateAlbumPage> {
                                             });
                                         }
                                     )
-                                ],
+                                ]
                             ),
-                            margin: EdgeInsets.only(top: 15, bottom: 25),
+                            margin: EdgeInsets.only(top: 15, bottom: 25)
                         ),
                         Row(
                             children: <Widget>[
@@ -94,18 +91,16 @@ class _CreateAlbumPageState extends State<_CreateAlbumPage> {
                                     ),
                                     margin: EdgeInsets.only(right: 10, bottom: 25)
                                 ),
-                                Text(imageName, style: TextStyle(color: Colors.blue, fontSize: 10)),
-                            ],
+                                Text(imageName, style: TextStyle(color: Colors.blue, fontSize: 10))
+                            ]
                         ),
                         TextField(
                             controller: _searchTextFieldController,
-                            decoration: InputDecoration(
-                                hintText: "Artista",
-                            ),
+                            decoration: InputDecoration(hintText: "Artista"),
                             onChanged: (text) {
                                 setState(() {
                                 });
-                            },
+                            }
                         ),
                         Container(
                             child: _artistList(_searchTextFieldController.text),
@@ -139,11 +134,11 @@ class _CreateAlbumPageState extends State<_CreateAlbumPage> {
                                     child: Text("Aceptar"),
                                     onPressed: () => _accept()
                                 )
-                            ],
+                            ]
                         )
-                    ],
+                    ]
                 ),
-                padding: EdgeInsets.fromLTRB(15, 5, 15, 15),
+                padding: EdgeInsets.fromLTRB(15, 5, 15, 15)
             )
         );
     }
@@ -208,9 +203,9 @@ class _CreateAlbumPageState extends State<_CreateAlbumPage> {
                                             textAlign: TextAlign.left
                                         )
                                     )
-                                ],
+                                ]
                             ),
-                            padding: EdgeInsets.only(top: 10, bottom: 10),
+                            padding: EdgeInsets.only(top: 10, bottom: 10)
                         )
                     )
                 );
@@ -239,8 +234,11 @@ class _CreateAlbumPageState extends State<_CreateAlbumPage> {
                                     DropdownButton(
                                         items: [
                                             DropdownMenuItem(	
-                                                child: Text("Eliminar artista", style: TextStyle(fontSize: 14)),	
-                                                value: "deleteArtist",	
+                                                child: Text(
+                                                    "Eliminar artista", 
+                                                    style: TextStyle(fontSize: 14)
+                                                ),	
+                                                value: "deleteArtist"
                                             )	
                                         ],
                                         icon: Icon(Icons.more_horiz),
@@ -250,27 +248,27 @@ class _CreateAlbumPageState extends State<_CreateAlbumPage> {
                                                 setState(() {
                                                 });
                                             }
-                                        },
+                                        }
                                     )
-                                ],
+                                ]
                             ),
                             decoration: BoxDecoration(
-                                border: Border(bottom: BorderSide(color: Colors.black, width: 0.3))
-                            ),
+                                border: Border(
+                                    bottom: BorderSide(
+                                        color: Colors.black, 
+                                        width: 0.3
+                                    )
+                                )
+                            )
                         )
                     )
                 );
             }
-            
         );
     }
 
     Future<void> _addSong(BuildContext context) async {
-        final song = await Navigator.push(
-            context, MaterialPageRoute(
-                builder: (context) => AddSongToAlbumScreen()
-            )
-        ) as Map<Song, File>;
+        final song = await Navigator.push(context, MaterialPageRoute(builder: (context) => AddSongToAlbumScreen())) as Map<Song, File>;
         if (song != null) {
             songs.add(song.keys.elementAt(0));
             songsFile.add(song.values.elementAt(0));
@@ -300,8 +298,11 @@ class _CreateAlbumPageState extends State<_CreateAlbumPage> {
                                     DropdownButton(
                                         items: [
                                             DropdownMenuItem(	
-                                                child: Text("Eliminar canción", style: TextStyle(fontSize: 14)),	
-                                                value: "deleteSong",	
+                                                child: Text(
+                                                    "Eliminar canción", 
+                                                    style: TextStyle(fontSize: 14)
+                                                ),	
+                                                value: "deleteSong"
                                             )	
                                         ],
                                         icon: Icon(Icons.more_horiz),
@@ -311,13 +312,18 @@ class _CreateAlbumPageState extends State<_CreateAlbumPage> {
                                                 setState(() {
                                                 });
                                             }
-                                        },
+                                        }
                                     )
-                                ],
+                                ]
                             ),
                             decoration: BoxDecoration(
-                                border: Border(bottom: BorderSide(color: Colors.black, width: 0.3))
-                            ),
+                                border: Border(
+                                    bottom: BorderSide(
+                                        color: Colors.black, 
+                                        width: 0.3
+                                    )
+                                )
+                            )
                         )
                     )
                 );
@@ -361,7 +367,7 @@ class _CreateAlbumPageState extends State<_CreateAlbumPage> {
                             });
                             Navigator.pop(context);
                             return;
-                        },
+                        }
                     )
                 ]);
             }, (errorResponse) {

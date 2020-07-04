@@ -16,9 +16,7 @@ class PlaylistList extends StatefulWidget {
 class _PlaylistListState extends State<PlaylistList> {
     @override
     Widget build(BuildContext context) {
-        return Expanded(
-            child: _createListView()
-        );
+        return Expanded(child: _createListView());
     }
 
     ListView _createListView() {
@@ -29,9 +27,7 @@ class _PlaylistListState extends State<PlaylistList> {
                 return Container(
                     width: double.infinity,
                     child: InkWell(
-                        onTap: () {
-                            widget.onTap(widget.playlists[index]);
-                        },
+                        onTap: () => widget.onTap(widget.playlists[index]),
                         child: Container(
                             child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -39,16 +35,21 @@ class _PlaylistListState extends State<PlaylistList> {
                                     Container(
                                         child: Text(
                                             widget.playlists[index].name,
-                                            textAlign: TextAlign.left,
+                                            textAlign: TextAlign.left
                                         ),
-                                        margin: EdgeInsets.only(bottom: 3),
-                                    ),
-                                ],
+                                        margin: EdgeInsets.only(bottom: 3)
+                                    )
+                                ]
                             ),
                             padding: EdgeInsets.only(top: 10, bottom: 10),
                             decoration: BoxDecoration(
-                                border: Border(bottom: BorderSide(color: Colors.black, width: 0.3))
-                            ),
+                                border: Border(
+                                    bottom: BorderSide(
+                                        color: Colors.black, 
+                                        width: 0.3
+                                    )
+                                )
+                            )
                         )
                     )
                 );

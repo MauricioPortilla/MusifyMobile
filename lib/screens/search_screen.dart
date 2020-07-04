@@ -43,14 +43,12 @@ class _SearchPageState extends State<_SearchPage> with SingleTickerProviderState
                     ),
                     child: TextField(
                         controller: _searchTextFieldController,
-                        decoration: InputDecoration(
-                            hintText: "Buscar",
-                        ),
+                        decoration: InputDecoration(hintText: "Buscar"),
                         onChanged: (text) {
                             setState(() {
                             });
-                        },
-                    ),
+                        }
+                    )
                 ),
                 centerTitle: true,
                 automaticallyImplyLeading: false,
@@ -60,8 +58,8 @@ class _SearchPageState extends State<_SearchPage> with SingleTickerProviderState
                         Tab(child: Text("Canción")),
                         Tab(child: Text("Álbum")),
                         Tab(child: Text("Artista")),
-                    ],
-                ),
+                    ]
+                )
             ),
             body: TabBarView(
                 controller: _tabController,
@@ -72,7 +70,7 @@ class _SearchPageState extends State<_SearchPage> with SingleTickerProviderState
                             children: <Widget>[
                                 _songList(_searchTextFieldController.text)
                             ]
-                        ),
+                        )
                     ),
                     Container(
                         padding: EdgeInsets.fromLTRB(15, 5, 15, 15),
@@ -80,7 +78,7 @@ class _SearchPageState extends State<_SearchPage> with SingleTickerProviderState
                             children: <Widget>[
                                 _albumList(_searchTextFieldController.text)
                             ]
-                        ),
+                        )
                     ),
                     Container(
                         padding: EdgeInsets.fromLTRB(15, 5, 15, 15),
@@ -88,10 +86,10 @@ class _SearchPageState extends State<_SearchPage> with SingleTickerProviderState
                             children: <Widget>[
                                 _artistList(_searchTextFieldController.text)
                             ]
-                        ),
-                    ),
-                ],
-            ),
+                        )
+                    )
+                ]
+            )
         );
     }
 

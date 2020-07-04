@@ -28,10 +28,8 @@ class _PlayerSettingsPageState extends State<_PlayerSettingsPage> {
                 automaticallyImplyLeading: false,
                 leading: IconButton(
                     icon: Icon(Icons.arrow_back_ios),
-                    onPressed: () {
-                        Session.homePop();
-                    },
-                ),
+                    onPressed: () => Session.homePop()
+                )
             ),
             body: Container(
                 child: Column(
@@ -45,92 +43,92 @@ class _PlayerSettingsPageState extends State<_PlayerSettingsPage> {
                                         fontWeight: FontWeight.bold,
                                         fontSize: 20
                                     )
-                                ),
-                            ],
+                                )
+                            ]
                         ),
                         Row(
                             children: <Widget>[
                                 Checkbox(
                                     value: lowSelected,
                                     onChanged: (value) {
-                                      if (value) {
-                                        Session.songStreamingQuality = "lowquality";
-                                        Session.preferences.setString("songStreamingQuality" + Session.account.accountId.toString(), "lowquality");
-                                        setState(() {
-                                            lowSelected = true;
-                                            mediumSelected = false;
-                                            highSelected = false;
-                                            automaticSelected = false;
-                                        });
-                                      }
-                                    },
+                                        if (value) {
+                                            Session.songStreamingQuality = "lowquality";
+                                            Session.preferences.setString("songStreamingQuality" + Session.account.accountId.toString(), "lowquality");
+                                            setState(() {
+                                                lowSelected = true;
+                                                mediumSelected = false;
+                                                highSelected = false;
+                                                automaticSelected = false;
+                                            });
+                                        }
+                                    }
                                 ),
                                 Text("Baja")
-                            ],
+                            ]
                         ),
                         Row(
                             children: <Widget>[
                                 Checkbox(
                                     value: mediumSelected,
                                     onChanged: (value) {
-                                      if (value) {
-                                        Session.songStreamingQuality = "mediumquality";
-                                        Session.preferences.setString("songStreamingQuality" + Session.account.accountId.toString(), "mediumquality");
-                                        setState(() {
-                                            lowSelected = false;
-                                            mediumSelected = true;
-                                            highSelected = false;
-                                            automaticSelected = false;
-                                        });
-                                      }
-                                    },
+                                        if (value) {
+                                            Session.songStreamingQuality = "mediumquality";
+                                            Session.preferences.setString("songStreamingQuality" + Session.account.accountId.toString(), "mediumquality");
+                                            setState(() {
+                                                lowSelected = false;
+                                                mediumSelected = true;
+                                                highSelected = false;
+                                                automaticSelected = false;
+                                            });
+                                        }
+                                    }
                                 ),
                                 Text("Media")
-                            ],
+                            ]
                         ),
                         Row(
                             children: <Widget>[
                                 Checkbox(
                                     value: highSelected,
                                     onChanged: (value) {
-                                      if (value) {
-                                        Session.songStreamingQuality = "highquality";
-                                        Session.preferences.setString("songStreamingQuality" + Session.account.accountId.toString(), "highquality");
-                                        setState(() {
-                                            lowSelected = false;
-                                            mediumSelected = false;
-                                            highSelected = true;
-                                            automaticSelected = false;
-                                        });
-                                      }
-                                    },
+                                        if (value) {
+                                            Session.songStreamingQuality = "highquality";
+                                            Session.preferences.setString("songStreamingQuality" + Session.account.accountId.toString(), "highquality");
+                                            setState(() {
+                                                lowSelected = false;
+                                                mediumSelected = false;
+                                                highSelected = true;
+                                                automaticSelected = false;
+                                            });
+                                        }
+                                    }
                                 ),
                                 Text("Alta")
-                            ],
+                            ]
                         ),
                         Row(
                             children: <Widget>[
                                 Checkbox(
                                     value: automaticSelected,
                                     onChanged: (value) {
-                                      if (value) {
-                                        Session.songStreamingQuality = "automaticquality";
-                                        Session.preferences.setString("songStreamingQuality" + Session.account.accountId.toString(), "automaticquality");
-                                        setState(() {
-                                            lowSelected = false;
-                                            mediumSelected = false;
-                                            highSelected = false;
-                                            automaticSelected = true;
-                                        });
-                                      }
-                                    },
+                                        if (value) {
+                                            Session.songStreamingQuality = "automaticquality";
+                                            Session.preferences.setString("songStreamingQuality" + Session.account.accountId.toString(), "automaticquality");
+                                            setState(() {
+                                                lowSelected = false;
+                                                mediumSelected = false;
+                                                highSelected = false;
+                                                automaticSelected = true;
+                                            });
+                                        }
+                                    }
                                 ),
                                 Text("Automática")
-                            ],
-                        ),
-                    ],
+                            ]
+                        )
+                    ]
                 ),
-                padding: EdgeInsets.fromLTRB(15, 5, 15, 15),
+                padding: EdgeInsets.fromLTRB(15, 5, 15, 15)
             )
         );
     }

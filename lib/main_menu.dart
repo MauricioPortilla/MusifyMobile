@@ -65,11 +65,9 @@ class _MainMenuPageState extends State<_MainMenuPage> with SingleTickerProviderS
                             child: RadioStationsScreen()
                         ),
                         Container(
-                            child: ListView(
-                                children: _loadOptions()
-                            )
+                            child: ListView(children: _loadOptions())
                         )
-                    ],
+                    ]
                 ),
                 bottomNavigationBar: Container(
                     child: Wrap(
@@ -88,11 +86,11 @@ class _MainMenuPageState extends State<_MainMenuPage> with SingleTickerProviderS
                                         Tab(icon: Icon(Icons.home)),
                                         Tab(icon: Icon(Icons.search)),
                                         Tab(icon: Icon(Icons.radio)),
-                                        Tab(icon: Icon(Icons.account_circle)),
-                                    ],
-                                ),
+                                        Tab(icon: Icon(Icons.account_circle))
+                                    ]
+                                )
                             )
-                        ],
+                        ]
                     )
                 )
             )
@@ -103,45 +101,33 @@ class _MainMenuPageState extends State<_MainMenuPage> with SingleTickerProviderS
         List<FlatButton> items = [
             FlatButton(
                 child: Text("Consultar biblioteca propia"),
-                onPressed: () {
-                    Session.homePush(ConsultAccountSongsScreen());
-                },
+                onPressed: () => Session.homePush(ConsultAccountSongsScreen())
             ),
             FlatButton(
                 child: Text("Consultar cola de reproducción"),
-                onPressed: () {
-                    Session.homePush(PlayQueueScreen());
-                },
+                onPressed: () => Session.homePush(PlayQueueScreen())
             ),
             FlatButton(
                 child: Text("Consultar historial"),
-                onPressed: () {
-                    Session.homePush(HistoryScreen());
-                },
+                onPressed: () => Session.homePush(HistoryScreen())
             ),
             FlatButton(
                 child: Text("Configuración del reproductor"),
-                onPressed: () {
-                    Session.homePush(PlayerSettingsScreen());
-                },
+                onPressed: () => Session.homePush(PlayerSettingsScreen())
             )
         ];
         if (Session.account.artist != null) {
             items.add(
                 FlatButton(
                     child: Text("Crear álbum"),
-                    onPressed: () {
-                        Session.homePush(CreateAlbumScreen());
-                    },
+                    onPressed: () => Session.homePush(CreateAlbumScreen())
                 )
             );
         }
         items.add(
             FlatButton(
                 child: Text("Cerrar sesión"),
-                onPressed: () {
-                    Navigator.pop(context);
-                },
+                onPressed: () => Navigator.pop(context)
             )
         );
         return items;

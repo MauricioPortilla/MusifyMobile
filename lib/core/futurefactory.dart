@@ -15,10 +15,10 @@ class FutureFactory<T> {
                     height: 50,
                     child: Center(
                         child: CircularProgressIndicator(), 
-                        widthFactor: 50,
-                    ),
+                        widthFactor: 50
+                    )
                 );
-            },
+            }
         );
     }
 }

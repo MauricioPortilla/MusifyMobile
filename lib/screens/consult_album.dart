@@ -34,10 +34,8 @@ class _ConsultAlbumPageState extends State<_ConsultAlbumPage> {
                 automaticallyImplyLeading: false,
                 leading: IconButton(
                     icon: Icon(Icons.arrow_back_ios),
-                    onPressed: () {
-                        Session.homePop();
-                    },
-                ),
+                    onPressed: () => Session.homePop()
+                )
             ),
             body: Container(
                 margin: EdgeInsets.only(top: 10),
@@ -47,17 +45,15 @@ class _ConsultAlbumPageState extends State<_ConsultAlbumPage> {
                             width: 100,
                             height: 100,
                             margin: EdgeInsets.only(right: 10),
-                            child: widget.album.fetchImage(),
+                            child: widget.album.fetchImage()
                         ),
                         Text(widget.album.type),
                         Text(widget.album.launchYear.toString() + " | " + widget.album.discography),
                         Text(widget.album.artistsNames()),
-                        Container(
-                            child: _songList()
-                        ),
-                    ],
+                        Container(child: _songList())
+                    ]
                 ),
-                padding: EdgeInsets.fromLTRB(15, 5, 15, 15),
+                padding: EdgeInsets.fromLTRB(15, 5, 15, 15)
             )
         );
     }

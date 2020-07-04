@@ -17,9 +17,7 @@ class ArtistList extends StatefulWidget {
 class _ArtistListState extends State<ArtistList> {
     @override
     Widget build(BuildContext context) {
-        return Expanded(
-            child: _createListView()
-        );
+        return Expanded(child: _createListView());
     }
 
     ListView _createListView() {
@@ -32,9 +30,7 @@ class _ArtistListState extends State<ArtistList> {
                     child: InkWell(
                         onTap: () {
                             FocusScope.of(context).unfocus();
-                            Session.homePush(ConsultArtistScreen(
-                                artist: widget.artists[index]
-                            ));
+                            Session.homePush(ConsultArtistScreen(artist: widget.artists[index]));
                         },
                         child: Container(
                             child: Row(
@@ -49,21 +45,29 @@ class _ArtistListState extends State<ArtistList> {
                                                     textAlign: TextAlign.left,
                                                     style: TextStyle(fontWeight: FontWeight.bold)
                                                 ),
-                                                margin: EdgeInsets.only(bottom: 3),
+                                                margin: EdgeInsets.only(bottom: 3)
                                             ),
                                             Row(
                                                 children: <Widget>[
-                                                    Text("Artista", style: TextStyle(fontSize: 13)),
-                                                ],
+                                                    Text(
+                                                        "Artista", 
+                                                        style: TextStyle(fontSize: 13)
+                                                    ),
+                                                ]
                                             )
-                                        ],
+                                        ]
                                     )
-                                ],
+                                ]
                             ),
                             padding: EdgeInsets.only(top: 10, bottom: 10),
                             decoration: BoxDecoration(
-                                border: Border(bottom: BorderSide(color: Colors.black, width: 0.3))
-                            ),
+                                border: Border(
+                                    bottom: BorderSide(
+                                        color: Colors.black, 
+                                        width: 0.3
+                                    )
+                                )
+                            )
                         )
                     )
                 );

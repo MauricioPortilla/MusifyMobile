@@ -36,15 +36,13 @@ class _ConsultArtistPageState extends State<_ConsultArtistPage> {
                 automaticallyImplyLeading: false,
                 leading: IconButton(
                     icon: Icon(Icons.arrow_back_ios),
-                    onPressed: () {
-                        Session.homePop();
-                    },
-                ),
+                    onPressed: () => Session.homePop()
+                )
             ),
             body: SingleChildScrollView(
                 child: Container(
                     child: _loadAlbums(),
-                    padding: EdgeInsets.fromLTRB(15, 5, 15, 15),
+                    padding: EdgeInsets.fromLTRB(15, 5, 15, 15)
                 )
             )
         );
@@ -61,9 +59,7 @@ class _ConsultArtistPageState extends State<_ConsultArtistPage> {
                     )
                 );
             }
-            return Column(
-                children: _albumsUI,
-            );
+            return Column(children: _albumsUI);
         }, () {
             return Center(child: Text("Ocurrió un error al cargar las canciones."));
         });

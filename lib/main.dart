@@ -56,7 +56,7 @@ class _MusifyState extends State<MusifyScreen> {
         return Scaffold(
             appBar: AppBar(
                 title: Text(widget.title),
-                centerTitle: true,
+                centerTitle: true
             ),
             body: SingleChildScrollView(
                 child: Container(
@@ -65,39 +65,35 @@ class _MusifyState extends State<MusifyScreen> {
                         children: <Widget>[
                             TextField(
                                 controller: _emailTextFieldController,
-                                decoration: InputDecoration(
-                                    labelText: "Correo electrónico"
-                                ),
+                                decoration: InputDecoration(labelText: "Correo electrónico"),
                                 maxLength: 100,
                                 maxLengthEnforced: true,
-                                keyboardType: TextInputType.emailAddress,
+                                keyboardType: TextInputType.emailAddress
                             ),
                             TextField(
                                 controller: _passwordTextFieldController,
-                                decoration: InputDecoration(
-                                    labelText: "Contraseña"
-                                ),
-                                obscureText: true,
+                                decoration: InputDecoration(labelText: "Contraseña"),
+                                obscureText: true
                             ),
                             Container(
                                 child: RaisedButton(
                                     onPressed: _loginButton,
                                     child: Text("Iniciar sesión"),
                                     color: Colors.lightBlue,
-                                    textColor: Colors.white,
+                                    textColor: Colors.white
                                 ),
                                 width: double.infinity,
-                                margin: EdgeInsets.only(top: 10),
+                                margin: EdgeInsets.only(top: 10)
                             ),
                             Container(
                                 child: RaisedButton(
                                     onPressed: _googleLoginButton,
                                     child: Text("Iniciar sesión con Google"),
                                     color: Colors.lightBlue,
-                                    textColor: Colors.white,
+                                    textColor: Colors.white
                                 ),
                                 width: double.infinity,
-                                margin: EdgeInsets.only(top: 10),
+                                margin: EdgeInsets.only(top: 10)
                             ),
                             Container(
                                 child: RaisedButton(
@@ -107,18 +103,17 @@ class _MusifyState extends State<MusifyScreen> {
                                     textColor: Colors.white,
                                 ),
                                 width: double.infinity,
-                                margin: EdgeInsets.only(top: 20),
-                            ),
-                        ],
-                    ),
+                                margin: EdgeInsets.only(top: 20)
+                            )
+                        ]
+                    )
                 )
-            ),
+            )
         );
     }
 
     bool _validateFields() {
-        return _emailTextFieldController.text.isNotEmpty &&
-            _passwordTextFieldController.text.isNotEmpty;
+        return _emailTextFieldController.text.isNotEmpty && _passwordTextFieldController.text.isNotEmpty;
     }
 
     bool _validateFieldsData() {
@@ -196,9 +191,7 @@ class _MusifyState extends State<MusifyScreen> {
         }
         _passwordTextFieldController.text = "";
         Navigator.pop(context);
-        Navigator.push(context, MaterialPageRoute(
-            builder: (context) => Session.mainMenu
-        ));
+        Navigator.push(context, MaterialPageRoute(builder: (context) => Session.mainMenu));
     }
 
     void _registerButton() {

@@ -29,9 +29,7 @@ class SongTable {
                     await album.fetchArtists();
                     await song.fetchGenre();
                     await song.fetchArtists();
-                    songs.add(SongTable (
-                        song: song
-                    ));
+                    songs.add(SongTable (song: song));
                 }
             } else {
                 var data = {
@@ -42,9 +40,7 @@ class SongTable {
                 var accountSongs;
                 if (response.status == "success") {
                     accountSongs = AccountSong.fromJson(response.data);
-                    songs.add(SongTable (
-                        accountSong: accountSongs
-                    ));
+                    songs.add(SongTable (accountSong: accountSongs));
                 } else if (response.status == "failed") {
                     Session.songsIdPlayQueue.remove(songId);
                     Session.preferences.setStringList("songsIdPlayQueue" + Session.account.accountId.toString(), Session.songsIdPlayQueue);

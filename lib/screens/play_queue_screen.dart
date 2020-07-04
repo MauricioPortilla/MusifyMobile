@@ -26,10 +26,8 @@ class _PlayQueuePageState extends State<_PlayQueuePage> {
                 automaticallyImplyLeading: false,
                 leading: IconButton(
                     icon: Icon(Icons.arrow_back_ios),
-                    onPressed: () {
-                        Session.homePop();
-                    },
-                ),
+                    onPressed: () => Session.homePop()
+                )
             ),
             body: Container(
                 child: Column(
@@ -39,16 +37,16 @@ class _PlayQueuePageState extends State<_PlayQueuePage> {
                             children: <Widget>[
                                 RaisedButton(
                                     child: Text("Eliminar cola"),
-                                    onPressed: Session.songsIdPlayQueue.length > 0 ? () => _deletePlayQueueButton() : null,
-                                ),
-                            ],
+                                    onPressed: Session.songsIdPlayQueue.length > 0 ? () => _deletePlayQueueButton() : null
+                                )
+                            ]
                         ),
                         Container(
-                            child: _songList(),
-                        ),
-                    ],
+                            child: _songList()
+                        )
+                    ]
                 ),
-                padding: EdgeInsets.fromLTRB(15, 5, 15, 15),
+                padding: EdgeInsets.fromLTRB(15, 5, 15, 15)
             )
         );
     }

@@ -9,13 +9,7 @@ import 'package:http/http.dart' as http;
 import 'package:path/path.dart';
 
 class Network {
-    static void get(
-        String resource, 
-        Map<String, dynamic> data, 
-        onSuccess(NetworkResponse response), 
-        onFailure(NetworkResponse errorResponse),
-        onError()
-    ) async {
+    static void get(String resource, Map<String, dynamic> data, onSuccess(NetworkResponse response), onFailure(NetworkResponse errorResponse), onError()) async {
         try {
             String query = resource;
             if (data != null) {
@@ -63,13 +57,7 @@ class Network {
         }
     }
 
-    static void getStreamBuffer(
-        String resource, 
-        Map<String, dynamic> data, 
-        onSuccess(Uint8List buffer), 
-        onFailure(NetworkResponse data),
-        onError()
-    ) async {
+    static void getStreamBuffer(String resource, Map<String, dynamic> data, onSuccess(Uint8List buffer), onFailure(NetworkResponse data), onError()) async {
         try {
             String query = resource;
             if (data != null) {
@@ -94,13 +82,7 @@ class Network {
         }
     }
     
-    static void post(
-        String resource, 
-        Map<String, dynamic> data, 
-        onSuccess(NetworkResponse response), 
-        onFailure(NetworkResponse errorResponse),
-        onError()
-    ) async {
+    static void post(String resource, Map<String, dynamic> data, onSuccess(NetworkResponse response), onFailure(NetworkResponse errorResponse), onError()) async {
         try {
             String query = resource;
             if (data != null) {
@@ -127,14 +109,7 @@ class Network {
         }
     }
 
-    static void postMultimedia(
-        String resource, 
-        Map<String, dynamic> data, 
-        List<File> files,
-        onSuccess(NetworkResponse response), 
-        onFailure(NetworkResponse errorResponse),
-        onError()
-    ) async {
+    static void postMultimedia(String resource, Map<String, dynamic> data, List<File> files, onSuccess(NetworkResponse response), onFailure(NetworkResponse errorResponse), onError()) async {
         try {
             String query = resource;
             if (data != null) {
@@ -165,13 +140,7 @@ class Network {
         }
     }
 
-    static void put(
-        String resource,
-        Map<String, dynamic> data,
-        onSuccess(NetworkResponse response),
-        onFailure(NetworkResponse errorResponse),
-        onError()
-    ) async {
+    static void put(String resource, Map<String, dynamic> data, onSuccess(NetworkResponse response), onFailure(NetworkResponse errorResponse), onError()) async {
         try {
             String query = resource;
             if (data != null) {
@@ -198,13 +167,7 @@ class Network {
         }
     }
 
-    static void delete(
-        String resource,
-        Map<String, dynamic> data,
-        onSuccess(NetworkResponse response),
-        onFailure(NetworkResponse errorResponse),
-        onError()
-    ) async {
+    static void delete(String resource, Map<String, dynamic> data, onSuccess(NetworkResponse response), onFailure(NetworkResponse errorResponse), onError()) async {
         try {
             String query = resource;
             if (data != null) {

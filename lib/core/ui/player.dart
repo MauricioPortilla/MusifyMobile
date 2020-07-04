@@ -33,11 +33,7 @@ class _PlayerState extends State<Player> {
         return GestureDetector(
             onTap: () {
                 if (latestPlayedSong != null || latestPlayedAccountSong != null) {
-                    Navigator.push(
-                        context, MaterialPageRoute(
-                            builder: (context) => PlayerScreen()
-                        )
-                    );
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => PlayerScreen()));
                 }
             },
             child: Container(
@@ -56,17 +52,15 @@ class _PlayerState extends State<Player> {
                                     GestureDetector(
                                         child: Text(
                                             latestPlayedSong == null ? (latestPlayedAccountSong != null ? latestPlayedAccountSong.title : "") : latestPlayedSong.title,
-                                            style: TextStyle(
-                                                fontSize: 15
-                                            )
+                                            style: TextStyle(fontSize: 15)
                                         ),
-                                        onTap: () {},
+                                        onTap: () {}
                                     ),
                                     GestureDetector(
                                         child: Text(latestPlayedSong == null ? "" : latestPlayedSong.album.artistsNames()),
-                                        onTap: () {},
-                                    ),
-                                ],
+                                        onTap: () {}
+                                    )
+                                ]
                             ),
                             Container(
                                 child: Row(
@@ -74,31 +68,31 @@ class _PlayerState extends State<Player> {
                                         Container(
                                             child: InkWell(
                                                 child: Icon(Icons.skip_previous),
-                                                onTap: previousButtonOnTap,
+                                                onTap: previousButtonOnTap
                                             ),
-                                            padding: EdgeInsets.all(10),
+                                            padding: EdgeInsets.all(10)
                                         ),
                                         Container(
                                             child: InkWell(
                                                 child: Icon(player.isPlaying ? Icons.pause : Icons.play_arrow),
-                                                onTap: playButtonOnTap,
+                                                onTap: playButtonOnTap
                                             ),
-                                            padding: EdgeInsets.all(10),
+                                            padding: EdgeInsets.all(10)
                                         ),
                                         Container(
                                             child: InkWell(
                                                 child: Icon(Icons.skip_next),
-                                                onTap: nextButtonOnTap,
+                                                onTap: nextButtonOnTap
                                             ),
-                                            padding: EdgeInsets.all(10),
-                                        ),
-                                    ],
-                                ),
+                                            padding: EdgeInsets.all(10)
+                                        )
+                                    ]
+                                )
                             )
-                        ],
-                    ),
+                        ]
+                    )
                 )
-            ),
+            )
         );
     }
 
@@ -107,7 +101,8 @@ class _PlayerState extends State<Player> {
             player.stopPlayer();
         }
         player.release();
-        setState(() {});
+        setState(() {
+        });
         if (player.isInited == t_INITIALIZED.NOT_INITIALIZED) {
             await player.initialize();
         }
@@ -165,7 +160,8 @@ class _PlayerState extends State<Player> {
             });
             nextButtonOnTap();
         });
-        setState(() { });
+        setState(() { 
+        });
         player.onPlayerStateChanged.listen((data) {
             if (data != null) {
                 playerMaxPosition = data.duration;
@@ -229,7 +225,8 @@ class _PlayerState extends State<Player> {
         } else if (player.isStopped) {
             _playSong(latestPlayedSongBuffer);
         }
-        setState(() { });
+        setState(() { 
+        });
     }
 
     void nextButtonOnTap() {

@@ -23,7 +23,7 @@ class _AlbumPanelState extends State<AlbumPanel> {
                                 width: 100,
                                 height: 100,
                                 margin: EdgeInsets.only(right: 10),
-                                child: widget.album.fetchImage(),
+                                child: widget.album.fetchImage()
                             ),
                             Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -33,23 +33,19 @@ class _AlbumPanelState extends State<AlbumPanel> {
                                         style: TextStyle(
                                             fontSize: 20,
                                             fontWeight: FontWeight.bold
-                                        ),
+                                        )
                                     ),
                                     Text(
                                         widget.album.launchYear.toString(),
-                                        style: TextStyle(
-                                            fontSize: 15
-                                        )
+                                        style: TextStyle(fontSize: 15)
                                     ),
                                     Text(
                                         widget.album.discography,
-                                        style: TextStyle(
-                                            fontSize: 12
-                                        )
+                                        style: TextStyle(fontSize: 12)
                                     )
-                                ],
+                                ]
                             )
-                        ],
+                        ]
                     ),
                     Container(
                         width: double.infinity,
@@ -58,11 +54,11 @@ class _AlbumPanelState extends State<AlbumPanel> {
                             direction: Axis.horizontal,
                             children: <Widget>[
                                 SongList(songs: widget.album.songs, isSearch: false),
-                            ],
+                            ]
                         )
-                    ),
-                ],
-            ),
+                    )
+                ]
+            )
         );
     }
 }

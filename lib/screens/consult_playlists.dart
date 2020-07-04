@@ -25,7 +25,7 @@ class _ConsultPlaylistsPageState extends State<_ConsultPlaylistsPage> {
             appBar: AppBar(
                 title: Text("Menú principal"),
                 centerTitle: true,
-                automaticallyImplyLeading: false,
+                automaticallyImplyLeading: false
             ),
             body: Container(
                 child: Column(
@@ -42,9 +42,9 @@ class _ConsultPlaylistsPageState extends State<_ConsultPlaylistsPage> {
                                     RaisedButton(
                                         child: Text("Nueva lista de reproducción"),
                                         onPressed: _createNewPlaylistButton,
-                                    ),
-                                ],
-                            ),
+                                    )
+                                ]
+                            )
                         ),
                         Text(
                             "Listas de reproducción",
@@ -55,10 +55,10 @@ class _ConsultPlaylistsPageState extends State<_ConsultPlaylistsPage> {
                         ),
                         Container(
                             child: _playlistListUI(),
-                        ),
-                    ],
+                        )
+                    ]
                 ),
-                padding: EdgeInsets.fromLTRB(15, 5, 15, 15),
+                padding: EdgeInsets.fromLTRB(15, 5, 15, 15)
             )
         );
     }
@@ -83,12 +83,10 @@ class _ConsultPlaylistsPageState extends State<_ConsultPlaylistsPage> {
             Expanded(
                 child: TextField(
                     controller: playlistNameTextFieldController,
-                    decoration: InputDecoration(
-                        labelText: "Nombre"
-                    ),
+                    decoration: InputDecoration(labelText: "Nombre"),
                     maxLength: 20,
-                    maxLengthEnforced: true,
-                ),
+                    maxLengthEnforced: true
+                )
             ), [
                 FlatButton(
                     child: Text("Crear"),
@@ -97,10 +95,7 @@ class _ConsultPlaylistsPageState extends State<_ConsultPlaylistsPage> {
                             UI.createErrorDialog(context, "Debes introducir un nombre.");
                             return;
                         }
-                        Playlist newPlaylist = Playlist(
-                            accountId: Session.account.accountId, 
-                            name: playlistNameTextFieldController.text
-                        );
+                        Playlist newPlaylist = Playlist(accountId: Session.account.accountId, name: playlistNameTextFieldController.text);
                         try {
                             newPlaylist.save((playlist) {
                                 setState(() {
@@ -114,13 +109,11 @@ class _ConsultPlaylistsPageState extends State<_ConsultPlaylistsPage> {
                         } catch (exception) {
                             UI.createErrorDialog(context, "Ocurrió un error al crear la lista de reproducción.");
                         }
-                    },
+                    }
                 ),
                 FlatButton(
                     child: Text("Cancelar"),
-                    onPressed: () {
-                        Navigator.pop(context);
-                    },
+                    onPressed: () => Navigator.pop(context)
                 )
             ]
         );
@@ -133,13 +126,11 @@ class _ConsultPlaylistsPageState extends State<_ConsultPlaylistsPage> {
                 onPressed: () {
                     Navigator.pop(context);
                     _subscribe();
-                },
+                }
             ),
             FlatButton(
                 child: Text("No"),
-                onPressed: () {
-                    Navigator.pop(context);
-                },
+                onPressed: () => Navigator.pop(context)
             )
         ]);
     }

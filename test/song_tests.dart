@@ -11,7 +11,10 @@ void main() async {
     await FlutterConfig.loadEnvVariables();
     test("TEST: Fetch album", () {
         Account.login("freya@arkanapp.com", "1230", expectAsync1<void, Account>((account) async {
-            Song song = Song(songId: 3, albumId: 3);
+            Song song = Song(
+                songId: 3, 
+                albumId: 3
+            );
             var album = await song.fetchAlbum();
             expect(album != null, true);
         }), (errorResponse) {
@@ -23,7 +26,10 @@ void main() async {
 
     test("TEST: Fetch genre", () {
         Account.login("freya@arkanapp.com", "1230", expectAsync1<void, Account>((account) async {
-            Song song = Song(songId: 1, genreId: 1);
+            Song song = Song(
+                songId: 1, 
+                genreId: 1
+            );
             var genre = await song.fetchGenre();
             expect(genre != null, true);
         }), (errorResponse) {

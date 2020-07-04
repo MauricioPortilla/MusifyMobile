@@ -15,11 +15,7 @@ class Core {
         try {
             final dataNetwork = await AndroidDeviceInfo().getNetworkInfo();
             if (dataNetwork['wifiLinkSpeed'] != null) {
-                return int.parse(
-                    dataNetwork['wifiLinkSpeed'].toString().substring(
-                        0, dataNetwork['wifiLinkSpeed'].toString().length - 5
-                    )
-                );
+                return int.parse(dataNetwork['wifiLinkSpeed'].toString().substring(0, dataNetwork['wifiLinkSpeed'].toString().length - 5));
             }
             return 0;
         } catch (exception) {

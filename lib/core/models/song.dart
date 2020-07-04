@@ -131,12 +131,7 @@ class Song {
         }
     }
 
-    static void fetchSongById(
-        int songId, 
-        onSuccess(Song song), 
-        onFailure(NetworkResponse errorResponse), 
-        onError()
-    ) {
+    static void fetchSongById(int songId, onSuccess(Song song), onFailure(NetworkResponse errorResponse), onError()) {
         Network.get("/song/$songId", null, (response) async {
             var song = Song.fromJson(response.data);
             Album album = await song.fetchAlbum();

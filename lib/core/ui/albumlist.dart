@@ -17,9 +17,7 @@ class AlbumList extends StatefulWidget {
 class _AlbumListState extends State<AlbumList> {
     @override
     Widget build(BuildContext context) {
-        return Expanded(
-            child: _createListView()
-        );
+        return Expanded(child: _createListView());
     }
 
     ListView _createListView() {
@@ -30,9 +28,7 @@ class _AlbumListState extends State<AlbumList> {
                 return Container(
                     width: double.infinity,
                     child: InkWell(
-                        onTap: () {
-                            Session.homePush(ConsultAlbumScreen(album: widget.albums[index]));
-                        },
+                        onTap: () => Session.homePush(ConsultAlbumScreen(album: widget.albums[index])),
                         child: Container(
                             child: Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -46,22 +42,30 @@ class _AlbumListState extends State<AlbumList> {
                                                     textAlign: TextAlign.left,
                                                     style: TextStyle(fontWeight: FontWeight.bold)
                                                 ),
-                                                margin: EdgeInsets.only(bottom: 3),
+                                                margin: EdgeInsets.only(bottom: 3)
                                             ),
                                             Row(
                                                 children: <Widget>[
-                                                    Text("Álbum - ", style: TextStyle(fontSize: 13)),
+                                                    Text(
+                                                        "Álbum - ", 
+                                                        style: TextStyle(fontSize: 13)
+                                                    ),
                                                     Text(widget.albums[index].artistsNames())
-                                                ],
+                                                ]
                                             )
-                                        ],
+                                        ]
                                     )
-                                ],
+                                ]
                             ),
                             padding: EdgeInsets.only(top: 10, bottom: 10),
                             decoration: BoxDecoration(
-                                border: Border(bottom: BorderSide(color: Colors.black, width: 0.3))
-                            ),
+                                border: Border(
+                                    bottom: BorderSide(
+                                        color: Colors.black, 
+                                        width: 0.3
+                                    )
+                                )
+                            )
                         )
                     )
                 );

@@ -22,9 +22,7 @@ class SongList extends StatefulWidget {
 class _SongListState extends State<SongList> {
     @override
     Widget build(BuildContext context) {
-        return Expanded(
-            child: _createListView()
-        );
+        return Expanded(child: _createListView());
     }
 
     ListView _createListView() {
@@ -61,22 +59,25 @@ class _SongListState extends State<SongList> {
                                                     textAlign: TextAlign.left,
                                                     style: TextStyle(fontWeight: FontWeight.bold)
                                                 ),
-                                                margin: EdgeInsets.only(bottom: 3),
+                                                margin: EdgeInsets.only(bottom: 3)
                                             ),
                                             Row(
                                                 children: <Widget>[
-                                                    Text("Canción - ", style: TextStyle(fontSize: 13)),
+                                                    Text(
+                                                        "Canción - ", 
+                                                        style: TextStyle(fontSize: 13)
+                                                    ),
                                                     Text(widget.songs[index].artistsNames())
-                                                ],
+                                                ]
                                             ),
                                             Container(
                                                 child: Text(
                                                     widget.songs[index].genre.name,
-                                                    textAlign: TextAlign.left,
+                                                    textAlign: TextAlign.left
                                                 ),
-                                                margin: EdgeInsets.only(bottom: 3),
-                                            ),
-                                        ],
+                                                margin: EdgeInsets.only(bottom: 3)
+                                            )
+                                        ]
                                     ),
                                     Container(
                                         width: 150,
@@ -94,15 +95,20 @@ class _SongListState extends State<SongList> {
                                                 } else if (value == "deleteFromPlaylist") {
                                                     _deleteFromPlaylist(widget.songs[index]);
                                                 }
-                                            },
+                                            }
                                         )
                                     )
-                                ],
+                                ]
                             ),
                             padding: EdgeInsets.only(top: 10, bottom: 10),
                             decoration: BoxDecoration(
-                                border: Border(bottom: BorderSide(color: Colors.black, width: 0.3))
-                            ),
+                                border: Border(
+                                    bottom: BorderSide(
+                                        color: Colors.black, 
+                                        width: 0.3
+                                    )
+                                )
+                            )
                         )
                     )
                 );
@@ -113,23 +119,35 @@ class _SongListState extends State<SongList> {
     List<DropdownMenuItem<String>> _loadSongRowDropdownItems() {
         List<DropdownMenuItem<String>> items = [
             DropdownMenuItem(
-                child: Text("Agregar a una lista de reproducción", style: TextStyle(fontSize: 14)),
-                value: "addToPlaylist",
+                child: Text(
+                    "Agregar a una lista de reproducción", 
+                    style: TextStyle(fontSize: 14)
+                ),
+                value: "addToPlaylist"
             ),
             DropdownMenuItem(
-                child: Text("Agregar a la cola de reproducción", style: TextStyle(fontSize: 14)),
-                value: "addToPlayQueue",
+                child: Text(
+                    "Agregar a la cola de reproducción", 
+                    style: TextStyle(fontSize: 14)
+                ),
+                value: "addToPlayQueue"
             ),
             DropdownMenuItem(
-                child: Text("Generar estación de radio", style: TextStyle(fontSize: 14)),
-                value: "generateRadioStation",
-            ),
+                child: Text(
+                    "Generar estación de radio", 
+                    style: TextStyle(fontSize: 14)
+                ),
+                value: "generateRadioStation"
+            )
         ];
         if (widget.playlistAssociated != null) {
             items.add(
                 DropdownMenuItem(
-                    child: Text("Eliminar de lista de reproducción", style: TextStyle(fontSize: 14)),
-                    value: "deleteFromPlaylist",
+                    child: Text(
+                        "Eliminar de lista de reproducción", 
+                        style: TextStyle(fontSize: 14)
+                    ),
+                    value: "deleteFromPlaylist"
                 )
             );
         }
@@ -137,13 +155,7 @@ class _SongListState extends State<SongList> {
     }
 
     void _addToPlaylist(Song song) {
-        Navigator.push(
-            context, MaterialPageRoute(
-                builder: (context) => AddSongToPlaylistScreen(
-                    songToAdd: song
-                )
-            )
-        );
+        Navigator.push(context, MaterialPageRoute(builder: (context) => AddSongToPlaylistScreen(songToAdd: song)));
     }
 
     void _addToPlayQueue(Song song) {
@@ -157,7 +169,7 @@ class _SongListState extends State<SongList> {
                     Session.songsIdPlayQueue.addAll(songsIdPlayQueue);
                     Session.preferences.setStringList("songsIdPlayQueue" + Session.account.accountId.toString(), Session.songsIdPlayQueue);
                     Navigator.pop(context);
-                },
+                }
             ),
             FlatButton(
                 child: Text("Al final"),
@@ -169,17 +181,13 @@ class _SongListState extends State<SongList> {
             ),
             FlatButton(
                 child: Text("Cancelar"),
-                onPressed: () {
-                    Navigator.pop(context);
-                }
+                onPressed: () => Navigator.pop(context)
             )
         ]);
     }
 
     void _generateRadioStation(Song song) {
-        if (Session.genresIdRadioStations.length == 0 || 
-            Session.genresIdRadioStations.firstWhere((element) => element == song.genreId.toString()) == null
-        ) {
+        if (Session.genresIdRadioStations.length == 0 || Session.genresIdRadioStations.firstWhere((element) => element == song.genreId.toString()) == null) {
             Session.genresIdRadioStations.add(song.genreId.toString());
             Session.preferences.setStringList("genresIdRadioStations" + Session.account.accountId.toString(), Session.genresIdRadioStations);
         } else {

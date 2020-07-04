@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 
 class UI {
-    static void createDialog(
-        BuildContext context, String title, Widget content,
-        List<Widget> actions
-    ) {
+    static void createDialog(BuildContext context, String title, Widget content, List<Widget> actions) {
         showDialog(
             context: context,
             builder: (BuildContext buildContext) {
@@ -17,22 +14,16 @@ class UI {
         );
     }
 
-    static void createSuccessDialog(
-        BuildContext context, String message
-    ) {
+    static void createSuccessDialog(BuildContext context, String message) {
         createDialog(context, "¡Éxito!", Text(message), <Widget>[
             FlatButton(
                 child: Text("Cerrar"),
-                onPressed: () {
-                    Navigator.pop(context);
-                }
+                onPressed: () => Navigator.pop(context)
             )
         ]);
     }
 
-    static void createErrorDialog(
-        BuildContext context, String errorResponseMessage
-    ) {
+    static void createErrorDialog(BuildContext context, String errorResponseMessage) {
         createDialog(context, "Error", Text(errorResponseMessage), <Widget>[
             FlatButton(
                 child: Text("Cerrar"),
@@ -57,10 +48,10 @@ class UI {
                             Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: <Widget>[
-                                    CircularProgressIndicator(),
-                                ],
-                            ),
-                        ],
+                                    CircularProgressIndicator()
+                                ]
+                            )
+                        ]
                     )
                 )
             );

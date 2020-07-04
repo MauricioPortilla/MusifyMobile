@@ -21,9 +21,7 @@ class SongTableList extends StatefulWidget {
 class _SongTableListState extends State<SongTableList> {
     @override
     Widget build(BuildContext context) {
-        return Expanded(
-            child: _createListView()
-        );
+        return Expanded(child: _createListView());
     }
 
     ListView _createListView() {
@@ -71,13 +69,7 @@ class _SongTableListState extends State<SongTableList> {
                                             icon: Icon(Icons.more_horiz),
                                             onChanged: (value) async {
                                                 if (value == "addToPlaylist") {
-                                                    Navigator.push(
-                                                        context, MaterialPageRoute(
-                                                            builder: (context) => AddSongToPlaylistScreen(
-                                                                songToAdd: widget.songs[index].song
-                                                            )
-                                                        )
-                                                    );
+                                                    Navigator.push(context, MaterialPageRoute(builder: (context) => AddSongToPlaylistScreen(songToAdd: widget.songs[index].song)));
                                                 } else if (value == "addToPlayQueue") {
                                                     UI.createDialog(context, "Agregar a la cola", Text("Agregar ..."), [
                                                         FlatButton(
@@ -97,7 +89,7 @@ class _SongTableListState extends State<SongTableList> {
                                                                 if (widget.isPlayQueue) {
                                                                     widget.onTap();
                                                                 }
-                                                            },
+                                                            }
                                                         ),
                                                         FlatButton(
                                                             child: Text("Al final"),
@@ -116,9 +108,7 @@ class _SongTableListState extends State<SongTableList> {
                                                         ),
                                                         FlatButton(
                                                             child: Text("Cancelar"),
-                                                            onPressed: () {
-                                                                Navigator.pop(context);
-                                                            }
+                                                            onPressed: () => Navigator.pop(context)
                                                         )
                                                     ]);
                                                 } else if (value == "generateRadioStation") {
@@ -139,15 +129,20 @@ class _SongTableListState extends State<SongTableList> {
                                                     }
                                                     widget.onTap();
                                                 }
-                                            },
+                                            }
                                         )
                                     )
-                                ],
+                                ]
                             ),
                             padding: EdgeInsets.only(top: 10, bottom: 10),
                             decoration: BoxDecoration(
-                                border: Border(bottom: BorderSide(color: Colors.black, width: 0.3))
-                            ),
+                                border: Border(
+                                    bottom: BorderSide(
+                                        color: Colors.black, 
+                                        width: 0.3
+                                    )
+                                )
+                            )
                         )
                     )
                 );
@@ -166,22 +161,25 @@ class _SongTableListState extends State<SongTableList> {
                             textAlign: TextAlign.left,
                             style: TextStyle(fontWeight: FontWeight.bold)
                         ),
-                        margin: EdgeInsets.only(bottom: 3),
+                        margin: EdgeInsets.only(bottom: 3)
                     ),
                     Row(
                         children: <Widget>[
-                            Text("Canción - ", style: TextStyle(fontSize: 13)),
+                            Text(
+                                "Canción - ", 
+                                style: TextStyle(fontSize: 13)
+                            ),
                             Text(widget.songs[index].song.artistsNames())
-                        ],
+                        ]
                     ),
                     Container(
                         child: Text(
                             widget.songs[index].song.genre.name,
                             textAlign: TextAlign.left,
                         ),
-                        margin: EdgeInsets.only(bottom: 3),
-                    ),
-                ],
+                        margin: EdgeInsets.only(bottom: 3)
+                    )
+                ]
             );
         } else {
             return Column(
@@ -193,14 +191,17 @@ class _SongTableListState extends State<SongTableList> {
                             textAlign: TextAlign.left,
                             style: TextStyle(fontWeight: FontWeight.bold)
                         ),
-                        margin: EdgeInsets.only(bottom: 3),
+                        margin: EdgeInsets.only(bottom: 3)
                     ),
                     Row(
                         children: <Widget>[
-                            Text("Canción de la cuenta", style: TextStyle(fontSize: 13))
-                        ],
-                    ),
-                ],
+                            Text(
+                                "Canción de la cuenta", 
+                                style: TextStyle(fontSize: 13)
+                            )
+                        ]
+                    )
+                ]
             );
         }
     }
@@ -210,30 +211,42 @@ class _SongTableListState extends State<SongTableList> {
         if (widget.songs[index].song != null){
             items.add(
                 DropdownMenuItem(
-                    child: Text("Agregar a una lista de reproducción", style: TextStyle(fontSize: 14)),
-                    value: "addToPlaylist",
+                    child: Text(
+                        "Agregar a una lista de reproducción", 
+                        style: TextStyle(fontSize: 14)
+                    ),
+                    value: "addToPlaylist"
                 )
             );
         }
         items.add(
             DropdownMenuItem(
-                child: Text("Agregar a la cola de reproducción", style: TextStyle(fontSize: 14)),
-                value: "addToPlayQueue",
+                child: Text(
+                    "Agregar a la cola de reproducción", 
+                    style: TextStyle(fontSize: 14)
+                ),
+                value: "addToPlayQueue"
             )
         );
         if (widget.songs[index].song != null){
             items.add(
                 DropdownMenuItem(
-                    child: Text("Generar estación de radio", style: TextStyle(fontSize: 14)),
-                    value: "generateRadioStation",
+                    child: Text(
+                        "Generar estación de radio", 
+                        style: TextStyle(fontSize: 14)
+                    ),
+                    value: "generateRadioStation"
                 )
             );
         }
         if (widget.isPlayQueue) {
             items.add(
                 DropdownMenuItem(
-                    child: Text("Eliminar canción de la cola", style: TextStyle(fontSize: 14)),
-                    value: "deleteFromPlayQueue",
+                    child: Text(
+                        "Eliminar canción de la cola", 
+                        style: TextStyle(fontSize: 14)
+                    ),
+                    value: "deleteFromPlayQueue"
                 )
             );
         }

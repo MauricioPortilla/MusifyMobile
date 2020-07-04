@@ -24,17 +24,15 @@ class _RadioStationsPageState extends State<_RadioStationsPage> {
             appBar: AppBar(
                 title: Text("Estaciones de radio"),
                 centerTitle: true,
-                automaticallyImplyLeading: false,
+                automaticallyImplyLeading: false
             ),
             body: Container(
                 child: Column(
                     children: <Widget>[
-                      Container(
-                        child: _genreList(),
-                      ),
-                    ],
+                      Container(child: _genreList())
+                    ]
                 ),
-                padding: EdgeInsets.fromLTRB(15, 5, 15, 15),
+                padding: EdgeInsets.fromLTRB(15, 5, 15, 15)
             )
         );
     }

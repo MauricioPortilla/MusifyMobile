@@ -45,13 +45,7 @@ class Album {
         );
     }
 
-    void save(
-        File imageFile, 
-        List<File> songsFile, 
-        onSuccess(), 
-        onFailure(NetworkResponse errorResponse), 
-        onError()
-    ) {
+    void save(File imageFile, List<File> songsFile, onSuccess(), onFailure(NetworkResponse errorResponse), onError()) {
         Network.postMultimedia("/album/songs", null, songsFile, (responseSongs) {
             if (responseSongs.status == "success") {
                 List<File> images = [imageFile];
@@ -67,18 +61,14 @@ class Album {
                         }
                         List artistsId = List();
                         for (Artist artist in artists) {
-                            artistsId.add({
-                                "artist_id": artist.artistId
-                            });
+                            artistsId.add({"artist_id": artist.artistId});
                         }
                         List newSongs = List();
                         int i = 0;
                         for (Song song in songs) {
                             List songArtistsId = List();
                             for (Artist artist in song.artists) {
-                                songArtistsId.add({
-                                    "artist_id": artist.artistId
-                                });
+                                songArtistsId.add({"artist_id": artist.artistId});
                             }
                             newSongs.add({
                                 "genre_id": song.genreId,
@@ -101,17 +91,17 @@ class Album {
                         Network.post("/album", data, (response) {
                             onSuccess();
                         }, onFailure, () {
-                            print("Exception@Album->save3()");
+                            print("Exception@Album->save()");
                             onError();
                         });
                     }
                 }, onFailure, () {
-                    print("Exception@Album->save2()");
+                    print("Exception@Album->save()");
                     onError();
                 });
             }
         }, onFailure, () {
-            print("Exception@Album->save1()");
+            print("Exception@Album->save()");
             onError();
         });
     }

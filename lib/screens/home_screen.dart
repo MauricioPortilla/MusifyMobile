@@ -41,9 +41,7 @@ class _HomePageState extends State<_HomePage> with AutomaticKeepAliveClientMixin
 
     @override
     Widget build(BuildContext context) {
-        return Scaffold(
-            body: content
-        );
+        return Scaffold(body: content);
     }
 
     void _changeContent(Widget newContent) {

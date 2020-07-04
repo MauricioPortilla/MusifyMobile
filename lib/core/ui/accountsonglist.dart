@@ -18,9 +18,7 @@ class AccountSongList extends StatefulWidget {
 class _AccountSongListState extends State<AccountSongList> {
     @override
     Widget build(BuildContext context) {
-        return Expanded(
-            child: _createListView()
-        );
+        return Expanded(child: _createListView());
     }
 
     ListView _createListView() {
@@ -49,8 +47,8 @@ class _AccountSongListState extends State<AccountSongList> {
                                     Container(
                                         child: Text(
                                             widget.accountSongs[index].title,
-                                            textAlign: TextAlign.left,
-                                        ),
+                                            textAlign: TextAlign.left
+                                        )
                                     ),
                                     Container(
                                         width: 150,
@@ -58,12 +56,18 @@ class _AccountSongListState extends State<AccountSongList> {
                                             isExpanded: true,
                                             items: <DropdownMenuItem<String>>[
                                                 DropdownMenuItem(
-                                                    child: Text("Agregar a la cola de reproducción", style: TextStyle(fontSize: 14)),
-                                                    value: "addToPlayQueue",
+                                                    child: Text(
+                                                        "Agregar a la cola de reproducción", 
+                                                        style: TextStyle(fontSize: 14)
+                                                    ),
+                                                    value: "addToPlayQueue"
                                                 ),
                                                 DropdownMenuItem(
-                                                    child: Text("Eliminar", style: TextStyle(fontSize: 14)),
-                                                    value: "delete",
+                                                    child: Text(
+                                                        "Eliminar", 
+                                                        style: TextStyle(fontSize: 14)
+                                                    ),
+                                                    value: "delete"
                                                 )
                                             ],
                                             icon: Icon(Icons.more_horiz),
@@ -73,14 +77,19 @@ class _AccountSongListState extends State<AccountSongList> {
                                                 } else if (value == "delete") {
                                                     _deleteAccountSong(widget.accountSongs[index]);
                                                 }
-                                            },
+                                            }
                                         )
                                     )
-                                ],
+                                ]
                             ),
                             decoration: BoxDecoration(
-                                border: Border(bottom: BorderSide(color: Colors.black, width: 0.3))
-                            ),
+                                border: Border(
+                                    bottom: BorderSide(
+                                        color: Colors.black, 
+                                        width: 0.3
+                                    )
+                                )
+                            )
                         )
                     )
                 );
@@ -99,7 +108,7 @@ class _AccountSongListState extends State<AccountSongList> {
                     Session.songsIdPlayQueue.addAll(songsIdPlayQueue);
                     Session.preferences.setStringList("songsIdPlayQueue" + Session.account.accountId.toString(), Session.songsIdPlayQueue);
                     Navigator.pop(context);
-                },
+                }
             ),
             FlatButton(
                 child: Text("Al final"),
@@ -111,9 +120,7 @@ class _AccountSongListState extends State<AccountSongList> {
             ),
             FlatButton(
                 child: Text("Cancelar"),
-                onPressed: () {
-                    Navigator.pop(context);
-                }
+                onPressed: () => Navigator.pop(context)
             )
         ]);
     }
@@ -137,11 +144,11 @@ class _AccountSongListState extends State<AccountSongList> {
                         Navigator.pop(context);
                         UI.createErrorDialog(context, "No se pudo establecer una conexión con el servidor.");
                     });
-                },
+                }
             ),
             FlatButton(
                 child: Text("No"),
-                onPressed: () => Navigator.pop(context),
+                onPressed: () => Navigator.pop(context)
             )
         ]);
     }

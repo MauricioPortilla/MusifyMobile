@@ -35,7 +35,7 @@ class _RegisterPageState extends State<_RegisterPage> {
         return Scaffold(
             appBar: AppBar(
                 title: Text("Registrar cuenta"),
-                centerTitle: true,
+                centerTitle: true
             ),
             body: SingleChildScrollView(
                 child: Container(
@@ -47,40 +47,32 @@ class _RegisterPageState extends State<_RegisterPage> {
                                     onPressed: _googleRegisterButton,
                                     child: Text("Registrarse con Google"),
                                     color: Colors.lightBlue,
-                                    textColor: Colors.white,
+                                    textColor: Colors.white
                                 ),
                                 width: double.infinity,
-                                margin: EdgeInsets.only(top: 10),
+                                margin: EdgeInsets.only(top: 10)
                             ),
                             TextField(
                                 controller: _emailTextFieldController,
-                                decoration: InputDecoration(
-                                    labelText: "Correo electrónico"
-                                ),
+                                decoration: InputDecoration(labelText: "Correo electrónico"),
                                 maxLength: 100,
                                 maxLengthEnforced: true,
-                                keyboardType: TextInputType.emailAddress,
+                                keyboardType: TextInputType.emailAddress
                             ),
                             TextField(
                                 controller: _passwordTextFieldController,
-                                decoration: InputDecoration(
-                                    labelText: "Contraseña"
-                                ),
-                                obscureText: true,
+                                decoration: InputDecoration(labelText: "Contraseña"),
+                                obscureText: true
                             ),
                             TextField(
                                 controller: _nameTextFieldController,
-                                decoration: InputDecoration(
-                                    labelText: "Nombre"
-                                ),
+                                decoration: InputDecoration(labelText: "Nombre"),
                                 maxLength: 50,
                                 maxLengthEnforced: true
                             ),
                             TextField(
                                 controller: _lastNameTextFieldController,
-                                decoration: InputDecoration(
-                                    labelText: "Apellidos"
-                                ),
+                                decoration: InputDecoration(labelText: "Apellidos"),
                                 maxLength: 50,
                                 maxLengthEnforced: true
                             ),
@@ -92,31 +84,29 @@ class _RegisterPageState extends State<_RegisterPage> {
                                             imAnArtist = value;
                                         });
                                     },
-                                    value: imAnArtist,
-                                ),
+                                    value: imAnArtist
+                                )
                             ),
                             TextField(
                                 controller: _artisticNameTextFieldController,
-                                decoration: InputDecoration(
-                                    labelText: "Nombre artístico"
-                                ),
+                                decoration: InputDecoration(labelText: "Nombre artístico"),
                                 maxLength: 50,
                                 maxLengthEnforced: true,
-                                enabled: imAnArtist,
+                                enabled: imAnArtist
                             ),
                             Container(
                                 child: RaisedButton(
                                     onPressed: _registerButton,
                                     child: Text("Registrarse"),
                                     color: Colors.lightBlue,
-                                    textColor: Colors.white,
+                                    textColor: Colors.white
                                 ),
                                 width: double.infinity,
-                                margin: EdgeInsets.only(top: 10),
-                            ),
-                        ],
-                    ),
-                ),
+                                margin: EdgeInsets.only(top: 10)
+                            )
+                        ]
+                    )
+                )
             )
         );
     }
@@ -159,7 +149,7 @@ class _RegisterPageState extends State<_RegisterPage> {
                         onPressed: () {
                             Navigator.pop(context);
                             Navigator.pop(context);
-                        },
+                        }
                     )
                 ]
             );
@@ -177,9 +167,7 @@ class _RegisterPageState extends State<_RegisterPage> {
             await googleSignIn.signIn().then((result) {
                 result.authentication.then((googleKey) {
                     Navigator.pushReplacement(
-                        context, MaterialPageRoute(
-                            builder: (context) => RegisterGoogleScreen(accessToken: googleKey.accessToken)
-                        )
+                        context, MaterialPageRoute(builder: (context) => RegisterGoogleScreen(accessToken: googleKey.accessToken))
                     );
                 }).catchError((error) {
                     print("Error on _HomePageState->_googleLoginButton() -> $error");
