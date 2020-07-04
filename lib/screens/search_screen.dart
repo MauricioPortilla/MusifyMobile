@@ -110,7 +110,7 @@ class _SearchPageState extends State<_SearchPage> with SingleTickerProviderState
     }
 
     FutureBuilder<List<Artist>> _artistList(String artisticName) {
-        return FutureFactory<List<Artist>>().networkFuture(Artist.fetchAlbumByArtisticNameCoincidences(artisticName), (data) {
+        return FutureFactory<List<Artist>>().networkFuture(Artist.fetchArtistsByArtisticNameCoincidences(artisticName), (data) {
             return ArtistList(artists: data);
         }, () {
             return Center(child: Text("Ocurrió un error al cargar la información."));

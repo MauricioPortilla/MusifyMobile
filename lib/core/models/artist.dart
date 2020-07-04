@@ -22,7 +22,7 @@ class Artist {
         );
     }
 
-    static Future<List<Artist>> fetchAlbumByArtisticNameCoincidences(String artisticName) async {
+    static Future<List<Artist>> fetchArtistsByArtisticNameCoincidences(String artisticName) async {
         List<Artist> artists = <Artist>[];
         if (artisticName.isEmpty) {
             return artists;

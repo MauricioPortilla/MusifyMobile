@@ -9,7 +9,7 @@ void main() async {
     await FlutterConfig.loadEnvVariables();
     test("TEST: Fetch artists by starting artistic name", () {
         Account.login("freya@arkanapp.com", "1230", expectAsync1<void, Account>((account) async {
-            var artists = await Artist.fetchAlbumByArtisticNameCoincidences("Fre");
+            var artists = await Artist.fetchArtistsByArtisticNameCoincidences("Fre");
             expect(artists.length > 0, true);
         }), (errorResponse) {
             fail("Unsuccessful login");
