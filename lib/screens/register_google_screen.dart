@@ -72,8 +72,16 @@ class _RegisterGooglePageState extends State<_RegisterGooglePage> {
             )
         );
     }
+    
+    bool _validateFields() {
+        return imAnArtist ? _artisticNameTextFieldController.text.isNotEmpty : true;
+    }
 
     void _finishRegisterWithGoogleButton() {
+        if (!_validateFields()) {
+            UI.createErrorDialog(context, "Faltan campos por completar");
+            return;
+        }
         UI.createLoadingDialog(context);
         Account account = Account();
         account.registerWithGoogle(widget.accessToken, imAnArtist, (account) {
@@ -86,6 +94,6 @@ class _RegisterGooglePageState extends State<_RegisterGooglePage> {
         }, () {
             Navigator.pop(context);
             UI.createErrorDialog(context, "Ocurrió un error al momento de registrar la cuenta.");
-        });
+        }, artisticName: _artisticNameTextFieldController.text);
     }
 }

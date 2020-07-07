@@ -79,7 +79,7 @@ class Account {
             "name": name,
             "last_name": lastName,
             "is_artist": isArtist,
-            "artistic_name": artisticName == "" ? null : artisticName
+            "artistic_name": artisticName.isEmpty ? null : artisticName
         };
         Network.post("/auth/register", data, (response) {
             onSuccess(Account.fromJson(response.data));
@@ -93,7 +93,7 @@ class Account {
         var data = {
             "access_token": accessToken,
             "is_artist": isArtist,
-            "artistic_name": artisticName == "" ? null : artisticName
+            "artistic_name": artisticName.isEmpty ? null : artisticName
         };
         Network.post("/auth/register/google", data, (response) {
             onSuccess(Account.fromJson(response.data));

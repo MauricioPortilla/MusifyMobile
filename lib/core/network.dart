@@ -9,7 +9,13 @@ import 'package:http/http.dart' as http;
 import 'package:path/path.dart';
 
 class Network {
-    static void get(String resource, Map<String, dynamic> data, onSuccess(NetworkResponse response), onFailure(NetworkResponse errorResponse), onError()) async {
+    static void get(
+        String resource, 
+        Map<String, dynamic> data, 
+        onSuccess(NetworkResponse response), 
+        onFailure(NetworkResponse errorResponse), 
+        onError()
+    ) async {
         try {
             String query = resource;
             if (data != null) {
@@ -21,7 +27,8 @@ class Network {
                 Core.SERVER_URL + query,
                 headers: <String, String> {
                     "Content-Type": "application/json; charset=UTF-8",
-                    "Authorization": Session.accessToken != null ? Session.accessToken : ""
+                    "Authorization": Session.accessToken != null ? Session.accessToken : "",
+                    "Accept-Language": "es"
                 }
             );
             Map<String, dynamic> jsonDecoded = json.decode(response.body);
@@ -47,7 +54,8 @@ class Network {
                 Core.SERVER_URL + query,
                 headers: <String, String> {
                     "Content-Type": "application/json; charset=UTF-8",
-                    "Authorization": Session.accessToken != null ? Session.accessToken : ""
+                    "Authorization": Session.accessToken != null ? Session.accessToken : "",
+                    "Accept-Language": "es"
                 }
             );
             var jsonResponse = json.decode(response.body);
@@ -69,7 +77,8 @@ class Network {
                 Core.SERVER_URL + query,
                 headers: <String, String> {
                     "Content-Type": "application/json; charset=UTF-8",
-                    "Authorization": Session.accessToken != null ? Session.accessToken : ""
+                    "Authorization": Session.accessToken != null ? Session.accessToken : "",
+                    "Accept-Language": "es"
                 }
             );
             if (response.statusCode == 200) {
@@ -94,7 +103,8 @@ class Network {
                 Core.SERVER_URL + query,
                 headers: <String, String> {
                     "Content-Type": "application/json; charset=UTF-8",
-                    "Authorization": Session.accessToken != null ? Session.accessToken : ""
+                    "Authorization": Session.accessToken != null ? Session.accessToken : "",
+                    "Accept-Language": "es"
                 },
                 body: jsonEncode(data)
             );
@@ -120,7 +130,8 @@ class Network {
             var request = http.MultipartRequest("POST", Uri.parse(Core.SERVER_URL + query));
             request.headers.addAll({
                 "Authorization": Session.accessToken != null ? Session.accessToken : "",
-                "Content-Type": "multipart/form-data"
+                "Content-Type": "multipart/form-data",
+                "Accept-Language": "es"
             });
             int counter = 0;
             for (var file in files) {
@@ -152,7 +163,8 @@ class Network {
                 Core.SERVER_URL + query,
                 headers: <String, String> {
                     "Content-Type": "application/json; charset=UTF-8",
-                    "Authorization": Session.accessToken != null ? Session.accessToken : ""
+                    "Authorization": Session.accessToken != null ? Session.accessToken : "",
+                    "Accept-Language": "es"
                 },
                 body: jsonEncode(data)
             );
@@ -179,6 +191,7 @@ class Network {
                 http.Request("DELETE", Uri.parse(Core.SERVER_URL + query))
                     ..headers["Content-Type"] = "application/json; charset=UTF-8"
                     ..headers["Authorization"] = Session.accessToken != null ? Session.accessToken : ""
+                    ..headers["Accept-Language"] = "es"
                     ..body = json.encode(data)
             );
             Map<String, dynamic> jsonDecoded = json.decode(await response.stream.bytesToString());

@@ -127,7 +127,13 @@ class _MainMenuPageState extends State<_MainMenuPage> with SingleTickerProviderS
         items.add(
             FlatButton(
                 child: Text("Cerrar sesión"),
-                onPressed: () => Navigator.pop(context)
+                onPressed: () {
+                    if (Session.player.state.player.isPlaying) {
+                        Session.player.state.player.stopPlayer();
+                    }
+                    Session.player.state.player.release();
+                    Navigator.pop(context);
+                }
             )
         );
         return items;
