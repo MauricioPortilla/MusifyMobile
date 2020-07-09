@@ -157,17 +157,17 @@ class _MusifyState extends State<MusifyScreen> {
                 }).catchError((error) {
                     Navigator.pop(context);
                     print("Error on _HomePageState->_googleLoginButton() -> $error");
-                    UI.createErrorDialog(context, "Error al establecer una conexión.");
+                    UI.createErrorDialog(context, "Ocurrió un error al momento de iniciar sesión.");
                 });
             }).catchError((error) {
                 Navigator.pop(context);
                 print("Error on _HomePageState->_googleLoginButton() -> $error");
-                UI.createErrorDialog(context, "Error al establecer una conexión.");
+                UI.createErrorDialog(context, "Ocurrió un error al momento de iniciar sesión.");
             });
         } catch (exception) {
             Navigator.pop(context);
             print("Error on _HomePageState->_googleLoginButton() -> $exception");
-            UI.createErrorDialog(context, "Error al establecer una conexión.");
+            UI.createErrorDialog(context, "Ocurrió un error al momento de iniciar sesión.");
         }
     }
 
@@ -190,7 +190,6 @@ class _MusifyState extends State<MusifyScreen> {
             Session.songStreamingQuality = Session.preferences.getString("songStreamingQuality" + account.accountId.toString());
         }
         _passwordTextFieldController.text = "";
-        Navigator.pop(context);
         Navigator.push(context, MaterialPageRoute(builder: (context) => Session.mainMenu));
     }
 

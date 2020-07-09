@@ -50,9 +50,15 @@ class _PlayerState extends State<Player> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
                                     GestureDetector(
-                                        child: Text(
-                                            latestPlayedSong == null ? (latestPlayedAccountSong != null ? latestPlayedAccountSong.title : "") : latestPlayedSong.title,
-                                            style: TextStyle(fontSize: 15)
+                                        child: Container(
+                                            width: MediaQuery.of(context).size.width / 1.8,
+                                            child: Text(
+                                                latestPlayedSong == null ? (
+                                                    latestPlayedAccountSong != null ? latestPlayedAccountSong.title : ""
+                                                ) : latestPlayedSong.title,
+                                                style: TextStyle(fontSize: 15)
+                                            ),
+                                            margin: EdgeInsets.only(bottom: 3)
                                         ),
                                         onTap: () {}
                                     ),
