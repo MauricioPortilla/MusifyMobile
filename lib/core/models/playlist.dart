@@ -88,7 +88,7 @@ class Playlist {
             "{playlistId}": playlistId,
             "{songId}": song.songId
         };
-        Network.get("/playlist/{playlistId}/song/{songId}", data, (response) {
+        Network.get("/playlist/{playlistId}/songs/{songId}", data, (response) {
             onSuccess();
         }, onFailure, () {
             print("Exception@Playlist->containsSong()");

@@ -146,6 +146,7 @@ class _MusifyState extends State<MusifyScreen> {
             await googleSignIn.signIn().then((result) {
                 result.authentication.then((googleKey) {
                     Account.loginWithGoogle(googleKey.accessToken, (account) {
+                        Navigator.pop(context);
                         _onSuccessfulLogin(account);
                     }, (errorResponse) {
                         Navigator.pop(context);
