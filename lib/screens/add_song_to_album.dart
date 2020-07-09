@@ -170,7 +170,7 @@ class _AddSongToAlbumPageState extends State<_AddSongToAlbumPage> {
                     width: double.infinity,
                     child: InkWell(
                         onTap: () {
-                            if (artists.length == 0 || artists.firstWhere((element) => element.artisticName == artistslist[index].artisticName) == null) {
+                            if (artists.length == 0 || artists.firstWhere((element) => element.artisticName == artistslist[index].artisticName, orElse:() => null) == null) {
                                 artists.add(artistslist[index]);
                             } else {
                                 UI.createLoadingDialog(context);
